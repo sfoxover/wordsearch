@@ -4,8 +4,8 @@
              xmlns:local="clr-namespace:WordSearch"
              x:Class="WordSearch.MainPage">
 
-	<Label Text="Welcome to Xamarin.Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+    <StackLayout>
+        <Button Text="New Game" Clicked="OnNewGame_Click"></Button>
+    </StackLayout>
 
 </ContentPage>

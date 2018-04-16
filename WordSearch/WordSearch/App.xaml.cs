@@ -13,7 +13,7 @@ namespace WordSearch
 		{
 			InitializeComponent();
 
-			MainPage = new WordSearch.MainPage();
+            MainPage = new NavigationPage(new MainPage());
 		}
 
 		protected override void OnStart ()
