@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
 {
@@ -15,8 +16,8 @@ namespace WordSearch.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private Array _tiles = null;
-        public Array Tiles
+        private Grid.IGridList<View> _tiles = null;
+        public Grid.IGridList<View> Tiles
         {
             get { return _tiles; }
             set
@@ -29,8 +30,8 @@ namespace WordSearch.ViewModels
             }
         }
 
-        private Array _tileRowDefinition = null;
-        public Array TileRowDefinition
+        private RowDefinitionCollection _tileRowDefinition = null;
+        public RowDefinitionCollection TileRowDefinition
         {
             get { return _tileRowDefinition; }
             set
@@ -43,8 +44,8 @@ namespace WordSearch.ViewModels
             }
         }
 
-        private Array _tileColumnDefinition = null;
-        public Array TileColumnDefinition
+        private ColumnDefinitionCollection _tileColumnDefinition = null;
+        public ColumnDefinitionCollection TileColumnDefinition
         {
             get { return _tileColumnDefinition; }
             set

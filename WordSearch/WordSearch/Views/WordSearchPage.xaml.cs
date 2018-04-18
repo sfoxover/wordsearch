@@ -21,8 +21,14 @@ namespace WordSearch
 
         public WordSearchPage ()
 		{
-			InitializeComponent();
             BindingContext = new WordSearchPageViewModel();
+            InitializeComponent();
+        }
+
+        // get access to ViewModel
+        private WordSearchPageViewModel ViewModel
+        {
+            get { return BindingContext as WordSearchPageViewModel; }
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -32,11 +38,13 @@ namespace WordSearch
             {
                 PageWidth = width;
                 PageHeight = height;
+                // calculate tiles for portrait mode orientation
                 bool bOK = CalculateTiles();
                 Debug.Assert(bOK);
             }
         }
 
+        // calculate for portrait mode orientation
         private bool CalculateTiles()
         {
             bool bOK = true;
@@ -44,6 +52,20 @@ namespace WordSearch
             {
                 TilesPerRow = (int)PageWidth / Defines.TILE_WIDTH;
                 TilesPerColumn = (int)PageHeight / Defines.TILE_HEIGHT;
+                // create grid Row Definition
+                var rows = new RowDefinitionCollection();
+                for(int n=0;n<TilesPerRow;n++)
+                {
+                    rows.Add(new RowDefinition { Height = Defines.TILE_HEIGHT });
+                }
+                ViewModel.TileRowDefinition = rows;
+                // create grid Column Definition
+                var columns = new ColumnDefinitionCollection();
+                for (int n = 0; n < TilesPerColumn; n++)
+                {
+                    columns.Add(new ColumnDefinition { Width = Defines.TILE_WIDTH });
+                }
+                ViewModel.TileColumnDefinition = columns;
             }
             catch(Exception ex)
             {
