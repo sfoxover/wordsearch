@@ -20,7 +20,6 @@ namespace WordSearch.UWP
         public MainPage()
         {
             this.InitializeComponent();
-
             LoadApplication(new WordSearch.App());
         }
     }

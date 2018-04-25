@@ -54,18 +54,29 @@ namespace WordSearch
                 TilesPerColumn = (int)PageHeight / Defines.TILE_HEIGHT;
                 // create grid Row Definition
                 var rows = new RowDefinitionCollection();
-                for(int n=0;n<TilesPerRow;n++)
+                for (int n = 0; n < TilesPerRow; n++)
                 {
                     rows.Add(new RowDefinition { Height = Defines.TILE_HEIGHT });
                 }
-                ViewModel.TileRowDefinition = rows;
                 // create grid Column Definition
                 var columns = new ColumnDefinitionCollection();
                 for (int n = 0; n < TilesPerColumn; n++)
                 {
                     columns.Add(new ColumnDefinition { Width = Defines.TILE_WIDTH });
                 }
-                ViewModel.TileColumnDefinition = columns;
+
+                wordsGrid = new Grid
+                {
+                    RowDefinitions = rows,
+                    ColumnDefinitions = columns
+                };
+                for (int column = 0; column < TilesPerColumn; column++)
+                {
+                    for (int row = 0; row < TilesPerRow; row++)
+                    {
+                        wordsGrid.Children.Add(new Label { Text = "a", FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)), HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand }, row, column);
+                    }
+                }
             }
             catch(Exception ex)
             {

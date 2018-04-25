@@ -57,6 +57,13 @@ namespace WordSearch.ViewModels
                 }
             }
         }
+
+        public WordSearchPageViewModel()
+        {
+            //Tiles = new Grid.IGridList<View>();
+            TileRowDefinition = new RowDefinitionCollection();
+            TileColumnDefinition = new ColumnDefinitionCollection();
+        }
     }
 }
 
