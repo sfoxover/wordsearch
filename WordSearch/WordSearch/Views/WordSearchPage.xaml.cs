@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WordSearch.Controls;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -19,17 +17,17 @@ namespace WordSearch
         int TilesPerRow { get; set; }
         int TilesPerColumn { get; set; }
 
-        public WordSearchPage ()
-		{
-            BindingContext = new WordSearchPageViewModel();
-            InitializeComponent();
-        }
-
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
         {
             get { return BindingContext as WordSearchPageViewModel; }
         }
+
+        public WordSearchPage ()
+		{
+            BindingContext = new WordSearchPageViewModel();
+            InitializeComponent();
+        }       
 
         protected override void OnSizeAllocated(double width, double height)
         {
@@ -52,34 +50,17 @@ namespace WordSearch
             {
                 TilesPerRow = (int)PageWidth / Defines.TILE_WIDTH;
                 TilesPerColumn = (int)PageHeight / Defines.TILE_HEIGHT;
-                // create grid Row Definition
-                var rows = new RowDefinitionCollection();
-                for (int n = 0; n < TilesPerRow; n++)
+                int totalTiles = TilesPerRow * TilesPerColumn;
+                var items = new ObservableCollection<TileView>();
+                for (int n = 0; n < totalTiles; n++)
                 {
-                    rows.Add(new RowDefinition { Height = Defines.TILE_HEIGHT });
+                    items.Add(new TileView());
                 }
-                // create grid Column Definition
-                var columns = new ColumnDefinitionCollection();
-                for (int n = 0; n < TilesPerColumn; n++)
-                {
-                    columns.Add(new ColumnDefinition { Width = Defines.TILE_WIDTH });
-                }
-
-                wordsGrid = new Grid
-                {
-                    RowDefinitions = rows,
-                    ColumnDefinitions = columns
-                };
-                for (int column = 0; column < TilesPerColumn; column++)
-                {
-                    for (int row = 0; row < TilesPerRow; row++)
-                    {
-                        wordsGrid.Children.Add(new Label { Text = "a", FontSize = Device.GetNamedSize(NamedSize.Small, typeof(Label)), HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.FillAndExpand }, row, column);
-                    }
-                }
+                ViewModel.Tiles = items;
             }
             catch(Exception ex)
             {
+                Debug.WriteLine("CalculateTiles exception, " + ex.Message);
                 bOK = false;
             }
             return bOK;

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Text;
+using WordSearch.Controls;
 using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
@@ -16,8 +18,8 @@ namespace WordSearch.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private Grid.IGridList<View> _tiles = null;
-        public Grid.IGridList<View> Tiles
+        private ObservableCollection<TileView> _tiles = null;
+        public ObservableCollection<TileView> Tiles
         {
             get { return _tiles; }
             set
@@ -30,39 +32,9 @@ namespace WordSearch.ViewModels
             }
         }
 
-        private RowDefinitionCollection _tileRowDefinition = null;
-        public RowDefinitionCollection TileRowDefinition
-        {
-            get { return _tileRowDefinition; }
-            set
-            {
-                if (_tileRowDefinition != value)
-                {
-                    _tileRowDefinition = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private ColumnDefinitionCollection _tileColumnDefinition = null;
-        public ColumnDefinitionCollection TileColumnDefinition
-        {
-            get { return _tileColumnDefinition; }
-            set
-            {
-                if (_tileColumnDefinition != value)
-                {
-                    _tileColumnDefinition = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         public WordSearchPageViewModel()
         {
-            //Tiles = new Grid.IGridList<View>();
-            TileRowDefinition = new RowDefinitionCollection();
-            TileColumnDefinition = new ColumnDefinitionCollection();
+            Tiles = new ObservableCollection<TileView>();
         }
     }
 }
