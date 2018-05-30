@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DLToolkit.Forms.Controls;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -18,8 +19,8 @@ namespace WordSearch.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private ObservableCollection<TileView> _tiles = null;
-        public ObservableCollection<TileView> Tiles
+        private FlowObservableCollection<object> _tiles = null;
+        public FlowObservableCollection<object> Tiles
         {
             get { return _tiles; }
             set
@@ -32,9 +33,23 @@ namespace WordSearch.ViewModels
             }
         }
 
+        private int? _columnCount = 0;
+        public int? ColumnCount
+        {
+            get { return _columnCount; }
+            set
+            {
+                if (_columnCount != value)
+                {
+                    _columnCount = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public WordSearchPageViewModel()
         {
-            Tiles = new ObservableCollection<TileView>();
+            Tiles = new FlowObservableCollection<object>();
         }
     }
 }

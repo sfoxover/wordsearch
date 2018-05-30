@@ -1,9 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:flv="clr-namespace:DLToolkit.Forms.Controls;assembly=DLToolkit.Forms.Controls.FlowListView"
+             xmlns:controls="clr-namespace:WordSearch.Controls"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
-        <StackLayout Orientation="Horizontal" BindingContext="{Binding Tiles}">
-        </StackLayout>
+        <flv:FlowListView FlowItemsSource="{Binding Tiles}" FlowColumnCount="{Binding ColumnCount}">
+
+            <flv:FlowListView.FlowLoadingTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <Label
+							HorizontalTextAlignment="Center"
+							VerticalTextAlignment="Center"
+							TextColor="Black"
+							Text="Loading..."
+						></Label>
+                    </ViewCell>
+                </DataTemplate>
+            </flv:FlowListView.FlowLoadingTemplate>
+            
+            <flv:FlowListView.FlowColumnTemplate>
+                <DataTemplate>
+                    <controls:TileView/>
+                </DataTemplate>
+            </flv:FlowListView.FlowColumnTemplate>
+        </flv:FlowListView>
     </ContentPage.Content>
 </ContentPage>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DLToolkit.Forms.Controls;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using WordSearch.Controls;
@@ -50,13 +52,14 @@ namespace WordSearch
             {
                 TilesPerRow = (int)PageWidth / Defines.TILE_WIDTH;
                 TilesPerColumn = (int)PageHeight / Defines.TILE_HEIGHT;
+                ViewModel.ColumnCount = TilesPerColumn;
                 int totalTiles = TilesPerRow * TilesPerColumn;
-                var items = new ObservableCollection<TileView>();
+                var items = new List<object>();
                 for (int n = 0; n < totalTiles; n++)
                 {
                     items.Add(new TileView());
                 }
-                ViewModel.Tiles = items;
+                ViewModel.Tiles = new FlowObservableCollection<object>(items);
             }
             catch(Exception ex)
             {
