@@ -1,12 +1,5 @@
-﻿using DLToolkit.Forms.Controls;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Text;
-using WordSearch.Controls;
-using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
 {
@@ -18,7 +11,7 @@ namespace WordSearch.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
-
+        /*
         private FlowObservableCollection<object> _tiles = null;
         public FlowObservableCollection<object> Tiles
         {
@@ -32,6 +25,7 @@ namespace WordSearch.ViewModels
                 }
             }
         }
+        */
 
         private int? _columnCount = 0;
         public int? ColumnCount
@@ -49,7 +43,7 @@ namespace WordSearch.ViewModels
 
         public WordSearchPageViewModel()
         {
-            Tiles = new FlowObservableCollection<object>();
+            //Tiles = new FlowObservableCollection<object>();
         }
     }
 }

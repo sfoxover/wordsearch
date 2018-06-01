@@ -1,8 +1,7 @@
-﻿using DLToolkit.Forms.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WordSearch.Controls;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
@@ -39,8 +38,11 @@ namespace WordSearch
                 PageWidth = width;
                 PageHeight = height;
                 // calculate tiles for portrait mode orientation
-                bool bOK = CalculateTiles();
-                Debug.Assert(bOK);
+                Task.Run(() =>
+                {
+                    bool bOK = CalculateTiles();
+                    Debug.Assert(bOK);
+                });
             }
         }
 
@@ -50,16 +52,37 @@ namespace WordSearch
             bool bOK = true;
             try
             {
-                TilesPerRow = (int)PageWidth / Defines.TILE_WIDTH;
+                TilesPerRow = (int)PageWidth / Defines.TILE_WIDTH; 
                 TilesPerColumn = (int)PageHeight / Defines.TILE_HEIGHT;
-                ViewModel.ColumnCount = TilesPerColumn;
-                int totalTiles = TilesPerRow * TilesPerColumn;
-                var items = new List<object>();
-                for (int n = 0; n < totalTiles; n++)
+
+                // create grid Row Definition
+                var rows = new RowDefinitionCollection();
+                for (int n = 0; n < TilesPerRow; n++)
                 {
-                    items.Add(new TileView());
+                    rows.Add(new RowDefinition { Height = GridLength.Star });
                 }
-                ViewModel.Tiles = new FlowObservableCollection<object>(items);
+                // create grid Column Definition
+                var columns = new ColumnDefinitionCollection();
+                for (int n = 0; n < TilesPerColumn; n++)
+                {
+                    columns.Add(new ColumnDefinition { Width = GridLength.Star });
+                }
+
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    tilesView.RowDefinitions = rows;
+                    tilesView.ColumnDefinitions = columns;
+                    // create titles
+                    tilesView.Children.Clear();
+                    for (int row = 0; row < TilesPerRow; row++)
+                    {
+                        for (int column = 0; column < TilesPerColumn; column++)
+                        {
+                            string letter = $"{row}{column}";
+                            tilesView.Children.Add(new TileView(letter), row, column);
+                        }
+                    }
+                });
             }
             catch(Exception ex)
             {

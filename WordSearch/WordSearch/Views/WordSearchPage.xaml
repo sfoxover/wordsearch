@@ -5,26 +5,6 @@
              xmlns:controls="clr-namespace:WordSearch.Controls"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
-        <flv:FlowListView FlowItemsSource="{Binding Tiles}" FlowColumnCount="{Binding ColumnCount}">
-
-            <flv:FlowListView.FlowLoadingTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Label
-							HorizontalTextAlignment="Center"
-							VerticalTextAlignment="Center"
-							TextColor="Black"
-							Text="Loading..."
-						></Label>
-                    </ViewCell>
-                </DataTemplate>
-            </flv:FlowListView.FlowLoadingTemplate>
-            
-            <flv:FlowListView.FlowColumnTemplate>
-                <DataTemplate>
-                    <controls:TileView/>
-                </DataTemplate>
-            </flv:FlowListView.FlowColumnTemplate>
-        </flv:FlowListView>
+        <Grid x:Name="tilesView"/>
     </ContentPage.Content>
 </ContentPage>

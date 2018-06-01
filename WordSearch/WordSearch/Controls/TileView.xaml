@@ -3,8 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordSearch.Controls.TileView">
   <ContentView.Content>
-      <StackLayout>
-          <Label Text="A" TextColor="Red"/>
-      </StackLayout>
-  </ContentView.Content>
+        <Frame OutlineColor="Black" BackgroundColor="Blue" Padding="1">
+            <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" BackgroundColor="Green">
+                <Label Text="{Binding Letter}" TextColor="Red" BackgroundColor="Yellow" FontSize="Micro" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+            </StackLayout>
+        </Frame>
+    </ContentView.Content>
 </ContentView>

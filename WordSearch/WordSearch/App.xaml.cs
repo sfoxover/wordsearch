@@ -1,5 +1,4 @@
-﻿using DLToolkit.Forms.Controls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +12,6 @@ namespace WordSearch
 		public App ()
 		{
 			InitializeComponent();
-            FlowListView.Init();
             MainPage = new NavigationPage(new MainPage());
 		}
 
