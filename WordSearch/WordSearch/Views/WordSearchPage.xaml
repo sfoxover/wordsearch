@@ -5,6 +5,6 @@
              xmlns:controls="clr-namespace:WordSearch.Controls"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
-        <Grid x:Name="tilesView"/>
+        <Grid x:Name="tilesView" ColumnSpacing="0" RowSpacing="0"/>
     </ContentPage.Content>
 </ContentPage>

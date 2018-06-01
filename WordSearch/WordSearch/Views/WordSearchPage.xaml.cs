@@ -59,13 +59,13 @@ namespace WordSearch
                 var rows = new RowDefinitionCollection();
                 for (int n = 0; n < TilesPerRow; n++)
                 {
-                    rows.Add(new RowDefinition { Height = GridLength.Star });
+                    rows.Add(new RowDefinition { Height = Defines.TILE_HEIGHT });
                 }
                 // create grid Column Definition
                 var columns = new ColumnDefinitionCollection();
                 for (int n = 0; n < TilesPerColumn; n++)
                 {
-                    columns.Add(new ColumnDefinition { Width = GridLength.Star });
+                    columns.Add(new ColumnDefinition { Width = Defines.TILE_WIDTH });
                 }
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
