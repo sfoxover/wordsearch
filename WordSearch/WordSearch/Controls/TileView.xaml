@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordSearch.Controls.TileView">
   <ContentView.Content>
-        <Frame OutlineColor="Blue" Padding="1" CornerRadius="3">
+        <Frame OutlineColor="Blue" Padding="1" CornerRadius="10">
             <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                <Label Text="{Binding Letter}" TextColor="Black" BackgroundColor="White" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+                <Label Text="{Binding Letter}" TextColor="Black" BackgroundColor="WhiteSmoke" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
         </Frame>
     </ContentView.Content>

@@ -5,6 +5,8 @@
              xmlns:controls="clr-namespace:WordSearch.Controls"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
-        <Grid x:Name="tilesView" ColumnSpacing="0" RowSpacing="0"/>
+        <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="CenterAndExpand">
+            <Grid x:Name="tilesView" ColumnSpacing="0" RowSpacing="0"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>
