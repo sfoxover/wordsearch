@@ -1,16 +1,12 @@
-﻿using System.ComponentModel;
+﻿using Prism.Commands;
+using Prism.Mvvm;
+using Prism.Navigation;
 using System.Runtime.CompilerServices;
 
-namespace WordSearch.ViewModels
+namespace WordSearch
 {
-    public class WordSearchPageViewModel : INotifyPropertyChanged
+    public class WordSearchPageViewModel : BindableBase
     {
-        // notify Xaml that a bound property has changed
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
         /*
         private FlowObservableCollection<object> _tiles = null;
         public FlowObservableCollection<object> Tiles
@@ -31,14 +27,7 @@ namespace WordSearch.ViewModels
         public int? ColumnCount
         {
             get { return _columnCount; }
-            set
-            {
-                if (_columnCount != value)
-                {
-                    _columnCount = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { SetProperty(ref _columnCount, value); }
         }
 
         public WordSearchPageViewModel()

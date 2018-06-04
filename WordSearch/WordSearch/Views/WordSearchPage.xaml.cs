@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WordSearch.Controls;
-using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -34,7 +32,7 @@ namespace WordSearch
         private void WordSearchPage_Appearing(object sender, EventArgs e)
         {
             // calculate tiles for portrait mode orientation
-            Task.Run(async () =>
+            Task.Run(() =>
             {
                 bool bOK = CalculateTiles();
                 Debug.Assert(bOK);
@@ -69,7 +67,7 @@ namespace WordSearch
                         for (int column = 0; column < TilesY; column++)
                         {
                             string letter = $"{row}{column}";
-                            tilesView.Children.Add(new TileView(letter));
+                            tilesView.Children.Add(new TileControl(letter));
                         }
                     }
                 });

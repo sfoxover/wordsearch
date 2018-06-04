@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿using Prism;
+using Prism.Ioc;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+using Prism.DryIoc;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace WordSearch
 {
-	public partial class App : Application
-	{
-		public App ()
-		{
-			InitializeComponent();
-            MainPage = new NavigationPage(new MainPage());
-		}
+	public partial class App : PrismApplication
+    {
+        public App() : this(null) { }
 
-		protected override void OnStart ()
-		{
-			// Handle when your app starts
-		}
+        public App(IPlatformInitializer initializer) : base(initializer) { }
 
-		protected override void OnSleep ()
-		{
-			// Handle when your app sleeps
-		}
+        protected override async void OnInitialized()
+        {
+            InitializeComponent();
+            await NavigationService.NavigateAsync("NavigationPage/MainPage");
+        }
 
-		protected override void OnResume ()
-		{
-			// Handle when your app resumes
-		}
-	}
+        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        {
+            containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.RegisterForNavigation<MainPage>();
+        }
+    }
 }
