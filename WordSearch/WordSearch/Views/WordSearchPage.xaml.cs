@@ -31,12 +31,7 @@ namespace WordSearch
 
         private void WordSearchPage_Appearing(object sender, EventArgs e)
         {
-            // calculate tiles for portrait mode orientation
-            Task.Run(() =>
-            {
-                bool bOK = CalculateTiles();
-                Debug.Assert(bOK);
-            });
+           
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -45,7 +40,13 @@ namespace WordSearch
             if (PageWidth != width || PageHeight != height)
             {
                 PageWidth = width;
-                PageHeight = height;              
+                PageHeight = height;
+                // calculate tiles for portrait mode orientation
+                Task.Run(() =>
+                {
+                    bool bOK = CalculateTiles();
+                    Debug.Assert(bOK);
+                });
             }
         }
 
