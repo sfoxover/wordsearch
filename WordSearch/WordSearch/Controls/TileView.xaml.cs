@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-
+using System.Windows.Input;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -62,11 +62,13 @@ namespace WordSearch.Controls
             }
         }
 
+        // frame click handler
+        public ICommand TileClickCommand { get; set; }
+
         public TileView ()
 		{
             BindingContext = this;
-            TileWidth = Defines.TILE_WIDTH - 1;
-            TileHeight = Defines.TILE_HEIGHT - 1;
+            SetDefaultValues();
             InitializeComponent();
 		}
 
@@ -74,9 +76,23 @@ namespace WordSearch.Controls
         {
             BindingContext = this;
             Letter = letter;
+            SetDefaultValues();
+            InitializeComponent();
+        }
+
+        void SetDefaultValues()
+        {
             TileWidth = Defines.TILE_WIDTH - 1;
             TileHeight = Defines.TILE_HEIGHT - 1;
-            InitializeComponent();
+            TileClickCommand = new Command(() => HandleTitleClick());
+        }
+
+        private void HandleTitleClick()
+        {
+            Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+            {
+                TileFrame.BorderColor = Color.Red;
+            });
         }
     }
 }
