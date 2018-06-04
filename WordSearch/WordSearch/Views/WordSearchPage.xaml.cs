@@ -15,8 +15,8 @@ namespace WordSearch
         double PageWidth { get; set; }
         double PageHeight { get; set; }
         // portrait tile size
-        int TilesPerRow { get; set; }
-        int TilesPerColumn { get; set; }
+        int TilesX { get; set; }
+        int TilesY { get; set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -28,7 +28,18 @@ namespace WordSearch
 		{
             BindingContext = new WordSearchPageViewModel();
             InitializeComponent();
-        }       
+            Appearing += WordSearchPage_Appearing;
+        }
+
+        private void WordSearchPage_Appearing(object sender, EventArgs e)
+        {
+            // calculate tiles for portrait mode orientation
+            Task.Run(async () =>
+            {
+                bool bOK = CalculateTiles();
+                Debug.Assert(bOK);
+            });
+        }
 
         protected override void OnSizeAllocated(double width, double height)
         {
@@ -36,13 +47,7 @@ namespace WordSearch
             if (PageWidth != width || PageHeight != height)
             {
                 PageWidth = width;
-                PageHeight = height;
-                // calculate tiles for portrait mode orientation
-                Task.Run(() =>
-                {
-                    bool bOK = CalculateTiles();
-                    Debug.Assert(bOK);
-                });
+                PageHeight = height;              
             }
         }
 
@@ -52,34 +57,19 @@ namespace WordSearch
             bool bOK = true;
             try
             {
-                TilesPerRow = (int)PageWidth / Defines.TILE_WIDTH; 
-                TilesPerColumn = (int)PageHeight / Defines.TILE_HEIGHT;
-
-                // create grid Row Definition
-                var rows = new RowDefinitionCollection();
-                for (int n = 0; n < TilesPerRow; n++)
-                {
-                    rows.Add(new RowDefinition { Height = Defines.TILE_HEIGHT });
-                }
-                // create grid Column Definition
-                var columns = new ColumnDefinitionCollection();
-                for (int n = 0; n < TilesPerColumn; n++)
-                {
-                    columns.Add(new ColumnDefinition { Width = Defines.TILE_WIDTH });
-                }
+                TilesX = (int)PageWidth / Defines.TILE_WIDTH; 
+                TilesY = (int)PageHeight / Defines.TILE_HEIGHT;
 
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    tilesView.RowDefinitions = rows;
-                    tilesView.ColumnDefinitions = columns;
                     // create titles
                     tilesView.Children.Clear();
-                    for (int row = 0; row < TilesPerRow; row++)
+                    for (int row = 0; row < TilesX; row++)
                     {
-                        for (int column = 0; column < TilesPerColumn; column++)
+                        for (int column = 0; column < TilesY; column++)
                         {
                             string letter = $"{row}{column}";
-                            tilesView.Children.Add(new TileView(letter), row, column);
+                            tilesView.Children.Add(new TileView(letter));
                         }
                     }
                 });

@@ -32,9 +32,41 @@ namespace WordSearch.Controls
             }
         }
 
+        // Tile Width request
+        private int _tileWidth;
+        public int TileWidth
+        {
+            get { return _tileWidth; }
+            set
+            {
+                if (_tileWidth != value)
+                {
+                    _tileWidth = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // Tile height request
+        private int _tileHeight;
+        public int TileHeight
+        {
+            get { return _tileHeight; }
+            set
+            {
+                if (_tileHeight != value)
+                {
+                    _tileHeight = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public TileView ()
 		{
             BindingContext = this;
+            TileWidth = Defines.TILE_WIDTH - 1;
+            TileHeight = Defines.TILE_HEIGHT - 1;
             InitializeComponent();
 		}
 
@@ -42,6 +74,8 @@ namespace WordSearch.Controls
         {
             BindingContext = this;
             Letter = letter;
+            TileWidth = Defines.TILE_WIDTH - 1;
+            TileHeight = Defines.TILE_HEIGHT - 1;
             InitializeComponent();
         }
     }
