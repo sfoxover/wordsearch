@@ -3,6 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
-        <FlexLayout x:Name="tilesView" Wrap="Wrap" Direction="Row" JustifyContent="Center"/>
+        <FlexLayout x:Name="tilesView" Wrap="Wrap" Direction="Row" JustifyContent="Center" />
     </ContentPage.Content>
 </ContentPage>

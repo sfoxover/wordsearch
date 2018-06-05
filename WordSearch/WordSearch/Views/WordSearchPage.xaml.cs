@@ -68,7 +68,7 @@ namespace WordSearch
                         for (int column = 0; column < TilesY; column++)
                         {
                             string letter = $"{row}{column}";
-                            tilesView.Children.Add(new TileControl(letter));
+                            tilesView.Children.Add(new TileControl(letter, row, column));
                         }
                     }
                 });
@@ -80,6 +80,5 @@ namespace WordSearch
             }
             return bOK;
         }
-
     }
 }

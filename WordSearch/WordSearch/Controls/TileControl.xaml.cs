@@ -13,10 +13,12 @@ namespace WordSearch.Controls
             get { return BindingContext as TileControlViewModel; }
         }
 
-        public TileControl(string letter)
+        public TileControl(string letter, int row, int column)
 		{
             InitializeComponent();
             ViewModel.Letter = letter;
+            ViewModel.TileRow = row;
+            ViewModel.TileColum = column;
         }
     }
 }
