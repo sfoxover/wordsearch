@@ -1,14 +1,16 @@
 ﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
-using Prism.Navigation;
+using WordSearch.Util;
 using Xamarin.Forms;
+using WordSearch.Controls;
 
-namespace WordSearch.Controls
+namespace WordSearch.ViewModels
 {
-	public class TileControlViewModel : BindableBase, INavigationAware
+	public class TileControlViewModel : BindableBase 
     {
-        protected INavigationService NavigationService { get; private set; }
+        // event aggregator
+        protected IEventAggregator EventAggregator { get; private set; }
 
         // letter displayed in control
         private string _letter;
@@ -64,7 +66,7 @@ namespace WordSearch.Controls
 
         // is tile clicked
         private bool _letterClicked;
-        public bool LetterClicked
+        public bool LetterSelected
         {
             get { return _letterClicked; }
             set { SetProperty(ref _letterClicked, value); }
@@ -73,9 +75,9 @@ namespace WordSearch.Controls
         // frame click handler
         public DelegateCommand TileClickCommand { get; set; }
 
-        public TileControlViewModel(INavigationService navigationService)
+        public TileControlViewModel(IEventAggregator eventAggregator)
         {
-            NavigationService = navigationService;
+            EventAggregator = eventAggregator;
             SetDefaultValues();
         }
 
@@ -89,14 +91,14 @@ namespace WordSearch.Controls
             TileHeight = Defines.TILE_HEIGHT - 1;
             TileRow = -1;
             TileColum = -1;
-            LetterClicked = false;
+            LetterSelected = false;
             TileClickCommand = new DelegateCommand(HandleTitleClick);
         }
 
         // tile was clicked
         private void HandleTitleClick()
         {
-            if (!LetterClicked)
+            if (!LetterSelected)
             {
                 TitleBorderColor = Color.Red;
                 LetterTextColor = Color.Black;
@@ -108,19 +110,9 @@ namespace WordSearch.Controls
                 LetterTextColor = Color.Black;
                 LetterTextBkgColor = Color.White;
             }
-            LetterClicked = !LetterClicked;
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
+            LetterSelected = !LetterSelected;
+            // publish event
+            EventAggregator.GetEvent<TileSelectionEvent<TileControlViewModel>>().Publish(this);
         }
     }
 }

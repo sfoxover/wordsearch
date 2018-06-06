@@ -3,6 +3,11 @@ using Prism.Ioc;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 using Prism.DryIoc;
+using WordSearch.Views;
+using Prism.Mvvm;
+using WordSearch.ViewModels;
+using WordSearch.Controls;
+using System;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace WordSearch
@@ -23,6 +28,24 @@ namespace WordSearch
         {
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.RegisterForNavigation<MainPage>();
+            containerRegistry.RegisterForNavigation<WordSearchPage>();
+        }
+
+        protected override void ConfigureViewModelLocator()
+        {
+            base.ConfigureViewModelLocator();
+            ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver(AlternateResolver);
+        }
+
+        private static Type AlternateResolver(Type type)
+        {
+            var viewName = type.Name;
+            if (String.IsNullOrEmpty(viewName))
+                return null;
+
+            var viewModel = "WordSearch.ViewModels." + viewName + "ViewModel";
+
+            return Type.GetType(viewModel);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Prism.Mvvm;
-using System;
+﻿using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
