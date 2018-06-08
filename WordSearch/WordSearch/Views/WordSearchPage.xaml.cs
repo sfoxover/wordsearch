@@ -1,5 +1,6 @@
 ﻿using Prism.Events;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WordSearch.Controls;
@@ -13,11 +14,13 @@ namespace WordSearch
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WordSearchPage : ContentPage
     {
+        // page width and height
         double PageWidth { get; set; }
         double PageHeight { get; set; }
-        // portrait tile size
-        int TilesX { get; set; }
-        int TilesY { get; set; }
+        // lock tile creation
+        private static object CalculateTilesLock = new object();
+
+        int FlagSize = 0;
 
         IEventAggregator EventAggregator { get; set; }
 
@@ -49,34 +52,45 @@ namespace WordSearch
                 // calculate tiles for portrait mode orientation
                 Task.Run(() =>
                 {
-                    bool bOK = CalculateTiles();
+                    bool bOK = CalculateTiles(width, height);
                     Debug.Assert(bOK);
                 });
             }
         }
 
         // calculate for portrait mode orientation
-        private bool CalculateTiles()
+        private bool CalculateTiles(double width, double height)
         {
             bool bOK = true;
             try
             {
-                TilesX = (int)PageWidth / Defines.TILE_WIDTH; 
-                TilesY = (int)PageHeight / Defines.TILE_HEIGHT;
-
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                lock (CalculateTilesLock)
                 {
+                    int tilesX = (int)width / Defines.TILE_WIDTH; 
+                    int tilesY = (int)height / Defines.TILE_HEIGHT;
+                    Debug.WriteLine($"CalculateTiles starting for {tilesX} x {tilesY}");
+                    var tiles = new List<TileControl>();
                     // create titles
-                    tilesView.Children.Clear();
-                    for (int row = 0; row < TilesX; row++)
+                    for (int column = 0; column < tilesY; column++)
                     {
-                        for (int column = 0; column < TilesY; column++)
+                        for (int row = 0; row < tilesX; row++)
                         {
                             string letter = $"{row}{column}";
-                            tilesView.Children.Add(new TileControl(letter, row, column));
+                            tiles.Add(new TileControl(letter, row, column));
+                            Debug.WriteLine(letter);
                         }
                     }
-                });
+                    // add tiles on UI thread
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        // create titles
+                        tilesView.Children.Clear();
+                        foreach (var tile in tiles)
+                        {
+                            tilesView.Children.Add(tile);
+                        }
+                    });
+                }
             }
             catch(Exception ex)
             {

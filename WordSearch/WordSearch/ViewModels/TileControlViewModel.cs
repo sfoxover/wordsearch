@@ -87,8 +87,8 @@ namespace WordSearch.ViewModels
             TitleBorderColor = Color.Blue;
             LetterTextColor = Color.Black;
             LetterTextBkgColor = Color.White;
-            TileWidth = Defines.TILE_WIDTH - 1;
-            TileHeight = Defines.TILE_HEIGHT - 1;
+            TileWidth = Defines.TILE_WIDTH - 2;
+            TileHeight = Defines.TILE_HEIGHT - 2;
             TileRow = -1;
             TileColum = -1;
             LetterSelected = false;
