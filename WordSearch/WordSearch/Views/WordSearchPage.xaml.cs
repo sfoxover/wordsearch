@@ -64,6 +64,7 @@ namespace WordSearch
             {
                 lock (CalculateTilesLock)
                 {
+                    // work out width and height based on page size and rows for difficulty level selected
                     int rows = WordManager.Instance.GetTileRows();
                     int tileWidth = (int)(width / rows);
                     int tileHeight = tileWidth;
