@@ -25,16 +25,16 @@ namespace WordSearch.ViewModels
         public int TileColum { get; set; }
 
         // Tile Width request
-        private int _tileWidth;
-        public int TileWidth
+        private double _tileWidth;
+        public double TileWidth
         {
             get { return _tileWidth; }
             set { SetProperty(ref _tileWidth, value); }
         }
 
         // Tile height request
-        private int _tileHeight;
-        public int TileHeight
+        private double _tileHeight;
+        public double TileHeight
         {
             get { return _tileHeight; }
             set { SetProperty(ref _tileHeight, value); }
@@ -87,8 +87,8 @@ namespace WordSearch.ViewModels
             TitleBorderColor = Color.Blue;
             LetterTextColor = Color.Black;
             LetterTextBkgColor = Color.White;
-            TileWidth = Defines.TILE_WIDTH - 2;
-            TileHeight = Defines.TILE_HEIGHT - 2;
+            TileWidth = 0;
+            TileHeight = 0;
             TileRow = -1;
             TileColum = -1;
             LetterSelected = false;

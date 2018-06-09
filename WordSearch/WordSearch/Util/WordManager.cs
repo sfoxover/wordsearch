@@ -13,10 +13,18 @@ namespace WordSearch.Util
         // word list array
         private Tile[,] TileLetterArray { get; set; }
         private static object TileLetterArrayLock = new object();
+        // game difficulty enum
+        public enum GameDifficulty { easy, medium, hard};
+        public GameDifficulty DifficultyLevel { get; set; }
+        // tile sizes
+        private const int TILE_ROWS_LEVEL_EASY = 8;
+        private const int TILE_ROWS_LEVEL_MEDIUM = 12;
+        private const int TILE_ROWS_LEVEL_HARD = 20;
 
         private WordManager()
         {
             TileLetterArray = null;
+            DifficultyLevel = GameDifficulty.medium;
         }
 
         // create new word tile multi dimentional array
@@ -70,6 +78,25 @@ namespace WordSearch.Util
             return bOK;
         }
 
+        // get tile width based on game difficulty
+        public int GetTileRows()
+        {
+            int result = 0;
+            switch(DifficultyLevel)
+            {
+                case GameDifficulty.easy:
+                    result = TILE_ROWS_LEVEL_EASY;
+                    break;
+                case GameDifficulty.medium:
+                    result = TILE_ROWS_LEVEL_MEDIUM;
+                    break;
+                case GameDifficulty.hard:
+                    result = TILE_ROWS_LEVEL_HARD;
+                    break;
+            }
+            Debug.Assert(result != 0);
+            return result;
+        }
 
         public bool ListenForTileClicks(IEventAggregator eventAggregator)
         {

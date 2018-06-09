@@ -64,8 +64,10 @@ namespace WordSearch
             {
                 lock (CalculateTilesLock)
                 {
-                    int rows = (int)width / Defines.TILE_WIDTH; 
-                    int columns = (int)height / Defines.TILE_HEIGHT;
+                    int rows = WordManager.Instance.GetTileRows();
+                    int tileWidth = (int)(width / rows);
+                    int tileHeight = tileWidth;
+                    int columns = (int)(height / tileHeight);
                     Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
                     // initialize word array
                     WordManager.Instance.InitializeWordTile(rows, columns);
@@ -79,8 +81,7 @@ namespace WordSearch
                             if (WordManager.Instance.GetTileAt(row, column, out tile))
                             {
                                 string letter = $"{tile.Letter}";
-                                tiles.Add(new TileControl(letter, row, column));
-                                Debug.WriteLine(letter);
+                                tiles.Add(new TileControl(letter, row, column, tileWidth, tileHeight));
                             }
                             else
                             {
