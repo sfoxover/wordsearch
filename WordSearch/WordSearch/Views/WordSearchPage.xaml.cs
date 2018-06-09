@@ -20,8 +20,6 @@ namespace WordSearch
         // lock tile creation
         private static object CalculateTilesLock = new object();
 
-        int FlagSize = 0;
-
         IEventAggregator EventAggregator { get; set; }
 
         // get access to ViewModel
@@ -66,18 +64,29 @@ namespace WordSearch
             {
                 lock (CalculateTilesLock)
                 {
-                    int tilesX = (int)width / Defines.TILE_WIDTH; 
-                    int tilesY = (int)height / Defines.TILE_HEIGHT;
-                    Debug.WriteLine($"CalculateTiles starting for {tilesX} x {tilesY}");
-                    var tiles = new List<TileControl>();
+                    int rows = (int)width / Defines.TILE_WIDTH; 
+                    int columns = (int)height / Defines.TILE_HEIGHT;
+                    Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
+                    // initialize word array
+                    WordManager.Instance.InitializeWordTile(rows, columns);
                     // create titles
-                    for (int column = 0; column < tilesY; column++)
+                    var tiles = new List<TileControl>();
+                    for (int column = 0; column < columns; column++)
                     {
-                        for (int row = 0; row < tilesX; row++)
+                        for (int row = 0; row < rows; row++)
                         {
-                            string letter = $"{row}{column}";
-                            tiles.Add(new TileControl(letter, row, column));
-                            Debug.WriteLine(letter);
+                            Tile tile = null;
+                            if (WordManager.Instance.GetTileAt(row, column, out tile))
+                            {
+                                string letter = $"{tile.Letter}";
+                                tiles.Add(new TileControl(letter, row, column));
+                                Debug.WriteLine(letter);
+                            }
+                            else
+                            {
+                                bOK = false;
+                                Debug.WriteLine($"Failed to read tile {row} x {column}");
+                            }
                         }
                     }
                     // add tiles on UI thread
