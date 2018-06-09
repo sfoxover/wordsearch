@@ -20,10 +20,13 @@ namespace WordSearch.Util
         private const int TILE_ROWS_LEVEL_EASY = 8;
         private const int TILE_ROWS_LEVEL_MEDIUM = 12;
         private const int TILE_ROWS_LEVEL_HARD = 20;
+        // word database
+        private WordDatabase WordsDb { get; set; }
 
         private WordManager()
         {
             TileLetterArray = null;
+            WordsDb = null;
             DifficultyLevel = GameDifficulty.medium;
         }
 
@@ -43,7 +46,11 @@ namespace WordSearch.Util
                         tiles.SetValue(tile, row, column);
                     }
                 }
-                lock(TileLetterArrayLock)
+                // load words database
+                WordsDb = new WordDatabase();
+                bOK = WordsDb.CreateWordList(5);
+
+                lock (TileLetterArrayLock)
                 {
                     TileLetterArray = tiles;
                 }
