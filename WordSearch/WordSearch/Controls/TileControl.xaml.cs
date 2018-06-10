@@ -1,4 +1,6 @@
-﻿using WordSearch.ViewModels;
+﻿using System.Diagnostics;
+using WordSearch.Models;
+using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -7,19 +9,21 @@ namespace WordSearch.Controls
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class TileControl : ContentView
     {
-        private TileControlViewModel ViewModel
+        public TileControlViewModel ViewModel
         {
             get { return BindingContext as TileControlViewModel; }
         }
 
-        public TileControl(string letter, int row, int column, int tileWidth, int tileHeight)
+        public TileControl(int row, int column, int tileWidth, int tileHeight)
 		{
             InitializeComponent();
-            ViewModel.Letter = letter;
+            Debug.Assert(ViewModel != null);
+            ViewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
             ViewModel.TileRow = row;
             ViewModel.TileColum = column;
             ViewModel.TileWidth = tileWidth - 2;
             ViewModel.TileHeight = tileHeight - 2;
+            ViewModel.LetterSelected = false;
         }
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
+using WordSearch.Models;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 
@@ -11,7 +12,8 @@ namespace WordSearch.Util
     public class WordManager
     {
         private static readonly Lazy<WordManager> _instance = new Lazy<WordManager>(() => { return new WordManager(); });
-        public static WordManager Instance { get { return _instance.Value; } }       
+        public static WordManager Instance { get { return _instance.Value; } }
+        static Random Random = new Random();
         // game difficulty enum
         public enum GameDifficulty { easy, medium, hard};
         public GameDifficulty DifficultyLevel { get; set; }
@@ -19,11 +21,16 @@ namespace WordSearch.Util
         private const int TILE_ROWS_LEVEL_EASY = 8;
         private const int TILE_ROWS_LEVEL_MEDIUM = 12;
         private const int TILE_ROWS_LEVEL_HARD = 20;
+        // words to solve per level
+        private const int WORDS_LEVEL_EASY = 4;
+        private const int WORDS_LEVEL_MEDIUM = 8;
+        private const int WORDS_LEVEL_HARD = 16;
+
         // array of random words
         public List<Word> Words { get; set; }
         private static object WordsLock = new object();
         // word list array
-        private Tile[,] Tiles { get; set; }
+        private TileControlViewModel[,] Tiles { get; set; }
         private static object TilesLock = new object();
 
         private WordManager()
@@ -34,19 +41,20 @@ namespace WordSearch.Util
         }
 
         // create new word tile multi dimentional array
-        public bool InitializeWordList(int rows, int columns)
+        public bool InitializeWordList(int rows, int columns, List<TileControl> controls)
         {
             bool bOK = true;
             try
             {
                 // create titles
-                var tiles = new Tile[rows, columns];
+                var tiles = new TileControlViewModel[rows, columns];
+                int count = 0;
                 for (int column = 0; column < columns; column++)
                 {
                     for (int row = 0; row < rows; row++)
                     {
-                        var tile = new Tile();
-                        tiles.SetValue(tile, row, column);
+                        tiles.SetValue(controls[count].ViewModel, row, column);
+                        count++;
                     }
                 }
                 // store tile array
@@ -80,12 +88,16 @@ namespace WordSearch.Util
                 }
                 // load words database
                 var wordDb = new WordDatabase();
-                List<string> wordList;
-                bOK = wordDb.GetRandomWords(5, maxWordLength, out wordList);
-                Debug.Assert(bOK);
-                if (bOK)
+                int count = 0;
+                int tries = 0;
+                int total = GetLevelWordCount();
+                var filterList = new List<string>();
+                while (count < total && tries < Defines.MAX_RANDOM_TRIES)
                 {
-                    foreach (var text in wordList)
+                    string text;
+                    bOK = wordDb.GetNextRandomWord(maxWordLength, filterList, out text);
+                    Debug.Assert(bOK);
+                    if (bOK)
                     {
                         // create word object
                         Word word = new Word(text);
@@ -98,20 +110,25 @@ namespace WordSearch.Util
                             Debug.Assert(bOK);
                             if (bOK)
                             {
+                                // found next word that fits ok
+                                filterList.Add(text);
                                 lock (WordsLock)
                                 {
                                     Words.Add(word);
+                                    count++;
+                                    tries = 0;
                                 }
                             }
                         }
                     }
-                    if (bOK)
-                    {
-                        // update tiles with words
-                        bOK = RefreshWordTileStates();
-                        Debug.Assert(bOK);
-                    }
-                }              
+                    tries++;
+                }
+                if (bOK)
+                {
+                    // update tiles with words
+                    bOK = RefreshWordTileStates();
+                    Debug.Assert(bOK);
+                }
             }
             catch (Exception ex)
             {
@@ -139,7 +156,8 @@ namespace WordSearch.Util
                             int column = (int)word.TilePositions[n].Y;
                             lock (TilesLock)
                             {
-                                Tiles[row, column].Letter = ch;
+                                Tiles[row, column].Letter = $"{ch}";
+                                Tiles[row, column].LetterSelected = true;
                             }
                         }
                     }
@@ -160,7 +178,6 @@ namespace WordSearch.Util
             bool bOK = false;
             try
             {
-                Random rand = new Random();
                 int rows = 0;
                 int columns = 0;
                 lock (TilesLock)
@@ -169,11 +186,11 @@ namespace WordSearch.Util
                     columns = Tiles.GetLength(1);
                 }
                 int tries = 0;
-                while (tries < 100)
+                while (tries < Defines.MAX_RANDOM_TRIES)
                 {
                     int wordLen = word.Text.Length;
-                    int row = rand.Next(rows);
-                    int column = rand.Next(columns);
+                    int row = Random.Next(rows);
+                    int column = Random.Next(columns);
                     var directions = new List<Word.WordDirection>();
                     foreach (Word.WordDirection direction in Enum.GetValues(typeof(Word.WordDirection)))
                     {
@@ -185,7 +202,7 @@ namespace WordSearch.Util
                     if (directions.Count > 0)
                     {
                         // select direction and set row and column for word object
-                        word.Direction = directions[rand.Next(directions.Count)];
+                        word.Direction = directions[Random.Next(directions.Count)];
                         word.Row = row;
                         word.Column = column;
                         bOK = true;
@@ -204,7 +221,7 @@ namespace WordSearch.Util
         }
 
         // get tile from array
-        public bool GetTileAt(int row, int column, out Tile tile)
+        public bool GetTileAt(int row, int column, out TileControlViewModel tile)
         {
             bool bOK = true;
             tile = null;
@@ -212,7 +229,7 @@ namespace WordSearch.Util
             {
                 lock (TilesLock)
                 {
-                    tile = Tiles.GetValue(row, column) as Tile;
+                    tile = Tiles.GetValue(row, column) as TileControlViewModel;
                 }
             }
             catch (Exception ex)
@@ -242,6 +259,28 @@ namespace WordSearch.Util
             }
             Debug.Assert(result != 0);
             return result;
+        }
+
+        // get number of words to find based on difficulty
+        int GetLevelWordCount()
+        {
+            int count = 0;
+            switch(DifficultyLevel)
+            {
+                case GameDifficulty.easy:
+                    count = WORDS_LEVEL_EASY;
+                    break;
+                case GameDifficulty.medium:
+                    count = WORDS_LEVEL_MEDIUM;
+                    break;
+                case GameDifficulty.hard:
+                    count = WORDS_LEVEL_HARD;
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+            return count;
         }
 
         public bool ListenForTileClicks(IEventAggregator eventAggregator)
@@ -283,7 +322,5 @@ namespace WordSearch.Util
             }
             return bOK;
         }
-
-
     }
 }

@@ -5,6 +5,6 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
-        <FlexLayout x:Name="tilesView" Wrap="Wrap" Direction="Row" JustifyContent="Center" />
+        <FlexLayout x:Name="FlexTilesView" Wrap="Wrap" Direction="Row" JustifyContent="Center" />
     </ContentPage.Content>
 </ContentPage>

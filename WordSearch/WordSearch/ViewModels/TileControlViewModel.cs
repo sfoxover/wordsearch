@@ -4,13 +4,16 @@ using Prism.Mvvm;
 using WordSearch.Util;
 using Xamarin.Forms;
 using WordSearch.Controls;
+using WordSearch.Models;
+using System;
 
 namespace WordSearch.ViewModels
 {
-	public class TileControlViewModel : BindableBase 
+	public class TileControlViewModel : BindableBase
     {
         // event aggregator
         protected IEventAggregator EventAggregator { get; private set; }
+        static Random Random = new Random();
 
         // letter displayed in control
         private string _letter;
@@ -65,11 +68,15 @@ namespace WordSearch.ViewModels
         }
 
         // is tile clicked
-        private bool _letterClicked;
+        private bool _letterSelected;
         public bool LetterSelected
         {
-            get { return _letterClicked; }
-            set { SetProperty(ref _letterClicked, value); }
+            get { return _letterSelected; }
+            set
+            {
+                SetProperty(ref _letterSelected, value);
+                SetLetterColors();
+            }
         }
 
         // frame click handler
@@ -95,10 +102,17 @@ namespace WordSearch.ViewModels
             TileClickCommand = new DelegateCommand(HandleTitleClick);
         }
 
-        // tile was clicked
-        private void HandleTitleClick()
+        // choose a random lower case letter
+        public static char GetRandomLetter()
         {
-            if (!LetterSelected)
+            int num = Random.Next(26);
+            char let = (char)('a' + num);
+            return let;
+        }
+
+        private void SetLetterColors()
+        {
+            if (LetterSelected)
             {
                 TitleBorderColor = Color.Red;
                 LetterTextColor = Color.Black;
@@ -110,6 +124,11 @@ namespace WordSearch.ViewModels
                 LetterTextColor = Color.Black;
                 LetterTextBkgColor = Color.White;
             }
+        }
+
+        // tile was clicked
+        private void HandleTitleClick()
+        {
             LetterSelected = !LetterSelected;
             // publish event
             EventAggregator.GetEvent<TileSelectionEvent<TileControlViewModel>>().Publish(this);

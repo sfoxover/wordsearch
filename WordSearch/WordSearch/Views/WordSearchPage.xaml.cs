@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using WordSearch.Controls;
+using WordSearch.Models;
 using WordSearch.Util;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
@@ -18,7 +20,7 @@ namespace WordSearch
         double PageWidth { get; set; }
         double PageHeight { get; set; }
         // lock tile creation
-        private static object CalculateTilesLock = new object();
+        private SemaphoreSlim CalculateTilesSemaphore { get; set; }
 
         IEventAggregator EventAggregator { get; set; }
 
@@ -31,6 +33,7 @@ namespace WordSearch
         public WordSearchPage (IEventAggregator eventAggregator)
 		{
             EventAggregator = eventAggregator;
+            CalculateTilesSemaphore = new SemaphoreSlim(1);
             InitializeComponent();
             Appearing += WordSearchPage_Appearing;
         }
@@ -40,7 +43,7 @@ namespace WordSearch
             WordManager.Instance.ListenForTileClicks(EventAggregator);
         }
 
-        protected override void OnSizeAllocated(double width, double height)
+        protected override async void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height); // must be called
             if (PageWidth != width || PageHeight != height)
@@ -48,60 +51,47 @@ namespace WordSearch
                 PageWidth = width;
                 PageHeight = height;
                 // calculate tiles for portrait mode orientation
-                Task.Run(() =>
-                {
-                    bool bOK = CalculateTiles(width, height);
-                    Debug.Assert(bOK);
-                });
+                bool bOK = await CalculateTiles(width, height);
+                Debug.Assert(bOK);
             }
         }
 
         // calculate for portrait mode orientation
-        private bool CalculateTiles(double width, double height)
+        private async Task<bool> CalculateTiles(double width, double height)
         {
             bool bOK = true;
             try
             {
-                lock (CalculateTilesLock)
+                bOK = await CalculateTilesSemaphore.WaitAsync(-1);
+                // work out width and height based on page size and rows for difficulty level selected
+                int rows = WordManager.Instance.GetTileRows();
+                int tileWidth = (int)(width / rows);
+                int tileHeight = tileWidth;
+                int columns = (int)(height / tileHeight);
+                Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
+                // add titles on UI thread
+                FlexTilesView.Children.Clear();
+                List<TileControl> controls = new List<TileControl>();
+                for (int column = 0; column < columns; column++)
                 {
-                    // work out width and height based on page size and rows for difficulty level selected
-                    int rows = WordManager.Instance.GetTileRows();
-                    int tileWidth = (int)(width / rows);
-                    int tileHeight = tileWidth;
-                    int columns = (int)(height / tileHeight);
-                    Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
-                    // initialize word array
-                    WordManager.Instance.InitializeWordList(rows, columns);
-                    // create titles
-                    // add tiles on UI thread
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    for (int row = 0; row < rows; row++)
                     {
-                        // create titles
-                        tilesView.Children.Clear();
-                        for (int column = 0; column < columns; column++)
-                        {
-                            for (int row = 0; row < rows; row++)
-                            {
-                                Tile tile = null;
-                                if (WordManager.Instance.GetTileAt(row, column, out tile))
-                                {
-                                    string letter = $"{tile.Letter}";
-                                    tilesView.Children.Add(new TileControl(letter, row, column, tileWidth, tileHeight));
-                                }
-                                else
-                                {
-                                    bOK = false;
-                                    Debug.WriteLine($"Failed to read tile {row} x {column}");
-                                }
-                            }
-                        }
-                    });
+                        var control = new TileControl(row, column, tileWidth, tileHeight);
+                        controls.Add(control);
+                        FlexTilesView.Children.Add(control);
+                    }
                 }
+                // initialize word array
+                bOK = WordManager.Instance.InitializeWordList(rows, columns, controls);
             }
             catch(Exception ex)
             {
                 Debug.WriteLine("CalculateTiles exception, " + ex.Message);
                 bOK = false;
+            }
+            finally
+            {
+                CalculateTilesSemaphore.Release();
             }
             return bOK;
         }
