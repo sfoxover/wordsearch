@@ -11,61 +11,19 @@ namespace WordSearch.Util
         public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
         // random word
         public string Text { get; set; }
-        int Row { get; set; }
-        int Column { get; set; }
-        WordDirection Direction { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
+        public WordDirection Direction { get; set; }
 
-        public Word(string text, int row, int column)
+        public Word(string text)
         {
             Text = text;
-            Row = row;
-            Column = column;
-        }
-
-        bool SelectDirection()
-        {
-            bool bOK = false;
-            try
-            {
-                Random rand = new Random();
-                int safeNum = selectedWords.Count * 100;
-                int item = 0;
-                int tries = 0;
-                int rows = tiles.GetLength(0);
-                int columns = tiles.GetLength(1);
-                while (item < selectedWords.Count && tries < safeNum)
-                {
-                    string word = selectedWords[item];
-                    int wordLen = word.Length;
-                    int row = rand.Next(rows);
-                    int column = rand.Next(columns);
-                    var directions = new List<WordDirection>();
-                    foreach (WordDirection direction in Enum.GetValues(typeof(WordDirection)))
-                    {
-                        if (WordFits(direction, word.Length, row, column, rows, columns))
-                        {
-                            directions.Add(direction);
-                        }
-                    }
-                    if (directions.Count > 0)
-                    {
-                        WordDirection directionSelected = directions[rand.Next(directions.Count)];
-                        item++;
-                    }
-                    tries++;
-                }
-            }
-            catch (Exception ex)
-            {
-                var error = $"WordFits exception, {ex.Message}";
-                Debug.WriteLine(error);
-                bOK = false;
-            }
-            return bOK;
-        }
+            Row = 0;
+            Column = 0;
+        }       
 
         // test if word fits direction
-        private bool WordFits(WordDirection direction, int wordLen, int row, int column, int rows, int columns)
+        internal bool WordFits(WordDirection direction, int wordLen, int row, int column, int rows, int columns)
         {
             bool bOK = false;
             try

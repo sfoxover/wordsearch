@@ -71,7 +71,7 @@ namespace WordSearch
                     int columns = (int)(height / tileHeight);
                     Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
                     // initialize word array
-                    WordManager.Instance.InitializeWordTile(rows, columns);
+                    WordManager.Instance.InitializeWordList(rows, columns);
                     // create titles
                     var tiles = new List<TileControl>();
                     for (int column = 0; column < columns; column++)
