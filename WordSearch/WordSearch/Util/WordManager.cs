@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
 using WordSearch.ViewModels;
+using Xamarin.Forms;
 
 namespace WordSearch.Util
 {
@@ -29,7 +30,7 @@ namespace WordSearch.Util
         {
             Tiles = null;
             Words = null;
-            DifficultyLevel = GameDifficulty.medium;
+            DifficultyLevel = GameDifficulty.easy;
         }
 
         // create new word tile multi dimentional array
@@ -54,7 +55,8 @@ namespace WordSearch.Util
                     Tiles = tiles;
                 }
                 // put words in tiles
-                bOK = PlaceWordsInTiles();
+                int maxWordLength = rows > columns? rows : columns;
+                bOK = PlaceWordsInTiles(maxWordLength);
                 Debug.Assert(bOK);
             }
             catch (Exception ex)
@@ -67,7 +69,7 @@ namespace WordSearch.Util
         }
 
         // put words in tiles
-        private bool PlaceWordsInTiles()
+        private bool PlaceWordsInTiles(int maxWordLength)
         {
             bool bOK = true;
             try
@@ -79,7 +81,7 @@ namespace WordSearch.Util
                 // load words database
                 var wordDb = new WordDatabase();
                 List<string> wordList;
-                bOK = wordDb.GetRandomWords(5, out wordList);
+                bOK = wordDb.GetRandomWords(5, maxWordLength, out wordList);
                 Debug.Assert(bOK);
                 if (bOK)
                 {
@@ -89,19 +91,63 @@ namespace WordSearch.Util
                         Word word = new Word(text);
                         // select a random direction and position
                         bOK = SelectRandomPose(ref word);
+                        Debug.Assert(bOK);
                         if (bOK)
                         {
-                            lock (WordsLock)
+                            bOK = word.CalculateTilePositions();
+                            Debug.Assert(bOK);
+                            if (bOK)
                             {
-                                Words.Add(word);
+                                lock (WordsLock)
+                                {
+                                    Words.Add(word);
+                                }
                             }
                         }
+                    }
+                    if (bOK)
+                    {
+                        // update tiles with words
+                        bOK = RefreshWordTileStates();
+                        Debug.Assert(bOK);
                     }
                 }              
             }
             catch (Exception ex)
             {
                 var error = $"PlaceWordsInTiles exception, {ex.Message}";
+                Debug.WriteLine(error);
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // refresh all tiles that belong to a word
+        private bool RefreshWordTileStates()
+        {
+            bool bOK = true;
+            try
+            {
+                lock (WordsLock)
+                {
+                    foreach (var word in Words) 
+                    {
+                        for (int n = 0; n < word.Text.Length; n++)
+                        {
+                            char ch = word.Text[n];
+                            int row = (int)word.TilePositions[n].X;
+                            int column = (int)word.TilePositions[n].Y;
+                            lock (TilesLock)
+                            {
+                                Tiles[row, column].Letter = ch;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"RefreshWordTileStates exception, {ex.Message}";
                 Debug.WriteLine(error);
                 bOK = false;
             }
@@ -131,7 +177,7 @@ namespace WordSearch.Util
                     var directions = new List<Word.WordDirection>();
                     foreach (Word.WordDirection direction in Enum.GetValues(typeof(Word.WordDirection)))
                     {
-                        if (word.WordFits(direction, wordLen, row, column, rows, columns))
+                        if (word.WordFits(direction, row, column, rows, columns))
                         {
                             directions.Add(direction);
                         }

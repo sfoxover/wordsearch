@@ -15,7 +15,7 @@ namespace WordSearch.Util
         }
 
         // get random list of words
-        public bool GetRandomWords(int numWords, out List<string> wordList)
+        public bool GetRandomWords(int numWords, int maxWordLength, out List<string> wordList)
         {
             wordList = new List<string>();
             try
@@ -29,10 +29,10 @@ namespace WordSearch.Util
                 while(words < numWords && tries < safeNum)
                 {
                     int num = rnd.Next(WordList.Length);
-                    string value = WordList[num].ToLower();
-                    if(!wordList.Contains(value))
+                    string text = WordList[num].ToLower();
+                    if(text.Length <= maxWordLength && !wordList.Contains(text))
                     {
-                        wordList.Add(value);
+                        wordList.Add(text);
                         words++;
                     }
                     tries++;
