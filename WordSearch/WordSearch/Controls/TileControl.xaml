@@ -10,7 +10,7 @@
                 <TapGestureRecognizer Command="{Binding TileClickCommand}"/>
             </Frame.GestureRecognizers>
             <StackLayout VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-                <Label Text="{Binding Letter}" TextColor="{Binding LetterTextColor}" BackgroundColor="{Binding LetterTextBkgColor}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
+                <Label Text="{Binding Letter}" FontSize="Large" TextColor="{Binding LetterTextColor}" BackgroundColor="{Binding LetterTextBkgColor}" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand"/>
             </StackLayout>
         </Frame>
     </ContentView.Content>

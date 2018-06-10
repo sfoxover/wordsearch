@@ -73,32 +73,27 @@ namespace WordSearch
                     // initialize word array
                     WordManager.Instance.InitializeWordList(rows, columns);
                     // create titles
-                    var tiles = new List<TileControl>();
-                    for (int column = 0; column < columns; column++)
-                    {
-                        for (int row = 0; row < rows; row++)
-                        {
-                            Tile tile = null;
-                            if (WordManager.Instance.GetTileAt(row, column, out tile))
-                            {
-                                string letter = $"{tile.Letter}";
-                                tiles.Add(new TileControl(letter, row, column, tileWidth, tileHeight));
-                            }
-                            else
-                            {
-                                bOK = false;
-                                Debug.WriteLine($"Failed to read tile {row} x {column}");
-                            }
-                        }
-                    }
                     // add tiles on UI thread
                     Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                     {
                         // create titles
                         tilesView.Children.Clear();
-                        foreach (var tile in tiles)
+                        for (int column = 0; column < columns; column++)
                         {
-                            tilesView.Children.Add(tile);
+                            for (int row = 0; row < rows; row++)
+                            {
+                                Tile tile = null;
+                                if (WordManager.Instance.GetTileAt(row, column, out tile))
+                                {
+                                    string letter = $"{tile.Letter}";
+                                    tilesView.Children.Add(new TileControl(letter, row, column, tileWidth, tileHeight));
+                                }
+                                else
+                                {
+                                    bOK = false;
+                                    Debug.WriteLine($"Failed to read tile {row} x {column}");
+                                }
+                            }
                         }
                     });
                 }
