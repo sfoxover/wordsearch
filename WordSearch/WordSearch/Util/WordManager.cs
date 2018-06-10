@@ -1,5 +1,6 @@
 ﻿using Prism.Events;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
 using WordSearch.ViewModels;
@@ -22,11 +23,14 @@ namespace WordSearch.Util
         private const int TILE_ROWS_LEVEL_HARD = 20;
         // word database
         private WordDatabase WordsDb { get; set; }
-
+        // array of random words
+        public List<Word> SelectedWords { get; set; }
+       
         private WordManager()
         {
             TileLetterArray = null;
             WordsDb = null;
+            SelectedWords = null;
             DifficultyLevel = GameDifficulty.medium;
         }
 
@@ -49,10 +53,15 @@ namespace WordSearch.Util
                 // load words database
                 WordsDb = new WordDatabase();
                 bOK = WordsDb.CreateWordList(5);
-
-                lock (TileLetterArrayLock)
+                Debug.Assert(bOK);
+                if (bOK)
                 {
-                    TileLetterArray = tiles;
+                    // put words in tiles
+                    bOK = PlaceWordsInTiles(tiles, WordsDb.SelectedWords);
+                    lock (TileLetterArrayLock)
+                    {
+                        TileLetterArray = tiles;
+                    }
                 }
             }
             catch (Exception ex)
@@ -63,6 +72,30 @@ namespace WordSearch.Util
             }
             return bOK;
         }
+
+        // put words in tiles
+        private bool PlaceWordsInTiles(Tile[,] tiles, List<string> selectedWords)
+        {
+            bool bOK = true;
+            try
+            {
+                SelectedWords = new List<Word>();
+                foreach (var text in selectedWords)
+                {
+                    Word word = new Word();
+                    SelectedWords.Add(word);
+                }
+
+              
+            }
+            catch (Exception ex)
+            {
+                var error = $"PlaceWordsInTiles exception, {ex.Message}";
+                Debug.WriteLine(error);
+                bOK = false;
+            }
+            return bOK;
+        }       
 
         // get tile from array
         public bool GetTileAt(int row, int column, out Tile tile)
