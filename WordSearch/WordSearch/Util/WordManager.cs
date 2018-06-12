@@ -110,6 +110,7 @@ namespace WordSearch.Util
                             {
                                 // found next word that fits ok
                                 filterList.Add(text);
+                                Debug.WriteLine($"PlaceWordsInTiles adding word {text}");
                                 lock (WordsLock)
                                 {
                                     Words.Add(word);
@@ -189,20 +190,36 @@ namespace WordSearch.Util
                     int wordLen = word.Text.Length;
                     int row = Random.Next(rows);
                     int column = Random.Next(columns);
+                    word.Row = row;
+                    word.Column = column;
                     var directions = new List<Word.WordDirection>();
                     foreach (Word.WordDirection direction in Enum.GetValues(typeof(Word.WordDirection)))
                     {
-                        if (word.WordFits(direction, row, column, rows, columns))
+                        // test if word fits
+                        word.Direction = direction;
+                        if (word.WordFits(rows, columns))
                         {
-                            directions.Add(direction);
+                            // test for collision with existing words
+                            bool bHasCollision = false;
+                            lock (WordsLock)
+                            {
+                                foreach(var existingWord in Words)
+                                {
+                                    if(existingWord.HasCollision(word))
+                                    {
+                                        bHasCollision = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!bHasCollision)
+                                directions.Add(direction);
                         }
                     }
                     if (directions.Count > 0)
                     {
                         // select direction and set row and column for word object
-                        word.Direction = directions[Random.Next(directions.Count)];
-                        word.Row = row;
-                        word.Column = column;
+                        word.Direction = directions[Random.Next(directions.Count)];                        
                         bOK = true;
                         break;
                     }

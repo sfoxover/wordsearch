@@ -28,15 +28,14 @@ namespace WordSearch
 
         public WordSearchPage (IEventAggregator eventAggregator)
 		{
-            Manager = new WordManager();
+            Manager = null;
             EventAggregator = eventAggregator;
             InitializeComponent();
             Appearing += WordSearchPage_Appearing;
         }
 
         private void WordSearchPage_Appearing(object sender, EventArgs e)
-        {
-            Manager.ListenForTileClicks(EventAggregator);
+        {            
             bool bOK = CalculateTiles(Width, Height);
             Debug.Assert(bOK);
             bOK = ResizeTiles(Width, Height);
@@ -66,6 +65,8 @@ namespace WordSearch
             bool bOK = true;
             try
             {
+                Manager = new WordManager();
+                Manager.ListenForTileClicks(EventAggregator);
                 // work out width and height based on page size and rows for difficulty level selected
                 int rows = Manager.GetTileRows();
                 int tileWidth = (int)(width / rows);
@@ -101,13 +102,17 @@ namespace WordSearch
             bool bOK = true;
             try
             {
-                int rows = Manager.GetTileRows();
-                int tileWidth = (int)(width / rows);
-                int tileHeight = tileWidth;
-                foreach (TileControl tileView in FlexTilesView.Children)
+                Debug.Assert(Manager != null);
+                if (Manager != null)
                 {
-                    tileView.ViewModel.TileWidth = tileWidth - 2;
-                    tileView.ViewModel.TileHeight = tileHeight - 2;
+                    int rows = Manager.GetTileRows();
+                    int tileWidth = (int)(width / rows);
+                    int tileHeight = tileWidth;
+                    foreach (TileControl tileView in FlexTilesView.Children)
+                    {
+                        tileView.ViewModel.TileWidth = tileWidth - 2;
+                        tileView.ViewModel.TileHeight = tileHeight - 2;
+                    }
                 }
             }
             catch(Exception ex)

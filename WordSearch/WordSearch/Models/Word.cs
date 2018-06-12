@@ -23,43 +23,44 @@ namespace WordSearch.Models
 
         public Word(string text)
         {
+            TilePositions = null;
             Text = text;
             Row = 0;
             Column = 0;
         }       
 
         // test if word fits direction
-        internal bool WordFits(WordDirection direction, int row, int column, int rows, int columns)
+        internal bool WordFits(int rows, int columns)
         {
             bool bOK = false;
             try
             {
                 int wordLen = Text.Length;
-                switch (direction)
+                switch (Direction)
                 {
                     case WordDirection.LeftToRight:
-                        bOK = (row + wordLen) <= rows;
+                        bOK = (Row + wordLen) <= rows;
                         break;
                     case WordDirection.TopToBottom:
-                        bOK = (column + wordLen) <= columns;
+                        bOK = (Column + wordLen) <= columns;
                         break;
                     case WordDirection.RightToLeft:
-                        bOK = (row - wordLen) >= 0;
+                        bOK = (Row - wordLen) >= 0;
                         break;
                     case WordDirection.BottomToTop:
-                        bOK = (column - wordLen) >= 0;
+                        bOK = (Column - wordLen) >= 0;
                         break;
                     case WordDirection.TopLeftToBottomRight:
-                        bOK = (row + wordLen) <= rows && (column + wordLen) <= columns;
+                        bOK = (Row + wordLen) <= rows && (Column + wordLen) <= columns;
                         break;
                     case WordDirection.TopRightToBottomLeft:
-                        bOK = (row - wordLen) >= 0 && (column + wordLen) <= columns;
+                        bOK = (Row - wordLen) >= 0 && (Column + wordLen) <= columns;
                         break;
                     case WordDirection.BottomLeftToTopRight:
-                        bOK = (row + wordLen) <= rows && (column - wordLen) >= 0;
+                        bOK = (Row + wordLen) <= rows && (Column - wordLen) >= 0;
                         break;
                     case WordDirection.BottomRightToTopLeft:
-                        bOK = (row - wordLen) >= 0 && (column - wordLen) >= 0;
+                        bOK = (Row - wordLen) >= 0 && (Column - wordLen) >= 0;
                         break;
                     default:
                         Debug.Assert(false);
@@ -88,41 +89,7 @@ namespace WordSearch.Models
                 TilePositions.Add(new Point(row, column));
                 for (int n = 1; n < wordLen; n++)
                 {
-                    switch (Direction)
-                    {
-                        case WordDirection.LeftToRight:
-                            row++;
-                            break;
-                        case WordDirection.TopToBottom:
-                            column++;
-                            break;
-                        case WordDirection.RightToLeft:
-                            row--;
-                            break;
-                        case WordDirection.BottomToTop:
-                            column--;
-                            break;
-                        case WordDirection.TopLeftToBottomRight:
-                            row++;
-                            column++;
-                            break;
-                        case WordDirection.TopRightToBottomLeft:
-                            row--;
-                            column++;
-                            break;
-                        case WordDirection.BottomLeftToTopRight:
-                            row++;
-                            column--;
-                            break;
-                        case WordDirection.BottomRightToTopLeft:
-                            row--;
-                            column--;
-                            break;
-                        default:
-                            bOK = false;
-                            Debug.Assert(false);
-                            break;
-                    }
+                    GetNextPosition(Direction, ref row, ref column);
                     TilePositions.Add(new Point(row, column));
                 }
             }
@@ -135,5 +102,78 @@ namespace WordSearch.Models
             return bOK;
         }
 
+        // get next position based on direction
+        internal void GetNextPosition(WordDirection direction, ref int row, ref int column)
+        {
+            switch (direction)
+            {
+                case WordDirection.LeftToRight:
+                    row++;
+                    break;
+                case WordDirection.TopToBottom:
+                    column++;
+                    break;
+                case WordDirection.RightToLeft:
+                    row--;
+                    break;
+                case WordDirection.BottomToTop:
+                    column--;
+                    break;
+                case WordDirection.TopLeftToBottomRight:
+                    row++;
+                    column++;
+                    break;
+                case WordDirection.TopRightToBottomLeft:
+                    row--;
+                    column++;
+                    break;
+                case WordDirection.BottomLeftToTopRight:
+                    row++;
+                    column--;
+                    break;
+                case WordDirection.BottomRightToTopLeft:
+                    row--;
+                    column--;
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+        }
+
+        // test all values in text for collision
+        internal bool HasCollision(Word word)
+        {
+            try
+            {
+                int row = Row;
+                int column = Column;
+                for (int n=0; n<Text.Length; n++)
+                {
+                    char ch1 = Text[n];
+                    int row2 = word.Row;
+                    int column2 = word.Column;
+                    for (int n2=0; n2<word.Text.Length; n2++)
+                    {
+                        char ch2 = word.Text[n2];
+                        // collision found
+                        if (row == row2 && column == column2 && ch1 != ch2)
+                        {
+                            Debug.WriteLine($"Collision found for words {Text} and {word.Text} at position {row} x {column}");
+                            return true;
+                        }
+                        GetNextPosition(word.Direction, ref row2, ref column2);
+                    }
+                    GetNextPosition(Direction, ref row, ref column);
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"HasCollision exception, {ex.Message}";
+                Debug.WriteLine(error);
+                return true;
+            }
+            return false;
+        }
     }
 }
