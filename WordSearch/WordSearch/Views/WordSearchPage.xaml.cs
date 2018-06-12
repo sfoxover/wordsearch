@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
 using WordSearch.Controls;
-using WordSearch.Models;
 using WordSearch.Util;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
@@ -16,13 +13,12 @@ namespace WordSearch
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class WordSearchPage : ContentPage
     {
-        // page width and height
-        double PageWidth { get; set; }
-        double PageHeight { get; set; }
-        // lock tile creation
-        private SemaphoreSlim CalculateTilesSemaphore { get; set; }
-
+        // word manager object
+        WordManager Manager { get; set; }
+        // Prism events interface
         IEventAggregator EventAggregator { get; set; }
+        // resize counter to avoid flicker
+        int PageSizedCounter { get; set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -32,39 +28,46 @@ namespace WordSearch
 
         public WordSearchPage (IEventAggregator eventAggregator)
 		{
+            Manager = new WordManager();
             EventAggregator = eventAggregator;
-            CalculateTilesSemaphore = new SemaphoreSlim(1);
             InitializeComponent();
             Appearing += WordSearchPage_Appearing;
         }
 
         private void WordSearchPage_Appearing(object sender, EventArgs e)
         {
-            WordManager.Instance.ListenForTileClicks(EventAggregator);
+            Manager.ListenForTileClicks(EventAggregator);
+            bool bOK = CalculateTiles(Width, Height);
+            Debug.Assert(bOK);
+            bOK = ResizeTiles(Width, Height);
+            Debug.Assert(bOK);
         }
 
-        protected override async void OnSizeAllocated(double width, double height)
+        protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height); // must be called
-            if (PageWidth != width || PageHeight != height)
+            // use size counter to avoid resize flicker
+            PageSizedCounter++;
+            Device.StartTimer(new TimeSpan(0, 0, 0, 0, 50), () =>
             {
-                PageWidth = width;
-                PageHeight = height;
-                // calculate tiles for portrait mode orientation
-                bool bOK = await CalculateTiles(width, height);
-                Debug.Assert(bOK);
-            }
+                PageSizedCounter--;
+                if (PageSizedCounter == 0)
+                {
+                    bool bOK = ResizeTiles(Width, Height);
+                    Debug.Assert(bOK);
+                }
+                return false;
+            });
         }
 
         // calculate for portrait mode orientation
-        private async Task<bool> CalculateTiles(double width, double height)
+        private bool CalculateTiles(double width, double height)
         {
             bool bOK = true;
             try
             {
-                bOK = await CalculateTilesSemaphore.WaitAsync(-1);
                 // work out width and height based on page size and rows for difficulty level selected
-                int rows = WordManager.Instance.GetTileRows();
+                int rows = Manager.GetTileRows();
                 int tileWidth = (int)(width / rows);
                 int tileHeight = tileWidth;
                 int columns = (int)(height / tileHeight);
@@ -76,24 +79,43 @@ namespace WordSearch
                 {
                     for (int row = 0; row < rows; row++)
                     {
-                        var control = new TileControl(row, column, tileWidth, tileHeight);
+                        var control = new TileControl(row, column, 0, 0);
                         controls.Add(control);
                         FlexTilesView.Children.Add(control);
                     }
                 }
                 // initialize word array
-                bOK = WordManager.Instance.InitializeWordList(rows, columns, controls);
+                bOK = Manager.InitializeWordList(rows, columns, controls);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Debug.WriteLine("CalculateTiles exception, " + ex.Message);
                 bOK = false;
             }
-            finally
-            {
-                CalculateTilesSemaphore.Release();
-            }
             return bOK;
         }
+
+        // resize tile width and height to match page size
+        private bool ResizeTiles(double width, double height)
+        {
+            bool bOK = true;
+            try
+            {
+                int rows = Manager.GetTileRows();
+                int tileWidth = (int)(width / rows);
+                int tileHeight = tileWidth;
+                foreach (TileControl tileView in FlexTilesView.Children)
+                {
+                    tileView.ViewModel.TileWidth = tileWidth - 2;
+                    tileView.ViewModel.TileHeight = tileHeight - 2;
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.WriteLine($"ResizeTiles exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }        
     }
 }

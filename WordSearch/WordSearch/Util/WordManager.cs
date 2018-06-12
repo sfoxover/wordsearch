@@ -11,8 +11,6 @@ namespace WordSearch.Util
 {
     public class WordManager
     {
-        private static readonly Lazy<WordManager> _instance = new Lazy<WordManager>(() => { return new WordManager(); });
-        public static WordManager Instance { get { return _instance.Value; } }
         static Random Random = new Random();
         // game difficulty enum
         public enum GameDifficulty { easy, medium, hard};
@@ -33,7 +31,7 @@ namespace WordSearch.Util
         private TileControlViewModel[,] Tiles { get; set; }
         private static object TilesLock = new object();
 
-        private WordManager()
+        public WordManager()
         {
             Tiles = null;
             Words = null;
