@@ -26,42 +26,25 @@ namespace WordSearch.Util
 
         // array of random words
         public List<Word> Words { get; set; }
-        private static object WordsLock = new object();
         // word list array
-        private TileControlViewModel[,] Tiles { get; set; }
-        private static object TilesLock = new object();
+        private TileControlViewModel[,] TileViewModels { get; set; }
 
         public WordManager()
         {
-            Tiles = null;
+            TileViewModels = null;
             Words = null;
             DifficultyLevel = GameDifficulty.easy;
         }
 
         // create new word tile multi dimentional array
-        public bool InitializeWordList(int rows, int columns, List<TileControl> controls)
+        public bool InitializeWordList(int maxWordLength, TileControlViewModel[,] viewModels)
         {
             bool bOK = true;
             try
             {
-                // create titles
-                var tiles = new TileControlViewModel[rows, columns];
-                int count = 0;
-                for (int column = 0; column < columns; column++)
-                {
-                    for (int row = 0; row < rows; row++)
-                    {
-                        tiles.SetValue(controls[count].ViewModel, row, column);
-                        count++;
-                    }
-                }
                 // store tile array
-                lock (TilesLock)
-                {
-                    Tiles = tiles;
-                }
+                TileViewModels = viewModels;
                 // put words in tiles
-                int maxWordLength = rows > columns? rows : columns;
                 bOK = PlaceWordsInTiles(maxWordLength);
                 Debug.Assert(bOK);
             }
@@ -80,10 +63,7 @@ namespace WordSearch.Util
             bool bOK = true;
             try
             {
-                lock (WordsLock)
-                {
-                    Words = new List<Word>();
-                }
+                Words = new List<Word>();
                 // load words database
                 var wordDb = new WordDatabase();
                 int count = 0;
@@ -111,12 +91,9 @@ namespace WordSearch.Util
                                 // found next word that fits ok
                                 filterList.Add(text);
                                 Debug.WriteLine($"PlaceWordsInTiles adding word {text}");
-                                lock (WordsLock)
-                                {
-                                    Words.Add(word);
-                                    count++;
-                                    tries = 0;
-                                }
+                                Words.Add(word);
+                                count++;
+                                tries = 0;
                             }
                         }
                     }
@@ -144,21 +121,15 @@ namespace WordSearch.Util
             bool bOK = true;
             try
             {
-                lock (WordsLock)
+                foreach (var word in Words) 
                 {
-                    foreach (var word in Words) 
+                    for (int n = 0; n < word.Text.Length; n++)
                     {
-                        for (int n = 0; n < word.Text.Length; n++)
-                        {
-                            char ch = word.Text[n];
-                            int row = (int)word.TilePositions[n].X;
-                            int column = (int)word.TilePositions[n].Y;
-                            lock (TilesLock)
-                            {
-                                Tiles[row, column].Letter = $"{ch}";
-                                Tiles[row, column].LetterSelected = true;
-                            }
-                        }
+                        char ch = word.Text[n];
+                        int row = (int)word.TilePositions[n].X;
+                        int column = (int)word.TilePositions[n].Y;
+                        TileViewModels[row, column].Letter = $"{ch}";
+                        TileViewModels[row, column].LetterSelected = true;
                     }
                 }
             }
@@ -177,13 +148,8 @@ namespace WordSearch.Util
             bool bOK = false;
             try
             {
-                int rows = 0;
-                int columns = 0;
-                lock (TilesLock)
-                {
-                    rows = Tiles.GetLength(0);
-                    columns = Tiles.GetLength(1);
-                }
+                int rows = TileViewModels.GetLength(0);
+                int columns = TileViewModels.GetLength(1);
                 int tries = 0;
                 while (tries < Defines.MAX_RANDOM_TRIES)
                 {
@@ -201,15 +167,12 @@ namespace WordSearch.Util
                         {
                             // test for collision with existing words
                             bool bHasCollision = false;
-                            lock (WordsLock)
+                            foreach(var existingWord in Words)
                             {
-                                foreach(var existingWord in Words)
+                                if(existingWord.HasCollision(word))
                                 {
-                                    if(existingWord.HasCollision(word))
-                                    {
-                                        bHasCollision = true;
-                                        break;
-                                    }
+                                    bHasCollision = true;
+                                    break;
                                 }
                             }
                             if(!bHasCollision)
@@ -242,10 +205,7 @@ namespace WordSearch.Util
             tile = null;
             try
             {
-                lock (TilesLock)
-                {
-                    tile = Tiles.GetValue(row, column) as TileControlViewModel;
-                }
+                tile = TileViewModels.GetValue(row, column) as TileControlViewModel;
             }
             catch (Exception ex)
             {

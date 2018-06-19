@@ -2,7 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="clr-namespace:Prism.Mvvm;assembly=Prism.Forms"
-             prism:ViewModelLocator.AutowireViewModel="True"
+             prism:ViewModelLocator.AutowireViewModel="false"
              x:Class="WordSearch.Controls.TileControl">
   <ContentView.Content>
         <Frame x:Name="TileFrame" BorderColor="{Binding TitleBorderColor}" Padding="1" CornerRadius="5" WidthRequest="{Binding TileWidth}" HeightRequest="{Binding TileHeight}">

@@ -35,10 +35,11 @@ namespace WordSearch
         }
 
         private void WordSearchPage_Appearing(object sender, EventArgs e)
-        {            
-            bool bOK = CalculateTiles(Width, Height);
+        {
+            double height = Height - FlexWordsList.Height;
+            bool bOK = CalculateTiles(Width, height);
             Debug.Assert(bOK);
-            bOK = ResizeTiles(Width, Height);
+            bOK = ResizeTiles(Width, height);
             Debug.Assert(bOK);
         }
 
@@ -52,7 +53,7 @@ namespace WordSearch
                 PageSizedCounter--;
                 if (PageSizedCounter == 0)
                 {
-                    bool bOK = ResizeTiles(Width, Height);
+                    bool bOK = ResizeTiles(Width, Height - FlexWordsList.Height);
                     Debug.Assert(bOK);
                 }
                 return false;
@@ -76,17 +77,36 @@ namespace WordSearch
                 // add titles on UI thread
                 FlexTilesView.Children.Clear();
                 List<TileControl> controls = new List<TileControl>();
+                var viewModels = new TileControlViewModel[rows, columns];
                 for (int column = 0; column < columns; column++)
                 {
                     for (int row = 0; row < rows; row++)
                     {
-                        var control = new TileControl(row, column, 0, 0);
+                        // create tile view model
+                        TileControlViewModel viewModel = new TileControlViewModel(EventAggregator);
+                        viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
+                        viewModel.TileRow = row;
+                        viewModel.TileColum = column;
+                        viewModel.TileWidth = tileWidth - 2;
+                        viewModel.TileHeight = tileHeight - 2;
+                        viewModels.SetValue(viewModel, row, column);
+                        // create tile control passing view model to constructor
+                        var control = new TileControl(viewModel);
                         controls.Add(control);
+                        // add control to flex view
                         FlexTilesView.Children.Add(control);
                     }
                 }
                 // initialize word array
-                bOK = Manager.InitializeWordList(rows, columns, controls);
+                int maxWordLength = rows > columns ? rows : columns;
+                bOK = Manager.InitializeWordList(maxWordLength, viewModels);
+                // place words in top of page
+                foreach(var word in Manager.Words)
+                {
+                    Label label = new Label();
+                    label.Text = word.Text;
+                    FlexWordsList.Children.Add(label);
+                }
             }
             catch (Exception ex)
             {

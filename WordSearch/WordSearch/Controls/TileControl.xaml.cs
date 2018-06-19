@@ -14,6 +14,13 @@ namespace WordSearch.Controls
             get { return BindingContext as TileControlViewModel; }
         }
 
+        public TileControl(TileControlViewModel viewModel)
+        {
+            Debug.Assert(viewModel != null);
+            BindingContext = viewModel;
+            InitializeComponent();
+        }
+
         public TileControl(int row, int column, int tileWidth, int tileHeight)
 		{
             InitializeComponent();
