@@ -20,6 +20,8 @@ namespace WordSearch.Models
         public WordDirection Direction { get; set; }
         // reference to tile objects used in this word
         public List<Point> TilePositions { get; set; }
+        // flag when whole word is completed
+        public bool IsWordCompleted { get; set; }
 
         public Word(string text)
         {
@@ -27,6 +29,7 @@ namespace WordSearch.Models
             Text = text;
             Row = 0;
             Column = 0;
+            IsWordCompleted = false;
         }       
 
         // test if word fits direction

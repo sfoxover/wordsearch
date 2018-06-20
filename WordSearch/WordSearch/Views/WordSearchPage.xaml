@@ -6,7 +6,7 @@
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
         <FlexLayout Direction="Column" BackgroundColor="LightGray">
-            <FlexLayout x:Name="FlexWordsList" FlexLayout.Grow="1" Wrap="Wrap" Direction="Row" AlignItems="Center" JustifyContent="SpaceEvenly"/>
+            <FlexLayout x:Name="FlexWordsList" FlexLayout.Grow="1" Wrap="Wrap" Direction="Row" AlignItems="Center" JustifyContent="SpaceEvenly" Margin="0,10,0,0"/>
             <FlexLayout x:Name="FlexTilesView" FlexLayout.Grow="19" Wrap="Wrap" Direction="Row" JustifyContent="Center" />
         </FlexLayout>
     </ContentPage.Content>

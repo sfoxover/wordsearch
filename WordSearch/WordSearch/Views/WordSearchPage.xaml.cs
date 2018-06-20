@@ -100,12 +100,12 @@ namespace WordSearch
                 // initialize word array
                 int maxWordLength = rows > columns ? rows : columns;
                 bOK = Manager.InitializeWordList(maxWordLength, viewModels);
-                // place words in top of page
-                foreach(var word in Manager.Words)
+                Debug.Assert(bOK);
+                // load words in header and strike out completed words
+                if (bOK)
                 {
-                    Label label = new Label();
-                    label.Text = word.Text;
-                    FlexWordsList.Children.Add(label);
+                    bOK = LoadWordsHeader();
+                    Debug.Assert(bOK);
                 }
             }
             catch (Exception ex)
@@ -141,6 +141,38 @@ namespace WordSearch
                 bOK = false;
             }
             return bOK;
-        }        
+        }
+
+        // load words in header and strike out completed words
+        private bool LoadWordsHeader()
+        {
+            bool bOK = true;
+            try
+            {
+                FlexWordsList.Children.Clear();
+                // place words in top of page
+                foreach (var word in Manager.Words)
+                {
+                    var label = new Label();                    
+                    if(word.IsWordCompleted)
+                    {
+                        label.Text = word.Text;
+                        label.BackgroundColor = Color.Yellow;
+                        label.TextColor = Color.Red;
+                    }
+                    else
+                    {
+                        label.Text = word.Text;
+                    }
+                    FlexWordsList.Children.Add(label);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadWordsHeader exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
     }
 }
