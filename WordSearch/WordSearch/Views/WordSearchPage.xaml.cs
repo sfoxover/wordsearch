@@ -19,6 +19,8 @@ namespace WordSearch
         IEventAggregator EventAggregator { get; set; }
         // resize counter to avoid flicker
         int PageSizedCounter { get; set; }
+        // is initialized
+        private bool HasBeenInitialized { get; set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -29,18 +31,9 @@ namespace WordSearch
         public WordSearchPage (IEventAggregator eventAggregator)
 		{
             Manager = null;
+            HasBeenInitialized = false;
             EventAggregator = eventAggregator;
             InitializeComponent();
-            Appearing += WordSearchPage_Appearing;
-        }
-
-        private void WordSearchPage_Appearing(object sender, EventArgs e)
-        {
-            double height = Height - FlexWordsList.Height;
-            bool bOK = CalculateTiles(Width, height);
-            Debug.Assert(bOK);
-            bOK = ResizeTiles(Width, height);
-            Debug.Assert(bOK);
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -51,9 +44,15 @@ namespace WordSearch
             Device.StartTimer(new TimeSpan(0, 0, 0, 0, 50), () =>
             {
                 PageSizedCounter--;
-                if (PageSizedCounter == 0)
+                if (PageSizedCounter == 0 && height > 0)
                 {
-                    bool bOK = ResizeTiles(Width, Height - FlexWordsList.Height);
+                    double wordHeight = Height - FlexWordsList.Height;
+                    if (!HasBeenInitialized)
+                    {
+                        HasBeenInitialized = CalculateTiles(Width, wordHeight);
+                        Debug.Assert(HasBeenInitialized);
+                    }
+                    bool bOK = ResizeTiles(width, wordHeight);
                     Debug.Assert(bOK);
                 }
                 return false;
@@ -66,6 +65,8 @@ namespace WordSearch
             bool bOK = true;
             try
             {
+                if (height <= 0)
+                    return false;
                 Manager = new WordManager();
                 Manager.ListenForTileClicks(EventAggregator);
                 // work out width and height based on page size and rows for difficulty level selected
@@ -149,22 +150,47 @@ namespace WordSearch
             bool bOK = true;
             try
             {
+                // clear grid columns
                 FlexWordsList.Children.Clear();
+                FlexWordsList.ColumnDefinitions.Clear();
+                FlexWordsList.RowDefinitions.Clear();
+                int rows = 4;
+                int columns = Manager.GetLevelWordCount() / 4;
+                Manager.GetLevelWordCount();
+                int count = 0;
+
                 // place words in top of page
-                foreach (var word in Manager.Words)
+                for (int column = 0; column < columns; column++)
                 {
-                    var label = new Label();                    
-                    if(word.IsWordCompleted)
+                    FlexWordsList.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });                   
+                }
+                for (int row = 0; row < rows; row++)
+                {
+                    FlexWordsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+                }
+
+                // place words in top of page
+                for (int column = 0;column< columns;column++)
+                {
+                    for (int row = 0; row < rows; row++)
                     {
-                        label.Text = word.Text;
-                        label.BackgroundColor = Color.Yellow;
-                        label.TextColor = Color.Red;
+                        var word = Manager.Words[count];
+                        var label = new Label();
+                        label.HorizontalTextAlignment = TextAlignment.Center;
+                        label.VerticalTextAlignment = TextAlignment.Center;
+                        if (word.IsWordCompleted)
+                        {
+                            label.Text = word.Text;
+                            label.BackgroundColor = Color.Yellow;
+                            label.TextColor = Color.Red;
+                        }
+                        else
+                        {
+                            label.Text = word.Text;
+                        }
+                        FlexWordsList.Children.Add(label, row, column);
+                        count++;
                     }
-                    else
-                    {
-                        label.Text = word.Text;
-                    }
-                    FlexWordsList.Children.Add(label);
                 }
             }
             catch (Exception ex)

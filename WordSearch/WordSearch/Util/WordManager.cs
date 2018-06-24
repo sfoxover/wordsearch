@@ -237,7 +237,7 @@ namespace WordSearch.Util
         }
 
         // get number of words to find based on difficulty
-        int GetLevelWordCount()
+        public int GetLevelWordCount()
         {
             int count = 0;
             switch(DifficultyLevel)
