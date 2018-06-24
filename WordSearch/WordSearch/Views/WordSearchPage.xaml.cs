@@ -105,7 +105,7 @@ namespace WordSearch
                 // load words in header and strike out completed words
                 if (bOK)
                 {
-                    bOK = LoadWordsHeader();
+                    bOK = ViewModel.LoadWordsHeader(Manager.Words);
                     Debug.Assert(bOK);
                 }
             }
@@ -142,55 +142,7 @@ namespace WordSearch
                 bOK = false;
             }
             return bOK;
-        }
-
-        // load words in header and strike out completed words
-        private bool LoadWordsHeader()
-        {
-            bool bOK = true;
-            try
-            {
-                // clear grid columns
-                FlexWordsList.Children.Clear();
-                FlexWordsList.ColumnDefinitions.Clear();
-                FlexWordsList.RowDefinitions.Clear();
-                int columns = 4;
-                int rows = Manager.GetLevelWordCount() / 4;
-                int count = 0;
-
-                // place words in top of page
-                for (int row = 0; row < rows; row++)
-                {
-                    FlexWordsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
-                    for (int column = 0;column< columns;column++)
-                    {
-                        FlexWordsList.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
-                        var word = Manager.Words[count];
-                        var label = new Label();
-                        label.HorizontalTextAlignment = TextAlignment.Center;
-                        label.VerticalTextAlignment = TextAlignment.Center;
-                        if (word.IsWordCompleted)
-                        {
-                            label.Text = word.Text;
-                            label.BackgroundColor = Color.Yellow;
-                            label.TextColor = Color.Red;
-                        }
-                        else
-                        {
-                            label.Text = word.Text;
-                        }
-                        FlexWordsList.Children.Add(label, column, row);
-                        count++;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"LoadWordsHeader exception, {ex.Message}");
-                bOK = false;
-            }
-            return bOK;
-        }
+        }       
     }
 }
 

@@ -33,7 +33,7 @@ namespace WordSearch.Util
         {
             TileViewModels = null;
             Words = null;
-            DifficultyLevel = GameDifficulty.easy;
+            DifficultyLevel = GameDifficulty.medium;
         }
 
         // create new word tile multi dimentional array
