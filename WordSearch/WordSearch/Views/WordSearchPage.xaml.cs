@@ -154,26 +154,17 @@ namespace WordSearch
                 FlexWordsList.Children.Clear();
                 FlexWordsList.ColumnDefinitions.Clear();
                 FlexWordsList.RowDefinitions.Clear();
-                int rows = 4;
-                int columns = Manager.GetLevelWordCount() / 4;
-                Manager.GetLevelWordCount();
+                int columns = 4;
+                int rows = Manager.GetLevelWordCount() / 4;
                 int count = 0;
 
                 // place words in top of page
-                for (int column = 0; column < columns; column++)
-                {
-                    FlexWordsList.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });                   
-                }
                 for (int row = 0; row < rows; row++)
                 {
-                    FlexWordsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
-                }
-
-                // place words in top of page
-                for (int column = 0;column< columns;column++)
-                {
-                    for (int row = 0; row < rows; row++)
+                    FlexWordsList.RowDefinitions.Add(new RowDefinition { Height = GridLength.Star });
+                    for (int column = 0;column< columns;column++)
                     {
+                        FlexWordsList.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Star });
                         var word = Manager.Words[count];
                         var label = new Label();
                         label.HorizontalTextAlignment = TextAlignment.Center;
@@ -188,7 +179,7 @@ namespace WordSearch
                         {
                             label.Text = word.Text;
                         }
-                        FlexWordsList.Children.Add(label, row, column);
+                        FlexWordsList.Children.Add(label, column, row);
                         count++;
                     }
                 }
@@ -202,3 +193,4 @@ namespace WordSearch
         }
     }
 }
+
