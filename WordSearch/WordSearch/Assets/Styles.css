@@ -1,0 +1,21 @@
+﻿^contentpage {
+    background-color: lightgray;
+}
+
+.HeaderText {
+    background-color: lightgray;
+    color: black;
+}
+
+.HeaderTextSelected {
+    background-color: yellow;
+    color:red;
+}
+
+.FlexHeaderText {
+    background-color:lightgray;
+    align-items:center;
+    justify-content:space-around;
+    flex-wrap:wrap;
+    flex-direction:row;
+}

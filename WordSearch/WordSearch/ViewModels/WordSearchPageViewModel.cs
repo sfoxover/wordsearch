@@ -62,6 +62,54 @@ namespace WordSearch.ViewModels
             get { return _text8; }
             set { SetProperty(ref _text8, value); }
         }
+        private string _text9;
+        public string Text9
+        {
+            get { return _text9; }
+            set { SetProperty(ref _text9, value); }
+        }
+        private string _text10;
+        public string Text10
+        {
+            get { return _text10; }
+            set { SetProperty(ref _text10, value); }
+        }
+        private string _text11;
+        public string Text11
+        {
+            get { return _text11; }
+            set { SetProperty(ref _text11, value); }
+        }
+        private string _text12;
+        public string Text12
+        {
+            get { return _text12; }
+            set { SetProperty(ref _text12, value); }
+        }
+        private string _text13;
+        public string Text13
+        {
+            get { return _text13; }
+            set { SetProperty(ref _text13, value); }
+        }
+        private string _text14;
+        public string Text14
+        {
+            get { return _text14; }
+            set { SetProperty(ref _text14, value); }
+        }
+        private string _text15;
+        public string Text15
+        {
+            get { return _text15; }
+            set { SetProperty(ref _text15, value); }
+        }
+        private string _text16;
+        public string Text16
+        {
+            get { return _text16; }
+            set { SetProperty(ref _text16, value); }
+        }
 
         public WordSearchPageViewModel(INavigationService navigationService)
         {
@@ -100,6 +148,17 @@ namespace WordSearch.ViewModels
                     Text6 = words[5].Text;
                     Text7 = words[6].Text;
                     Text8 = words[7].Text;
+                }
+                if (words.Count >= 16)
+                {
+                    Text9 = words[8].Text;
+                    Text10 = words[9].Text;
+                    Text11 = words[10].Text;
+                    Text12 = words[11].Text;
+                    Text13 = words[12].Text;
+                    Text14 = words[13].Text;
+                    Text15 = words[14].Text;
+                    Text16 = words[15].Text;
                 }
             }
             catch (Exception ex)
