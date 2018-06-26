@@ -1,15 +1,10 @@
 ﻿^contentpage {
     background-color: lightgray;
+    margin:0;
 }
 
-.HeaderText {
-    background-color: lightgray;
-    color: black;
-}
-
-.HeaderTextSelected {
-    background-color: yellow;
-    color:red;
+FlexLayout{
+    margin:0;
 }
 
 .FlexHeaderText {
@@ -18,4 +13,5 @@
     justify-content:space-around;
     flex-wrap:wrap;
     flex-direction:row;
+    margin-top:5;
 }

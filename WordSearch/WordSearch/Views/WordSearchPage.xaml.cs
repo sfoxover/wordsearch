@@ -105,7 +105,7 @@ namespace WordSearch
                 // load words in header and strike out completed words
                 if (bOK)
                 {
-                    bOK = ViewModel.LoadWordsHeader(Manager.Words);
+                    bOK = LoadWordsHeader();
                     Debug.Assert(bOK);
                 }
             }
@@ -142,7 +142,40 @@ namespace WordSearch
                 bOK = false;
             }
             return bOK;
-        }       
+        }
+
+        // load words in header and highlight completed words
+        public bool LoadWordsHeader()
+        {
+            bool bOK = true;
+            try
+            {
+                // call view model to bind text
+                ViewModel.LoadWordsHeader(Manager.Words);
+                // dynamically update style
+                for (int n=0; n<Manager.Words.Count; n++)
+                {
+                    var word = Manager.Words[n];
+                    var label = FlexWordsList.Children[n] as Label;
+                    if(word.IsWordCompleted)
+                    {
+                        label.BackgroundColor = Color.Yellow;
+                        label.TextColor = Color.Red;
+                    }
+                    else
+                    {
+                        label.BackgroundColor = Color.LightGray;
+                        label.TextColor = Color.Black;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadWordsHeader exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
     }
 }
 

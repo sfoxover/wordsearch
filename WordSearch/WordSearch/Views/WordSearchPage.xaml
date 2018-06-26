@@ -12,8 +12,8 @@
     <ContentPage.Content>
         <FlexLayout Direction="Column" BackgroundColor="LightGray">
             <FlexLayout StyleClass="FlexHeaderText" x:Name="FlexWordsList" FlexLayout.Grow="1">
-                <Label StyleClass="HeaderText" Text="{Binding Text1}" IsVisible="{Binding Text1, Converter={StaticResource StringToBool}}"/>
-                <Label StyleClass="HeaderTextSelected" Text="{Binding Text2}" IsVisible="{Binding Text2, Converter={StaticResource StringToBool}}"/>
+                <Label Text="{Binding Text1}" IsVisible="{Binding Text1, Converter={StaticResource StringToBool}}"/>
+                <Label Text="{Binding Text2}" IsVisible="{Binding Text2, Converter={StaticResource StringToBool}}"/>
                 <Label Text="{Binding Text3}" IsVisible="{Binding Text3, Converter={StaticResource StringToBool}}"/>
                 <Label Text="{Binding Text4}" IsVisible="{Binding Text4, Converter={StaticResource StringToBool}}"/>
                 <Label Text="{Binding Text5}" IsVisible="{Binding Text5, Converter={StaticResource StringToBool}}"/>
