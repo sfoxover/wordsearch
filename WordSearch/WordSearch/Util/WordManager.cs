@@ -267,6 +267,7 @@ namespace WordSearch.Util
                     return false;
                 eventAggregator.GetEvent<TileSelectionEvent<TileControlViewModel>>().Subscribe((tile)=> {
                     Debug.WriteLine($"tile clicked {tile.Letter}");
+                    ChangeLetterSelection(tile);
                 });
             }
             catch(Exception ex)
@@ -292,6 +293,68 @@ namespace WordSearch.Util
             catch (Exception ex)
             {
                 var error = $"StopListenForTileClicks exception, {ex.Message}";
+                Debug.WriteLine(error);
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // change word letter selection if clicked
+        private bool ChangeLetterSelection(TileControlViewModel tile)
+        {
+            bool bOK = true;
+            try
+            {
+                foreach (var word in Words)
+                {
+                    for (int n = 0; n < word.Text.Length; n++)
+                    {
+                        int row = (int)word.TilePositions[n].X;
+                        int column = (int)word.TilePositions[n].Y;
+                        if (tile.TileRow == row && tile.TileColum == column)
+                        {
+                            // check if whole word is selected
+                            bool selected;
+                            bOK = CheckForCompletedWord(word, out selected);
+                            if(bOK && selected)
+                            {
+                                word.IsWordCompleted = true;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"ChangeLetterSelection exception, {ex.Message}";
+                Debug.WriteLine(error);
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // check if whole word is selected
+        private bool CheckForCompletedWord(Word word, out bool selected)
+        {
+            bool bOK = true;
+            selected = true;
+            try
+            {
+                for (int n = 0; n < word.Text.Length; n++)
+                {
+                    int row = (int)word.TilePositions[n].X;
+                    int column = (int)word.TilePositions[n].Y;
+                    if (!TileViewModels[row, column].LetterSelected)
+                    {
+                        selected = false;
+                        break;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"CheckForCompletedWord exception, {ex.Message}";
                 Debug.WriteLine(error);
                 bOK = false;
             }
