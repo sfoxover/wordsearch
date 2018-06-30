@@ -30,15 +30,19 @@ namespace WordSearch.Util
         private TileControlViewModel[,] TileViewModels { get; set; }
         // delegate callback to update header text
         public delegate void WordCompletedDelegate(Word word);
-        public WordCompletedDelegate WordCompletedCallback { get; set; }
+        public event WordCompletedDelegate WordCompletedCallback;
         // delegate callback for tile click
         public delegate void TileClickedDelegate(TileControlViewModel tile);
         public event TileClickedDelegate TileClickedCallback;
-
+        // delegate callback for game completed
+        public delegate void GameCompletedDelegate();
+        public event GameCompletedDelegate GameCompletedCallback;
 
         public WordManager()
         {
             WordCompletedCallback = null;
+            TileClickedCallback = null;
+            GameCompletedCallback = null;
             TileViewModels = null;
             Words = null;
             DifficultyLevel = GameDifficulty.medium;
@@ -322,10 +326,16 @@ namespace WordSearch.Util
                             // check if whole word is selected
                             bool selected;
                             bOK = CheckForCompletedWord(word, out selected);
-                            if(bOK && selected)
+                            Debug.Assert(bOK);
+                            if (bOK && selected)
                             {
+                                // mark tiles as part of completed word so they are not deselected
+                                bOK = MarkTilesAsWordCompleted(word);
+                                Debug.Assert(bOK);
                                 word.IsWordCompleted = true;
                                 WordCompletedCallback?.Invoke(word);
+                                // check if all words are selected
+                                bOK = CheckForAllWordsSelected();
                             }
                             break;
                         }
@@ -339,7 +349,7 @@ namespace WordSearch.Util
                 bOK = false;
             }
             return bOK;
-        }
+        }       
 
         // check if whole word is selected
         private bool CheckForCompletedWord(Word word, out bool selected)
@@ -362,6 +372,57 @@ namespace WordSearch.Util
             catch (Exception ex)
             {
                 var error = $"CheckForCompletedWord exception, {ex.Message}";
+                Debug.WriteLine(error);
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // mark tiles as part of completed word so they are not deselected
+        private bool MarkTilesAsWordCompleted(Word word)
+        {
+            bool bOK = true;
+            try
+            {
+                for (int n = 0; n < word.Text.Length; n++)
+                {
+                    int row = (int)word.TilePositions[n].X;
+                    int column = (int)word.TilePositions[n].Y;
+                    TileViewModels[row, column].IsPartOfCompletedWord = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"MarkTilesAsWordCompleted exception, {ex.Message}";
+                Debug.WriteLine(error);
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // check if all words are selected
+        private bool CheckForAllWordsSelected()
+        {
+            bool bOK = true;
+            try
+            {
+                bool allSelected = true;
+                foreach (var word in Words)
+                {
+                    if(!word.IsWordCompleted)
+                    {
+                        allSelected = false;
+                        break;
+                    }
+                }
+                if(allSelected)
+                {
+                    GameCompletedCallback?.Invoke();
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"CheckForAllWordsSelected exception, {ex.Message}";
                 Debug.WriteLine(error);
                 bOK = false;
             }

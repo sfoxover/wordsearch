@@ -73,6 +73,8 @@ namespace WordSearch.ViewModels
                 SetLetterColors();
             }
         }
+        // is this tile part of cmpleted word
+        public bool IsPartOfCompletedWord { get; set; }
 
         // frame click handler
         public DelegateCommand TileClickCommand { get; set; }
@@ -80,6 +82,7 @@ namespace WordSearch.ViewModels
 
         public TileControlViewModel(WordManager.TileClickedDelegate callback)
         {
+            IsPartOfCompletedWord = false;
             TileClickedCallBack = callback;
             SetDefaultValues();
         }
@@ -125,9 +128,12 @@ namespace WordSearch.ViewModels
         // tile was clicked
         private void HandleTitleClick()
         {
-            LetterSelected = !LetterSelected;
-            // publish event
-            TileClickedCallBack?.Invoke(this);
+            if (!IsPartOfCompletedWord)
+            {
+                LetterSelected = !LetterSelected;
+                // publish event
+                TileClickedCallBack?.Invoke(this);
+            }
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Prism.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
@@ -20,9 +19,6 @@ namespace WordSearch
         int PageSizedCounter { get; set; }
         // is initialized
         private bool HasBeenInitialized { get; set; }
-      // delegate callbacks
-        public event WordManager.WordCompletedDelegate WordCompletedCallback;
-        public event WordManager.TileClickedDelegate TileClickedCallback;
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -33,9 +29,7 @@ namespace WordSearch
         public WordSearchPage ()
 		{
             Manager = null;
-            TileClickedCallback = null;
-            HasBeenInitialized = false;
-            WordCompletedCallback += WordSearchPage_OnUpdateHeaderText;
+            HasBeenInitialized = false;            
             InitializeComponent();
         }
 
@@ -71,8 +65,10 @@ namespace WordSearch
                 if (height <= 0)
                     return false;
                 Manager = new WordManager();
-                Manager.WordCompletedCallback = WordCompletedCallback;
-                TileClickedCallback = Manager.ListenForTileClicks();
+                // set up WordManager delegate events 
+                var tileClickedCallback = Manager.ListenForTileClicks();
+                Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
+                Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
                 // work out width and height based on page size and rows for difficulty level selected
                 int rows = Manager.GetTileRows();
                 int tileWidth = (int)(width / rows);
@@ -88,7 +84,7 @@ namespace WordSearch
                     for (int row = 0; row < rows; row++)
                     {
                         // create tile view model
-                        TileControlViewModel viewModel = new TileControlViewModel(TileClickedCallback);
+                        TileControlViewModel viewModel = new TileControlViewModel(tileClickedCallback);
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColum = column;
@@ -119,7 +115,7 @@ namespace WordSearch
                 bOK = false;
             }
             return bOK;
-        }
+        }       
 
         // resize tile width and height to match page size
         private bool ResizeTiles(double width, double height)
@@ -182,11 +178,17 @@ namespace WordSearch
         }
 
         // delegate callback to update header text
-        private void WordSearchPage_OnUpdateHeaderText(Word word)
+        private async void OnWordCompletedCallbackAsync(Word word)
         {
             LoadWordsHeader();
+            await DisplayAlert("Great job", $"You found the word {word.Text}!", "OK");
         }
 
+        // delegate for game completed callback
+        private async void OnGameCompletedCallbackAsync()
+        {
+            await DisplayAlert("Winner", "Game completed!", "OK");   
+        }
     }
 }
 
