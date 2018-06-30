@@ -1,18 +1,13 @@
 ﻿using Prism.Commands;
-using Prism.Events;
 using Prism.Mvvm;
 using WordSearch.Util;
 using Xamarin.Forms;
-using WordSearch.Controls;
-using WordSearch.Models;
 using System;
 
 namespace WordSearch.ViewModels
 {
 	public class TileControlViewModel : BindableBase
     {
-        // event aggregator
-        protected IEventAggregator EventAggregator { get; private set; }
         static Random Random = new Random();
 
         // letter displayed in control
@@ -81,10 +76,11 @@ namespace WordSearch.ViewModels
 
         // frame click handler
         public DelegateCommand TileClickCommand { get; set; }
+        private WordManager.TileClickedDelegate TileClickedCallBack { get; set; }
 
-        public TileControlViewModel(IEventAggregator eventAggregator)
+        public TileControlViewModel(WordManager.TileClickedDelegate callback)
         {
-            EventAggregator = eventAggregator;
+            TileClickedCallBack = callback;
             SetDefaultValues();
         }
 
@@ -131,7 +127,7 @@ namespace WordSearch.ViewModels
         {
             LetterSelected = !LetterSelected;
             // publish event
-            EventAggregator.GetEvent<TileSelectionEvent<TileControlViewModel>>().Publish(this);
+            TileClickedCallBack?.Invoke(this);
         }
     }
 }

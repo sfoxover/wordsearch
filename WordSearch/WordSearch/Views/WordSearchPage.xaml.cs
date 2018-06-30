@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
+using WordSearch.Models;
 using WordSearch.Util;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
@@ -15,12 +16,13 @@ namespace WordSearch
     {
         // word manager object
         WordManager Manager { get; set; }
-        // Prism events interface
-        IEventAggregator EventAggregator { get; set; }
         // resize counter to avoid flicker
         int PageSizedCounter { get; set; }
         // is initialized
         private bool HasBeenInitialized { get; set; }
+      // delegate callbacks
+        public event WordManager.WordCompletedDelegate WordCompletedCallback;
+        public event WordManager.TileClickedDelegate TileClickedCallback;
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -28,11 +30,12 @@ namespace WordSearch
             get { return BindingContext as WordSearchPageViewModel; }
         }
 
-        public WordSearchPage (IEventAggregator eventAggregator)
+        public WordSearchPage ()
 		{
             Manager = null;
+            TileClickedCallback = null;
             HasBeenInitialized = false;
-            EventAggregator = eventAggregator;
+            WordCompletedCallback += WordSearchPage_OnUpdateHeaderText;
             InitializeComponent();
         }
 
@@ -68,7 +71,8 @@ namespace WordSearch
                 if (height <= 0)
                     return false;
                 Manager = new WordManager();
-                Manager.ListenForTileClicks(EventAggregator);
+                Manager.WordCompletedCallback = WordCompletedCallback;
+                TileClickedCallback = Manager.ListenForTileClicks();
                 // work out width and height based on page size and rows for difficulty level selected
                 int rows = Manager.GetTileRows();
                 int tileWidth = (int)(width / rows);
@@ -84,7 +88,7 @@ namespace WordSearch
                     for (int row = 0; row < rows; row++)
                     {
                         // create tile view model
-                        TileControlViewModel viewModel = new TileControlViewModel(EventAggregator);
+                        TileControlViewModel viewModel = new TileControlViewModel(TileClickedCallback);
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColum = column;
@@ -176,6 +180,13 @@ namespace WordSearch
             }
             return bOK;
         }
+
+        // delegate callback to update header text
+        private void WordSearchPage_OnUpdateHeaderText(Word word)
+        {
+            LoadWordsHeader();
+        }
+
     }
 }
 

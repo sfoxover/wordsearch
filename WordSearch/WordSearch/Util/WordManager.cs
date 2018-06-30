@@ -28,9 +28,17 @@ namespace WordSearch.Util
         public List<Word> Words { get; set; }
         // word list array
         private TileControlViewModel[,] TileViewModels { get; set; }
+        // delegate callback to update header text
+        public delegate void WordCompletedDelegate(Word word);
+        public WordCompletedDelegate WordCompletedCallback { get; set; }
+        // delegate callback for tile click
+        public delegate void TileClickedDelegate(TileControlViewModel tile);
+        public event TileClickedDelegate TileClickedCallback;
+
 
         public WordManager()
         {
+            WordCompletedCallback = null;
             TileViewModels = null;
             Words = null;
             DifficultyLevel = GameDifficulty.medium;
@@ -258,25 +266,23 @@ namespace WordSearch.Util
             return count;
         }
 
-        public bool ListenForTileClicks(IEventAggregator eventAggregator)
+        public TileClickedDelegate ListenForTileClicks()
         {
-            bool bOK = true;
             try
             {
-                if (eventAggregator == null)
-                    return false;
-                eventAggregator.GetEvent<TileSelectionEvent<TileControlViewModel>>().Subscribe((tile)=> {
+                TileClickedCallback += ((tile)=>
+                {
                     Debug.WriteLine($"tile clicked {tile.Letter}");
                     ChangeLetterSelection(tile);
                 });
+                return TileClickedCallback;
             }
             catch(Exception ex)
             {
                 var error = $"ListenForTileClicks exception, {ex.Message}";
                 Debug.WriteLine(error);
-                bOK = false;
             }
-            return bOK;
+            return null;
         }
 
         public bool StopListenForTileClicks(IEventAggregator eventAggregator)
@@ -319,6 +325,7 @@ namespace WordSearch.Util
                             if(bOK && selected)
                             {
                                 word.IsWordCompleted = true;
+                                WordCompletedCallback?.Invoke(word);
                             }
                             break;
                         }
