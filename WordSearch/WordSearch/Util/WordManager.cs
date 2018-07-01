@@ -37,6 +37,8 @@ namespace WordSearch.Util
         // delegate callback for game completed
         public delegate void GameCompletedDelegate();
         public event GameCompletedDelegate GameCompletedCallback;
+        // previous clicked title that is not part of word
+        private TileControlViewModel LastFailedTileClicked { get; set; }
 
         public WordManager()
         {
@@ -45,6 +47,7 @@ namespace WordSearch.Util
             GameCompletedCallback = null;
             TileViewModels = null;
             Words = null;
+            LastFailedTileClicked = null;
             DifficultyLevel = GameDifficulty.easy;
         }
 
@@ -277,7 +280,7 @@ namespace WordSearch.Util
                 TileClickedCallback += ((tile)=>
                 {
                     Debug.WriteLine($"tile clicked {tile.Letter}");
-                    ChangeLetterSelection(tile);
+                    CheckForSelectedWord(tile);
                 });
             }
             catch(Exception ex)
@@ -308,11 +311,12 @@ namespace WordSearch.Util
         }
 
         // change word letter selection if clicked
-        private bool ChangeLetterSelection(TileControlViewModel tile)
+        private bool CheckForSelectedWord(TileControlViewModel tile)
         {
             bool bOK = true;
             try
             {
+                bool isPartOfWord = false;
                 foreach (var word in Words)
                 {
                     for (int n = 0; n < word.Text.Length; n++)
@@ -321,6 +325,7 @@ namespace WordSearch.Util
                         int column = (int)word.TilePositions[n].Y;
                         if (tile.TileRow == row && tile.TileColum == column)
                         {
+                            isPartOfWord = true;
                             // check if whole word is selected
                             bool selected;
                             bOK = CheckForCompletedWord(word, out selected);
@@ -339,10 +344,19 @@ namespace WordSearch.Util
                         }
                     }
                 }
+                // deselect previous click
+                if (LastFailedTileClicked != null)
+                {
+                    LastFailedTileClicked.LetterSelected = false;
+                    LastFailedTileClicked = null;
+                }
+                if (!isPartOfWord)
+                    LastFailedTileClicked = tile;
+
             }
             catch (Exception ex)
             {
-                var error = $"ChangeLetterSelection exception, {ex.Message}";
+                var error = $"CheckForSelectedWord exception, {ex.Message}";
                 Debug.WriteLine(error);
                 bOK = false;
             }
