@@ -8,7 +8,8 @@ namespace WordSearch.Util
     public class WordDatabase
     {
         // source of words
-        private string[] WordList = { "Africa", "Air", "Aladdin", "Alaska", "America", "Apple", "Appleseed", "April", "As", "Asia", "Atari", "August" };
+        private string[] WordList = { "Africa", "Air", "Aladdin", "Alaska", "America", "Apple", "Appleseed", "April", "As", "Asia", "Atari", "August", "Bad", "Brown", "Bear",
+            "Wear", "Who", "Police", "Box", "Car", "House", "Mouse", "Fox", "Clown", "July", "Friday"  };
         static Random Random = new Random();
         public WordDatabase()
         {

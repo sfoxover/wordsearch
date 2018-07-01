@@ -45,7 +45,7 @@ namespace WordSearch.Util
             GameCompletedCallback = null;
             TileViewModels = null;
             Words = null;
-            DifficultyLevel = GameDifficulty.medium;
+            DifficultyLevel = GameDifficulty.hard;
         }
 
         // create new word tile multi dimentional array
@@ -141,7 +141,7 @@ namespace WordSearch.Util
                         int row = (int)word.TilePositions[n].X;
                         int column = (int)word.TilePositions[n].Y;
                         TileViewModels[row, column].Letter = $"{ch}";
-                        TileViewModels[row, column].LetterSelected = true;
+                        TileViewModels[row, column].LetterSelected = false;
                     }
                 }
             }
