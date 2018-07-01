@@ -33,7 +33,7 @@ namespace WordSearch.Util
         public event WordCompletedDelegate WordCompletedCallback;
         // delegate callback for tile click
         public delegate void TileClickedDelegate(TileControlViewModel tile);
-        public event TileClickedDelegate TileClickedCallback;
+        public TileClickedDelegate TileClickedCallback;
         // delegate callback for game completed
         public delegate void GameCompletedDelegate();
         public event GameCompletedDelegate GameCompletedCallback;
@@ -45,7 +45,7 @@ namespace WordSearch.Util
             GameCompletedCallback = null;
             TileViewModels = null;
             Words = null;
-            DifficultyLevel = GameDifficulty.hard;
+            DifficultyLevel = GameDifficulty.easy;
         }
 
         // create new word tile multi dimentional array
@@ -270,7 +270,7 @@ namespace WordSearch.Util
             return count;
         }
 
-        public TileClickedDelegate ListenForTileClicks()
+        public void ListenForTileClicks()
         {
             try
             {
@@ -279,14 +279,12 @@ namespace WordSearch.Util
                     Debug.WriteLine($"tile clicked {tile.Letter}");
                     ChangeLetterSelection(tile);
                 });
-                return TileClickedCallback;
             }
             catch(Exception ex)
             {
                 var error = $"ListenForTileClicks exception, {ex.Message}";
                 Debug.WriteLine(error);
             }
-            return null;
         }
 
         public bool StopListenForTileClicks(IEventAggregator eventAggregator)

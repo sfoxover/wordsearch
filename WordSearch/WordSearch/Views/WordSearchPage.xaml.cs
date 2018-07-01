@@ -43,17 +43,40 @@ namespace WordSearch
                 PageSizedCounter--;
                 if (PageSizedCounter == 0 && height > 0)
                 {
+                    bool bOK;
                     double wordHeight = Height - FlexWordsList.Height;
                     if (!HasBeenInitialized)
                     {
+                        bOK = InitalizeDelegates();
+                        Debug.Assert(bOK);
                         HasBeenInitialized = CalculateTiles(Width, wordHeight);
                         Debug.Assert(HasBeenInitialized);
                     }
-                    bool bOK = ResizeTiles(width, wordHeight);
+                    bOK = ResizeTiles(width, wordHeight);
                     Debug.Assert(bOK);
                 }
                 return false;
             });
+        }
+
+        // set up callbacks
+        private bool InitalizeDelegates()
+        {
+            bool bOK = true;
+            try
+            {
+                Manager = new WordManager();
+                // set up WordManager delegate events                 
+                Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
+                Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
+                Manager.ListenForTileClicks();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("InitalizeDelegates exception, " + ex.Message);
+                bOK = false;
+            }
+            return bOK;
         }
 
         // calculate for portrait mode orientation
@@ -63,16 +86,13 @@ namespace WordSearch
             try
             {
                 if (height <= 0)
-                    return false;
-                Manager = new WordManager();
-                // set up WordManager delegate events 
-                var tileClickedCallback = Manager.ListenForTileClicks();
-                Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
-                Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
+                    return false;               
                 // work out width and height based on page size and rows for difficulty level selected
                 int rows = Manager.GetTileRows();
                 int tileWidth = (int)(width / rows);
-                int tileHeight = tileWidth;
+                int tileHeight = (int)(height / rows);
+                // use min of height or width to ensure min tiles required
+                tileWidth = tileHeight = Math.Min(tileWidth, tileHeight);
                 int columns = (int)(height / tileHeight);
                 Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
                 // add titles on UI thread
@@ -84,7 +104,7 @@ namespace WordSearch
                     for (int row = 0; row < rows; row++)
                     {
                         // create tile view model
-                        TileControlViewModel viewModel = new TileControlViewModel(tileClickedCallback);
+                        TileControlViewModel viewModel = new TileControlViewModel(Manager.TileClickedCallback);
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColum = column;
