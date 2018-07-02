@@ -1,38 +1,31 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Navigation;
+﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
 {
-	public class MainPageViewModel : BindableBase, INavigationAware
+	public class MainPageViewModel : INotifyPropertyChanged
     {
-        // prism NavigationService
-        protected INavigationService NavigationService { get; private set; }
+        // notify Xaml that a bound property has changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
         // new game command click
-        public DelegateCommand NewGameClickCommand { get; set; }
+        public ICommand NewGameClickCommand;
 
-        public MainPageViewModel(INavigationService navigationService)
+        public MainPageViewModel()
         {
-            NavigationService = navigationService;
-            NewGameClickCommand = new DelegateCommand(NewGameClickAsync);
+            NewGameClickCommand = new Command(NewGameClickAsync);
         }
 
         private async void NewGameClickAsync()
         {
-            await NavigationService.NavigateAsync("NavigationPage/WordSearchPage");
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
+            await Navigate;
         }
     }
 }

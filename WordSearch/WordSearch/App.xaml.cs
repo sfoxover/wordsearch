@@ -1,51 +1,33 @@
-﻿using Prism;
-using Prism.Ioc;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
-using Prism.DryIoc;
 using WordSearch.Views;
-using Prism.Mvvm;
-using WordSearch.ViewModels;
-using WordSearch.Controls;
 using System;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace WordSearch
 {
-	public partial class App : PrismApplication
+	public partial class App : Application
     {
-        public App() : this(null) { }
-
-        public App(IPlatformInitializer initializer) : base(initializer) { }
-
-        protected override async void OnInitialized()
+        public App()
         {
             InitializeComponent();
-            await NavigationService.NavigateAsync("NavigationPage/MainPage");
+
+            MainPage = new MainPage();
         }
 
-        protected override void RegisterTypes(IContainerRegistry containerRegistry)
+        protected override void OnStart()
         {
-            containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage>();
-            containerRegistry.RegisterForNavigation<WordSearchPage>();
+            // Handle when your app starts
         }
 
-        protected override void ConfigureViewModelLocator()
+        protected override void OnSleep()
         {
-            base.ConfigureViewModelLocator();
-            ViewModelLocationProvider.SetDefaultViewTypeToViewModelTypeResolver(AlternateResolver);
+            // Handle when your app sleeps
         }
 
-        private static Type AlternateResolver(Type type)
+        protected override void OnResume()
         {
-            var viewName = type.Name;
-            if (String.IsNullOrEmpty(viewName))
-                return null;
-
-            var viewModel = "WordSearch.ViewModels." + viewName + "ViewModel";
-
-            return Type.GetType(viewModel);
+            // Handle when your app resumes
         }
     }
 }
