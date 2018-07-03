@@ -1,5 +1,4 @@
-﻿using Prism.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
@@ -288,26 +287,6 @@ namespace WordSearch.Util
                 var error = $"ListenForTileClicks exception, {ex.Message}";
                 Debug.WriteLine(error);
             }
-        }
-
-        public bool StopListenForTileClicks(IEventAggregator eventAggregator)
-        {
-            bool bOK = true;
-            try
-            {
-                if (eventAggregator == null)
-                    return false;
-                eventAggregator.GetEvent<TileSelectionEvent<TileControlViewModel>>().Unsubscribe((tile) => {
-                    Debug.WriteLine($"tile clicked {tile.Letter}");
-                });
-            }
-            catch (Exception ex)
-            {
-                var error = $"StopListenForTileClicks exception, {ex.Message}";
-                Debug.WriteLine(error);
-                bOK = false;
-            }
-            return bOK;
         }
 
         // change word letter selection if clicked

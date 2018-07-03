@@ -1,14 +1,21 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using WordSearch.Util;
+﻿using WordSearch.Util;
 using Xamarin.Forms;
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace WordSearch.ViewModels
 {
-	public class TileControlViewModel : BindableBase
+	public class TileControlViewModel : INotifyPropertyChanged
     {
         static Random Random = new Random();
+
+        // notify Xaml that a bound property has changed
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged([CallerMemberName]string name = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
         // letter displayed in control
         private string _letter;

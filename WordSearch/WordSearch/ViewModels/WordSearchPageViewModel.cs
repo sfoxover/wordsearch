@@ -1,18 +1,13 @@
-﻿using Prism.Commands;
-using Prism.Mvvm;
-using Prism.Navigation;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using WordSearch.Models;
 
 namespace WordSearch.ViewModels
 {
-    public class WordSearchPageViewModel : BindableBase, INavigationAware
+    public class WordSearchPageViewModel : INotifyPropertyChanged
     {
-        // prism NavigationService
-        protected INavigationService NavigationService { get; private set; }
-
         // header text labels
         private string _text1;
         public string Text1
@@ -114,18 +109,6 @@ namespace WordSearch.ViewModels
         public WordSearchPageViewModel(INavigationService navigationService)
         {
             NavigationService = navigationService;
-        }
-
-        public void OnNavigatedFrom(NavigationParameters parameters)
-        {
-        }
-
-        public void OnNavigatedTo(NavigationParameters parameters)
-        {
-        }
-
-        public void OnNavigatingTo(NavigationParameters parameters)
-        {
         }
 
         // load words in header and strike out completed words
