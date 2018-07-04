@@ -94,6 +94,7 @@ namespace WordSearch
                 int tileHeight = (int)(height / rows);
                 // use min of height or width to ensure min tiles required
                 tileWidth = tileHeight = Math.Min(tileWidth, tileHeight);
+                rows = (int)(width / tileWidth);
                 int columns = (int)(height / tileHeight);
                 Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
                 // add titles on UI thread
@@ -109,8 +110,8 @@ namespace WordSearch
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColum = column;
-                        viewModel.TileWidth = tileWidth - 2;
-                        viewModel.TileHeight = tileHeight - 2;
+                        viewModel.TileWidth = tileWidth;
+                        viewModel.TileHeight = tileHeight;
                         viewModels.SetValue(viewModel, row, column);
                         // create tile control passing view model to constructor
                         var control = new TileControl(viewModel);

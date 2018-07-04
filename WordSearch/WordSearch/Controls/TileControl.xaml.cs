@@ -14,23 +14,24 @@ namespace WordSearch.Controls
             get { return BindingContext as TileControlViewModel; }
         }
 
-        public TileControl(TileControlViewModel viewModel)
+        // test live rendering
+        public TileControl()
         {
-            Debug.Assert(viewModel != null);
-            BindingContext = viewModel;
+            BindingContext = new TileControlViewModel(null);
+            ViewModel.Letter = "a";
+            ViewModel.TileRow = 0;
+            ViewModel.TileColum = 0;
+            ViewModel.TileWidth = 90 - 2;
+            ViewModel.TileHeight = 90 - 2;
+            ViewModel.LetterSelected = true;
             InitializeComponent();
         }
 
-        public TileControl(int row, int column, int tileWidth, int tileHeight)
-		{
+        public TileControl(TileControlViewModel viewModel)
+        {
+            Debug.Assert(viewModel != null);
             InitializeComponent();
-            Debug.Assert(ViewModel != null);
-            ViewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
-            ViewModel.TileRow = row;
-            ViewModel.TileColum = column;
-            ViewModel.TileWidth = tileWidth - 2;
-            ViewModel.TileHeight = tileHeight - 2;
-            ViewModel.LetterSelected = false;
+            BindingContext = viewModel;
         }
     }
 }

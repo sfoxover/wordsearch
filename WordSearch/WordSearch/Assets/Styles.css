@@ -8,12 +8,21 @@ FlexLayout{
 }
 
 .FlexHeaderText {
-    background-color:lightgray;
-    align-items:center;
-    justify-content:space-around;
-    flex-wrap:wrap;
-    flex-direction:row;
-    margin-top:5;
+    background-color: lightgray;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 0;
+}
+
+.FlexTilePanel {
+    background-color: red;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 0;
 }
 
 .BlueButton {
