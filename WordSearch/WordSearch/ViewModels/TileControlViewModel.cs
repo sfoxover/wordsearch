@@ -76,13 +76,14 @@ namespace WordSearch.ViewModels
         public bool IsPartOfCompletedWord { get; set; }
 
         // frame click handler
-        public ICommand TileClickCommand;
+        public Command TileClickCommand { get; }
         private WordManager.TileClickedDelegate TileClickedCallBack { get; set; }
 
         public TileControlViewModel(WordManager.TileClickedDelegate callback)
         {
             IsPartOfCompletedWord = false;
-            TileClickedCallBack = callback;            
+            TileClickedCallBack = callback;
+            TileClickCommand = new Command(OnTitleClicked);
             SetDefaultValues();
         }
 
@@ -97,7 +98,6 @@ namespace WordSearch.ViewModels
             TileRow = -1;
             TileColum = -1;
             LetterSelected = false;
-            TileClickCommand = new Command(HandleTitleClick);
         }
 
         // choose a random lower case letter
@@ -125,7 +125,7 @@ namespace WordSearch.ViewModels
         }
 
         // tile was clicked
-        private void HandleTitleClick()
+        private void OnTitleClicked()
         {
             if (!IsPartOfCompletedWord)
             {
