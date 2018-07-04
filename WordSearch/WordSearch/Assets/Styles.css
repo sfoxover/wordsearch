@@ -15,3 +15,10 @@ FlexLayout{
     flex-direction:row;
     margin-top:5;
 }
+
+.BlueButton {
+    padding-left: 10;
+    padding-right: 10;
+    background-color:cornflowerblue;
+    color:white;
+}
