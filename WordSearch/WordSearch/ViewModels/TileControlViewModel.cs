@@ -1,21 +1,13 @@
 ﻿using WordSearch.Util;
 using Xamarin.Forms;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using System.Windows.Input;
 
 namespace WordSearch.ViewModels
 {
-	public class TileControlViewModel : INotifyPropertyChanged
+	public class TileControlViewModel : BindableBase
     {
         static Random Random = new Random();
-
-        // notify Xaml that a bound property has changed
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         // letter displayed in control
         private string _letter;
@@ -84,13 +76,13 @@ namespace WordSearch.ViewModels
         public bool IsPartOfCompletedWord { get; set; }
 
         // frame click handler
-        public DelegateCommand TileClickCommand { get; set; }
+        public ICommand TileClickCommand;
         private WordManager.TileClickedDelegate TileClickedCallBack { get; set; }
 
         public TileControlViewModel(WordManager.TileClickedDelegate callback)
         {
             IsPartOfCompletedWord = false;
-            TileClickedCallBack = callback;
+            TileClickedCallBack = callback;            
             SetDefaultValues();
         }
 
@@ -105,7 +97,7 @@ namespace WordSearch.ViewModels
             TileRow = -1;
             TileColum = -1;
             LetterSelected = false;
-            TileClickCommand = new DelegateCommand(HandleTitleClick);
+            TileClickCommand = new Command(HandleTitleClick);
         }
 
         // choose a random lower case letter

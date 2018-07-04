@@ -7,7 +7,7 @@ namespace WordSearch.UWP
         {
             this.InitializeComponent();
 
-            LoadApplication(new App());
+            LoadApplication(new WordSearch.App());
         }
     }
 }

@@ -6,16 +6,9 @@ using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
 {
-	public class MainPageViewModel : INotifyPropertyChanged
+	public class MainPageViewModel : BindableBase
     {
         private INavigation Navigation { get; set; }
-
-        // notify Xaml that a bound property has changed
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName]string name = "")
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
 
         // new game command click
         public ICommand NewGameClickCommand;

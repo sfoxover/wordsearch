@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using WordSearch.Models;
+using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
 {
-    public class WordSearchPageViewModel : INotifyPropertyChanged
+    public class WordSearchPageViewModel : BindableBase
     {
+        private INavigation Navigation { get; set; }
+
         // header text labels
         private string _text1;
         public string Text1
@@ -106,9 +108,9 @@ namespace WordSearch.ViewModels
             set { SetProperty(ref _text16, value); }
         }
 
-        public WordSearchPageViewModel(INavigationService navigationService)
+        public WordSearchPageViewModel(INavigation value)
         {
-            NavigationService = navigationService;
+            Navigation = value;
         }
 
         // load words in header and strike out completed words
