@@ -14,8 +14,8 @@ namespace WordSearch.Views
 
         public MainPage()
         {
-            BindingContext = new MainPageViewModel(Navigation);
             InitializeComponent();
+            BindingContext = new MainPageViewModel(Navigation);
         }
     }
 }

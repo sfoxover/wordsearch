@@ -11,15 +11,15 @@ namespace WordSearch.ViewModels
         private INavigation Navigation { get; set; }
 
         // new game command click
-        public ICommand NewGameClickCommand;
+        public Command NewEasyGameCommand { get; }
 
         public MainPageViewModel(INavigation value)
         {
             Navigation = value;
-            NewGameClickCommand = new Command(NewGameClickAsync);
+            NewEasyGameCommand = new Command(OnNewGameClick);
         }
 
-        private async void NewGameClickAsync()
+        public async void OnNewGameClick()
         {
             await Navigation.PushAsync(new WordSearchPage());
         }

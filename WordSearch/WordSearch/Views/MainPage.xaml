@@ -4,7 +4,7 @@
              x:Class="WordSearch.Views.MainPage">
 
     <StackLayout>
-        <Button Text="New Game" Command="{Binding NewGameClickCommand}"></Button>
+        <Button Text="New Game" Command="{Binding NewEasyGameCommand}"></Button>
     </StackLayout>
 
 </ContentPage>

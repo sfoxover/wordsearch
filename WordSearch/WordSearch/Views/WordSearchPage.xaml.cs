@@ -31,6 +31,7 @@ namespace WordSearch
             Manager = null;
             HasBeenInitialized = false;            
             InitializeComponent();
+            BindingContext = new WordSearchPageViewModel(Navigation);
         }
 
         protected override void OnSizeAllocated(double width, double height)
