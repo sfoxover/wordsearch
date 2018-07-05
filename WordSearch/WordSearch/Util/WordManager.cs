@@ -314,10 +314,18 @@ namespace WordSearch.Util
                                 // mark tiles as part of completed word so they are not deselected
                                 bOK = MarkTilesAsWordCompleted(word);
                                 Debug.Assert(bOK);
-                                word.IsWordCompleted = true;
-                                WordCompletedCallback?.Invoke(word);
+                                word.IsWordCompleted = true;                                
                                 // check if all words are selected
-                                bOK = CheckForAllWordsSelected();
+                                bOK = CheckForAllWordsSelected(out bool allSelected);
+                                Debug.Assert(bOK);
+                                if(bOK && allSelected)
+                                {
+                                    GameCompletedCallback?.Invoke();
+                                }
+                                else
+                                {
+                                    WordCompletedCallback?.Invoke(word);
+                                }
                             }
                             break;
                         }
@@ -392,12 +400,12 @@ namespace WordSearch.Util
         }
 
         // check if all words are selected
-        private bool CheckForAllWordsSelected()
+        private bool CheckForAllWordsSelected(out bool allSelected)
         {
             bool bOK = true;
+            allSelected = true;
             try
             {
-                bool allSelected = true;
                 foreach (var word in Words)
                 {
                     if(!word.IsWordCompleted)
@@ -405,17 +413,14 @@ namespace WordSearch.Util
                         allSelected = false;
                         break;
                     }
-                }
-                if(allSelected)
-                {
-                    GameCompletedCallback?.Invoke();
-                }
+                }               
             }
             catch (Exception ex)
             {
                 var error = $"CheckForAllWordsSelected exception, {ex.Message}";
                 Debug.WriteLine(error);
                 bOK = false;
+                allSelected = false;
             }
             return bOK;
         }

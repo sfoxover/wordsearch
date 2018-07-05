@@ -178,8 +178,8 @@ namespace WordSearch
                     Debug.Assert(bOK);
                     foreach (TileControl tileView in FlexTilesView.Children)
                     {
-                        tileView.WidthRequest = tileWidth;
-                        tileView.HeightRequest = tileHeight;
+                        tileView.ViewModel.TileWidth = tileWidth;
+                        tileView.ViewModel.TileHeight = tileHeight;
                     }
                 }
             }
