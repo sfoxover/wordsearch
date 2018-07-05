@@ -231,7 +231,7 @@ namespace WordSearch.Util
         }
 
         // get tile width based on game difficulty
-        public int GetTileRows()
+        public int GetMinRequiredTiles()
         {
             int result = 0;
             switch(DifficultyLevel)

@@ -2,7 +2,7 @@
 <ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="WordSearch.Controls.TileControl"
-             WidthRequest="{Binding TileWidth}" HeightRequest="{Binding TileHeight}">
+             WidthRequest="{Binding TileWidth, Mode=TwoWay}" HeightRequest="{Binding TileHeight, Mode=TwoWay}">
     <ContentView.Content>
         <Frame x:Name="TileFrame" BorderColor="{Binding TitleBorderColor}" Padding="1" CornerRadius="5">
             <Frame.GestureRecognizers>

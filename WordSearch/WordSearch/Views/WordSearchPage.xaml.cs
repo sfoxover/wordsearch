@@ -19,6 +19,9 @@ namespace WordSearch
         int PageSizedCounter { get; set; }
         // is initialized
         private bool HasBeenInitialized { get; set; }
+        // rows and columns
+        int Rows { get; set; }
+        int Columns { get; set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -28,6 +31,8 @@ namespace WordSearch
 
         public WordSearchPage ()
 		{
+            Rows = 0;
+            Columns = 0;
             Manager = null;
             HasBeenInitialized = false;            
             InitializeComponent();
@@ -78,7 +83,7 @@ namespace WordSearch
                 bOK = false;
             }
             return bOK;
-        }
+        }       
 
         // calculate for portrait mode orientation
         private bool CalculateTiles(double width, double height)
@@ -87,23 +92,17 @@ namespace WordSearch
             try
             {
                 if (height <= 0)
-                    return false;               
-                // work out width and height based on page size and rows for difficulty level selected
-                int rows = Manager.GetTileRows();
-                int tileWidth = (int)(width / rows);
-                int tileHeight = (int)(height / rows);
-                // use min of height or width to ensure min tiles required
-                tileWidth = tileHeight = Math.Min(tileWidth, tileHeight);
-                rows = (int)(width / tileWidth);
-                int columns = (int)(height / tileHeight);
-                Debug.WriteLine($"CalculateTiles starting for {rows} x {columns}");
+                    return false;
+                // work out tile width and height and count based on orientation and difficulty level selected
+                bOK = CalculateTileWidthHeight(width, height, out int tileWidth, out int tileHeight);
+                Debug.Assert(bOK);
                 // add titles on UI thread
                 FlexTilesView.Children.Clear();
                 List<TileControl> controls = new List<TileControl>();
-                var viewModels = new TileControlViewModel[rows, columns];
-                for (int column = 0; column < columns; column++)
+                var viewModels = new TileControlViewModel[Rows, Columns];
+                for (int column = 0; column < Columns; column++)
                 {
-                    for (int row = 0; row < rows; row++)
+                    for (int row = 0; row < Rows; row++)
                     {
                         // create tile view model
                         TileControlViewModel viewModel = new TileControlViewModel(Manager.TileClickedCallback);
@@ -121,7 +120,7 @@ namespace WordSearch
                     }
                 }
                 // initialize word array
-                int maxWordLength = rows > columns ? rows : columns;
+                int maxWordLength = Rows > Columns ? Rows : Columns;
                 bOK = Manager.InitializeWordList(maxWordLength, viewModels);
                 Debug.Assert(bOK);
                 // load words in header and strike out completed words
@@ -137,7 +136,33 @@ namespace WordSearch
                 bOK = false;
             }
             return bOK;
-        }       
+        }
+
+        // work out tile width and height and count based on orientation and difficulty level selected
+        private bool CalculateTileWidthHeight(double width, double height, out int tileWidth, out int tileHeight)
+        {
+            bool bOK = true;
+            tileWidth = 0;
+            tileHeight = 0;
+            try
+            {
+                if (height <= 0)
+                    return false;
+                int tiles = Manager.GetMinRequiredTiles();
+                tileWidth = (int)(width / tiles);
+                tileHeight = (int)(height / tiles);
+                // use min of height or width to ensure min tiles required
+                tileWidth = tileHeight = Math.Min(tileWidth, tileHeight);
+                Rows = (int)(width / tileWidth);
+                Columns = (int)(height / tileHeight);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CalculateTileWidthHeight exception, " + ex.Message);
+                bOK = false;
+            }
+            return bOK;
+        }
 
         // resize tile width and height to match page size
         private bool ResizeTiles(double width, double height)
@@ -148,19 +173,40 @@ namespace WordSearch
                 Debug.Assert(Manager != null);
                 if (Manager != null)
                 {
-                    int rows = Manager.GetTileRows();
-                    int tileWidth = (int)(width / rows);
-                    int tileHeight = tileWidth;
+                    // work out tile width and height and count based on orientation and difficulty level selected
+                    bOK = CalculateResizedTileWidthHeight(width, height, out int tileWidth, out int tileHeight);
+                    Debug.Assert(bOK);
                     foreach (TileControl tileView in FlexTilesView.Children)
                     {
-                        tileView.ViewModel.TileWidth = tileWidth - 2;
-                        tileView.ViewModel.TileHeight = tileHeight - 2;
+                        tileView.WidthRequest = tileWidth;
+                        tileView.HeightRequest = tileHeight;
                     }
                 }
             }
             catch(Exception ex)
             {
                 Debug.WriteLine($"ResizeTiles exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // calculate tile size needs to maintain correct number of rows and columns in flex layout
+        private bool CalculateResizedTileWidthHeight(double width, double height, out int tileWidth, out int tileHeight)
+        {
+            bool bOK = true;
+            tileWidth = 0;
+            tileHeight = 0;
+            try
+            {
+                if (height <= 0)
+                    return false;
+                tileWidth = (int)(width / Rows);
+                tileHeight = (int)(height / Columns);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("CalculateResizedTileWidthHeight exception, " + ex.Message);
                 bOK = false;
             }
             return bOK;
