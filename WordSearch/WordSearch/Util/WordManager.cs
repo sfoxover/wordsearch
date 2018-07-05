@@ -320,6 +320,7 @@ namespace WordSearch.Util
                                 Debug.Assert(bOK);
                                 if(bOK && allSelected)
                                 {
+                                    WordCompletedCallback?.Invoke(word);
                                     GameCompletedCallback?.Invoke();
                                 }
                                 else

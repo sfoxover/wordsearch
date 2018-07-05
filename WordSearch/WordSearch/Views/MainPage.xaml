@@ -5,8 +5,10 @@
     <ContentPage.Resources>
         <StyleSheet Source="/Assets/Styles.css" />
     </ContentPage.Resources>
-    <StackLayout>
+    <StackLayout Orientation="Vertical">
         <Button StyleClass="BlueButton" Text="New Game Easy Level" Command="{Binding NewEasyGameCommand}" HorizontalOptions="Center"></Button>
+        <Button StyleClass="BlueButton" Text="New Game Medium Level" Command="{Binding NewMediumGameCommand}" HorizontalOptions="Center"></Button>
+        <Button StyleClass="BlueButton" Text="New Game Hard Level" Command="{Binding NewHardGameCommand}" HorizontalOptions="Center"></Button>
     </StackLayout>
 
 </ContentPage>

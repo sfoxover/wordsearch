@@ -29,14 +29,15 @@ namespace WordSearch
             get { return BindingContext as WordSearchPageViewModel; }
         }
 
-        public WordSearchPage ()
-		{
+        public WordSearchPage(WordManager.GameDifficulty level)
+        {
             Rows = 0;
             Columns = 0;
-            Manager = null;
-            HasBeenInitialized = false;            
+            HasBeenInitialized = false;
             InitializeComponent();
             BindingContext = new WordSearchPageViewModel(Navigation);
+            Manager = new WordManager();
+            Manager.DifficultyLevel = level;
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -70,8 +71,7 @@ namespace WordSearch
         {
             bool bOK = true;
             try
-            {
-                Manager = new WordManager();
+            {                
                 // set up WordManager delegate events                 
                 Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
                 Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
