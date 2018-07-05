@@ -13,7 +13,7 @@ FlexLayout{
     justify-content: space-around;
     flex-wrap: wrap;
     flex-direction: row;
-    margin-top: 0;
+    margin-top: 5;
 }
 
 .FlexTilePanel {
