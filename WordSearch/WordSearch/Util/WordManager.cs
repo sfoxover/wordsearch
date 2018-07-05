@@ -22,6 +22,14 @@ namespace WordSearch.Util
         private const int WORDS_LEVEL_EASY = 4;
         private const int WORDS_LEVEL_MEDIUM = 8;
         private const int WORDS_LEVEL_HARD = 16;
+        // start seconds per level
+        private const int START_SECS_EASY = 300;
+        private const int START_SECS_MEDIUM = 240;
+        private const int START_SECS_HARD = 180;
+        // start seconds per level
+        private const int POINTS_PER_LETTER_EASY = 10;
+        private const int POINTS_PER_LETTER_MEDIUM = 20;
+        private const int POINTS_PER_LETTER_HARD = 50;
 
         // array of random words
         public List<Word> Words { get; set; }
@@ -36,6 +44,8 @@ namespace WordSearch.Util
         // delegate callback for game completed
         public delegate void GameCompletedDelegate();
         public event GameCompletedDelegate GameCompletedCallback;
+       
+
         // previous clicked title that is not part of word
         private TileControlViewModel LastFailedTileClicked { get; set; }
 
@@ -270,6 +280,50 @@ namespace WordSearch.Util
                     break;
             }
             return count;
+        }
+
+        // get start seconds based on difficulty level
+        internal int GetStartSecondsRemaining()
+        {
+            int secondsRemaining = 0;
+            switch (DifficultyLevel)
+            {
+                case GameDifficulty.easy:
+                    secondsRemaining = START_SECS_EASY;
+                    break;
+                case GameDifficulty.medium:
+                    secondsRemaining = START_SECS_MEDIUM;
+                    break;
+                case GameDifficulty.hard:
+                    secondsRemaining = START_SECS_HARD;
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+            return secondsRemaining;
+        }
+
+        // get points per letter
+        internal int GetPointsPerLetter()
+        {
+            int points = 0;
+            switch (DifficultyLevel)
+            {
+                case GameDifficulty.easy:
+                    points = POINTS_PER_LETTER_EASY;
+                    break;
+                case GameDifficulty.medium:
+                    points = POINTS_PER_LETTER_MEDIUM;
+                    break;
+                case GameDifficulty.hard:
+                    points = POINTS_PER_LETTER_HARD;
+                    break;
+                default:
+                    Debug.Assert(false);
+                    break;
+            }
+            return points;
         }
 
         public void ListenForTileClicks()

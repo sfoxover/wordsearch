@@ -7,13 +7,22 @@ FlexLayout{
     margin:0;
 }
 
-.FlexHeaderText {
+.FlexScoreHeader {
     background-color: lightgray;
     align-items: center;
     justify-content: space-around;
     flex-wrap: wrap;
     flex-direction: row;
     margin-top: 5;
+}
+
+.FlexWordsList {
+    background-color: lightgray;
+    align-items: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin-top: 0;
 }
 
 .FlexTilePanel {

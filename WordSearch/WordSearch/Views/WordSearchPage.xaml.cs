@@ -29,15 +29,27 @@ namespace WordSearch
             get { return BindingContext as WordSearchPageViewModel; }
         }
 
-        public WordSearchPage(WordManager.GameDifficulty level)
+        public WordSearchPage()
         {
             Rows = 0;
             Columns = 0;
             HasBeenInitialized = false;
             InitializeComponent();
-            BindingContext = new WordSearchPageViewModel(Navigation);
+            Manager = new WordManager();
+            BindingContext = new WordSearchPageViewModel(Navigation, 300, 20);
+        }
+
+        public WordSearchPage(WordManager.GameDifficulty level)
+        {
+            Rows = 0;
+            Columns = 0;
+            HasBeenInitialized = false;
+            InitializeComponent();            
             Manager = new WordManager();
             Manager.DifficultyLevel = level;
+            int secondsRemaining = Manager.GetStartSecondsRemaining();
+            int points = Manager.GetPointsPerLetter();
+            BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points);
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -51,7 +63,7 @@ namespace WordSearch
                 if (PageSizedCounter == 0 && height > 0)
                 {
                     bool bOK;
-                    double wordHeight = Height - FlexWordsList.Height;
+                    double wordHeight = Height - FlexWordsList.Height - FlexScoreHeader.Height;
                     if (!HasBeenInitialized)
                     {
                         bOK = InitalizeDelegates();
@@ -249,12 +261,14 @@ namespace WordSearch
         private async void OnWordCompletedCallbackAsync(Word word)
         {
             LoadWordsHeader();
+            ViewModel.UpdateScore(word.Text.Length);
             await DisplayAlert("Great job", $"You found the word {word.Text}!", "OK");
         }
 
         // delegate for game completed callback
         private async void OnGameCompletedCallbackAsync()
         {
+            ViewModel.GameCompleted = true;
             await DisplayAlert("Winner", "Game completed!", "OK");   
         }
     }

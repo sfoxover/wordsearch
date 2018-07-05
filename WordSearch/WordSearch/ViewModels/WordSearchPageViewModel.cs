@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Models;
+using WordSearch.Util;
 using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
@@ -107,11 +108,43 @@ namespace WordSearch.ViewModels
             get { return _text16; }
             set { SetProperty(ref _text16, value); }
         }
+        // countdown timer
+        private string _gameTimer;
+        public string GameTimer
+        {
+            get { return _gameTimer; }
+            set { SetProperty(ref _gameTimer, value); }
+        }
+        // score board
+        private string _scoreBoard;
+        public string ScoreBoard
+        {
+            get { return _scoreBoard; }
+            set { SetProperty(ref _scoreBoard, value); }
+        }
+        // countdown timer
+        private double SecondsRemaining { get; set; }
+        private double StartingSeconds { get; set; }
+        // points per letter
+        private double PointsPerLetter { get; set; }
+        // game score
+        private int GameScore { get; set; }
+        // is game completed
+        public bool GameCompleted { get; set; }
 
-        public WordSearchPageViewModel(INavigation value)
+        public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter)
         {
             Navigation = value;
-        }
+            StartingSeconds = secondsRemaining;
+            SecondsRemaining = secondsRemaining;
+            PointsPerLetter = pointsPerLetter;
+            Debug.Assert(SecondsRemaining > 0);
+            Debug.Assert(PointsPerLetter > 0);
+            GameScore = 0;
+            GameCompleted = false;
+            ScoreBoard = $"Score: {GameScore}";
+            StartGameTimer();
+        }    
 
         // load words in header and strike out completed words
         public bool LoadWordsHeader(List<Word> words)
@@ -152,6 +185,42 @@ namespace WordSearch.ViewModels
                 bOK = false;
             }
             return bOK;
+        }
+
+        private void StartGameTimer()
+        {
+            try
+            {
+                Device.StartTimer(new TimeSpan(0, 0, 0, 1), () =>
+                {
+                    SecondsRemaining -= 1;
+                    if (SecondsRemaining < 0)
+                        SecondsRemaining = 0;
+                    GameTimer = $"Time remaining: {(int)SecondsRemaining} seconds";
+                    return !GameCompleted;
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"StartGameTimer exception, {ex.Message}");
+            }
+        }
+
+        internal void UpdateScore(int length)
+        {
+            try
+            {
+                if (SecondsRemaining > 0)
+                {
+                    double multiplier = SecondsRemaining / StartingSeconds * PointsPerLetter;
+                    GameScore += (int)(length * multiplier);
+                    ScoreBoard = $"Score: {GameScore}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"UpdateScore exception, {ex.Message}");
+            }
         }
     }
 }
