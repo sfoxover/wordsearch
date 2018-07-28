@@ -131,6 +131,34 @@ namespace WordSearch.ViewModels
         private int GameScore { get; set; }
         // is game completed
         public bool GameCompleted { get; set; }
+        // header local html path
+        private string _wordSearchHeaderSourceHtml;
+        public string WordSearchHeaderSourceHtml
+        {
+            get { return _wordSearchHeaderSourceHtml; }
+            set { SetProperty(ref _wordSearchHeaderSourceHtml, value); }
+        }
+        // local html page width
+        private double _htmlPageWidth;
+        public double HtmlPageWidth
+        {
+            get { return _htmlPageWidth; }
+            set { SetProperty(ref _htmlPageWidth, value); }
+        }
+        // local header html page height
+        private double _htmlHeaderPageHeight;
+        public double HtmlHeaderPageHeight
+        {
+            get { return _htmlHeaderPageHeight; }
+            set { SetProperty(ref _htmlHeaderPageHeight, value); }
+        }
+        // local tile html page height
+        private double _htmlTilePageHeight;
+        public double HtmlTilePageHeight
+        {
+            get { return _htmlTilePageHeight; }
+            set { SetProperty(ref _htmlTilePageHeight, value); }
+        }
 
         public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter)
         {
@@ -143,6 +171,7 @@ namespace WordSearch.ViewModels
             GameScore = 0;
             GameCompleted = false;
             ScoreBoard = $"Score: {GameScore}";
+            WordSearchHeaderSourceHtml = DependencyService.Get<IDependencyHelper>().GetLocalHtmlPath() + "wordSearchHeader.html";
             StartGameTimer();
         }    
 

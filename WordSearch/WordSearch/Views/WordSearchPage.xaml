@@ -4,34 +4,12 @@
              xmlns:Util="clr-namespace:WordSearch.Util"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Resources>
-        <Util:TextToBoolConverter x:Key="StringToBool"/>
         <StyleSheet Source="/Assets/Styles.css" />
     </ContentPage.Resources>
     <ContentPage.Content>
-        <FlexLayout Direction="Column" BackgroundColor="LightGray">
-            <FlexLayout StyleClass="FlexScoreHeader" x:Name="FlexScoreHeader" FlexLayout.Grow="1">
-                <Label Text="{Binding GameTimer}"/>
-                <Label Text="{Binding ScoreBoard}"/>
-            </FlexLayout>
-            <FlexLayout StyleClass="FlexWordsList" x:Name="FlexWordsList" FlexLayout.Grow="1">
-                <Label Text="{Binding Text1}" IsVisible="{Binding Text1, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text2}" IsVisible="{Binding Text2, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text3}" IsVisible="{Binding Text3, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text4}" IsVisible="{Binding Text4, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text5}" IsVisible="{Binding Text5, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text6}" IsVisible="{Binding Text6, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text7}" IsVisible="{Binding Text7, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text8}" IsVisible="{Binding Text8, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text9}" IsVisible="{Binding Text9, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text10}" IsVisible="{Binding Text10, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text11}" IsVisible="{Binding Text11, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text12}" IsVisible="{Binding Text12, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text13}" IsVisible="{Binding Text13, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text14}" IsVisible="{Binding Text14, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text15}" IsVisible="{Binding Text15, Converter={StaticResource StringToBool}}"/>
-                <Label Text="{Binding Text16}" IsVisible="{Binding Text16, Converter={StaticResource StringToBool}}"/>
-            </FlexLayout>
-            <FlexLayout x:Name="FlexTilesView" FlexLayout.Grow="19" Wrap="Wrap" Direction="Row" JustifyContent="Center"/>
-        </FlexLayout>
+        <StackLayout x:Name="FlexScoreHeader" Orientation="Vertical" BackgroundColor="LightGray" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <WebView Source="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}" />
+            <FlexLayout x:Name="FlexTilesView" Wrap="Wrap" HeightRequest="{Binding HtmlTilePageHeight}" WidthRequest="{Binding HtmlPageWidth}"/>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

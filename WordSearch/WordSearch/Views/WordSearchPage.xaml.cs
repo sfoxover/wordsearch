@@ -62,8 +62,11 @@ namespace WordSearch
                 PageSizedCounter--;
                 if (PageSizedCounter == 0 && height > 0)
                 {
+                    ViewModel.HtmlPageWidth = width;
+                    ViewModel.HtmlHeaderPageHeight = 120;
+                    double wordHeight = height - 120;
+                    ViewModel.HtmlTilePageHeight = wordHeight;
                     bool bOK;
-                    double wordHeight = Height - FlexWordsList.Height - FlexScoreHeader.Height;
                     if (!HasBeenInitialized)
                     {
                         bOK = InitalizeDelegates();
@@ -236,7 +239,7 @@ namespace WordSearch
                 for (int n=0; n<Manager.Words.Count; n++)
                 {
                     var word = Manager.Words[n];
-                    var label = FlexWordsList.Children[n] as Label;
+                  /*  var label = FlexWordsList.Children[n] as Label;
                     if(word.IsWordCompleted)
                     {
                         label.BackgroundColor = Color.Yellow;
@@ -246,7 +249,7 @@ namespace WordSearch
                     {
                         label.BackgroundColor = Color.LightGray;
                         label.TextColor = Color.Black;
-                    }
+                    } */
                 }
             }
             catch (Exception ex)
