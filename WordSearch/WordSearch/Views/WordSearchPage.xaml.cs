@@ -37,6 +37,7 @@ namespace WordSearch
             InitializeComponent();
             Manager = new WordManager();
             BindingContext = new WordSearchPageViewModel(Navigation, 300, 20);
+            webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
         }
 
         public WordSearchPage(WordManager.GameDifficulty level)
@@ -50,6 +51,7 @@ namespace WordSearch
             int points = Manager.GetPointsPerLetter();
             BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points);
             InitializeComponent();
+            webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -251,6 +253,8 @@ namespace WordSearch
                         label.TextColor = Color.Black;
                     } */
                 }
+                string script = "";
+                webViewHeader.InjectJavascriptAsync(script).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
@@ -273,6 +277,11 @@ namespace WordSearch
         {
             ViewModel.GameCompleted = true;
             await DisplayAlert("Winner", "Game completed!", "OK");   
+        }
+
+        void HeaderJSCallback(string message)
+        {
+            System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
         }
     }
 }
