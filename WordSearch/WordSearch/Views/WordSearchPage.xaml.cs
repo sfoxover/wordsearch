@@ -43,13 +43,13 @@ namespace WordSearch
         {
             Rows = 0;
             Columns = 0;
-            HasBeenInitialized = false;
-            InitializeComponent();            
+            HasBeenInitialized = false;            
             Manager = new WordManager();
             Manager.DifficultyLevel = level;
             int secondsRemaining = Manager.GetStartSecondsRemaining();
             int points = Manager.GetPointsPerLetter();
             BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points);
+            InitializeComponent();
         }
 
         protected override void OnSizeAllocated(double width, double height)

@@ -171,7 +171,7 @@ namespace WordSearch.ViewModels
             GameScore = 0;
             GameCompleted = false;
             ScoreBoard = $"Score: {GameScore}";
-            WordSearchHeaderSourceHtml = DependencyService.Get<IDependencyHelper>().GetLocalHtmlPath() + "wordSearchHeader.html";
+            WordSearchHeaderSourceHtml = "html/wordSearchHeader.html";
             StartGameTimer();
         }    
 
