@@ -235,25 +235,10 @@ namespace WordSearch
             bool bOK = true;
             try
             {
-                // call view model to bind text
-                ViewModel.LoadWordsHeader(Manager.Words);
-                // dynamically update style
-                for (int n=0; n<Manager.Words.Count; n++)
-                {
-                    var word = Manager.Words[n];
-                  /*  var label = FlexWordsList.Children[n] as Label;
-                    if(word.IsWordCompleted)
-                    {
-                        label.BackgroundColor = Color.Yellow;
-                        label.TextColor = Color.Red;
-                    }
-                    else
-                    {
-                        label.BackgroundColor = Color.LightGray;
-                        label.TextColor = Color.Black;
-                    } */
-                }
-                string script = "";
+                // call view model to get json data
+                ViewModel.LoadWordsHeaderHtml(Manager.Words, out MessageJson msg);
+                string json = msg.GetJsonString();
+                string script = $"header.handleMsgFromApp('{json}')";
                 webViewHeader.InjectJavascriptAsync(script).ConfigureAwait(false);
             }
             catch (Exception ex)
@@ -282,6 +267,7 @@ namespace WordSearch
         void HeaderJSCallback(string message)
         {
             System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
+            MessageJson msg = new MessageJson(message);
         }
     }
 }

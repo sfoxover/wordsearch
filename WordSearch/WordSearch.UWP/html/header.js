@@ -1,15 +1,23 @@
-﻿$(document).ready(function() {    
-    header.signalOnReady();
+﻿// on ready handler
+$(document).ready(function () {    
+    header.signalNativeApp("OnReady");
 });
 
 class Header {
     constructor() {
     }
 
-    signalOnReady() {
+    // pass message and data to native app
+    signalNativeApp(msg, data) {
         try {
             this.waitForHeaderCallbackCreation().then(function () {
-                headerJSCallback("OnReady");
+                // format message into json
+                var msgObj = new Object();
+                msgObj.Message = msg;
+                msgObj.Data = data;
+                var json = JSON.stringify(msgObj);
+                // call native code
+                headerJSCallback(json);
             });
         }
         catch (err) {
@@ -37,13 +45,32 @@ class Header {
     handleError(err) {
         try {
             this.waitForHeaderCallbackCreation().then(function () {
-                headerJSCallback("ERROR: " + err);
+                // format error message into json
+                var msgObj = new Object();
+                msgObj.Message = "Error";
+                msgObj.Data = err.Message;
+                var json = JSON.stringify(msgObj);
+                // call native code
+                headerJSCallback(json);
             });
         }
         catch (err) {
             console.error(err);
         }
     }
-}
 
+    // handle message from native app
+    handleMsgFromApp(json) {
+        try {
+            var msgObj = JSON.parse(json);
+            var msg = msgObj.Message;
+            var data = msgObj.Data;
+        }
+        catch (err) {
+            this.handleError(err);
+        }
+    }
+
+}
+// global Header object
 var header = new Header();
