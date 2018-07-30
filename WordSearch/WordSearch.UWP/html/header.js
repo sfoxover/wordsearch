@@ -65,10 +65,33 @@ class Header {
             var msgObj = JSON.parse(json);
             var msg = msgObj.Message;
             var data = msgObj.Data;
+            switch (msg) {
+                case "LoadWordsHeader":
+                    {
+                        this.makeTable($("#wordsList"), data);
+                        break;
+                    }
+                default:
+                    {
+                        this.handleError("Unknown message from app, " + msg);
+                        break;
+                    }
+            }
         }
         catch (err) {
             this.handleError(err);
         }
+    }
+
+    makeTable(container, items) {
+        var table = $("<table/>").addClass('headerTable');
+        var row = $("<tr/>");
+        $.each(items, function (rowCount, item) {
+            var word = item.Text;
+            row.append($("<td/>").text(word));
+        });
+        table.append(row);
+        return container.html(table);
     }
 
 }

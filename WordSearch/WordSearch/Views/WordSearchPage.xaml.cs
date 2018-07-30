@@ -235,8 +235,9 @@ namespace WordSearch
             bool bOK = true;
             try
             {
-                // call view model to get json data
-                ViewModel.LoadWordsHeaderHtml(Manager.Words, out MessageJson msg);
+                var msg = new MessageJson();
+                msg.Message = "LoadWordsHeader";
+                msg.Data = Manager.Words;
                 string json = msg.GetJsonString();
                 string script = $"header.handleMsgFromApp('{json}')";
                 webViewHeader.InjectJavascriptAsync(script).ConfigureAwait(false);

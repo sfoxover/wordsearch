@@ -79,45 +79,6 @@ namespace WordSearch.ViewModels
             StartGameTimer();
         }    
 
-        // load words in header and strike out completed words
-        public bool LoadWordsHeaderHtml(List<Word> words, out MessageJson msg)
-        {
-            bool bOK = true;
-            msg = new MessageJson();
-            try
-            {
-                msg.Message = "LoadWordsHeader";
-                string data = "[[ ";
-                // place words in grid layout header
-                int count = 0;
-                foreach(var word in words)
-                {
-                    count++;
-                    data += $"[ \"text\": \"{word.Text}\", \"completed\", {word.IsWordCompleted} ]";
-                    if(count <4)
-                    {
-                        data += ",";
-                    }
-                    else
-                    {
-                        if (words.IndexOf(word) != words.Count - 1)
-                            data += "],";
-                        else
-                            data += "]";
-                        count = 0;
-                    }
-                }
-                data += " ]]";
-                msg.Data = data;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"LoadWordsHeader exception, {ex.Message}");
-                bOK = false;
-            }
-            return bOK;
-        }
-
         private void StartGameTimer()
         {
             try

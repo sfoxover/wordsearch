@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -6,21 +7,26 @@ using Xamarin.Forms;
 
 namespace WordSearch.Models
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Word
     {
         // word direction enum
         public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
         // random word
+        [JsonProperty]
         public string Text { get; set; }
         // start row position
+        [JsonProperty]
         public int Row { get; set; }
         // start column position
+        [JsonProperty]
         public int Column { get; set; }
         // word bearing
         public WordDirection Direction { get; set; }
         // reference to tile objects used in this word
         public List<Point> TilePositions { get; set; }
         // flag when whole word is completed
+        [JsonProperty]
         public bool IsWordCompleted { get; set; }
 
         public Word(string text)
