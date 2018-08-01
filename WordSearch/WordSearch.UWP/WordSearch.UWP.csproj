@@ -103,6 +103,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="html\digital-7.ttf" />
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
