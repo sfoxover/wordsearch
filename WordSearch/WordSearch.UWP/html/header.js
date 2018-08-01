@@ -5,6 +5,12 @@ $(document).ready(function () {
 
 class Header {
     constructor() {
+        this.waitForHeaderCallbackCreation().then(function () {
+            console.log('Native object loaded');
+        }).catch(function (error) {
+            console.log('Loading mock data');
+            header.loadMockData();
+        });
     }
 
     // pass message and data to native app
@@ -18,6 +24,8 @@ class Header {
                 var json = JSON.stringify(msgObj);
                 // call native code
                 headerJSCallback(json);
+            }).catch(function(error) {
+                console.log(error);
             });
         }
         catch (err) {
@@ -29,9 +37,17 @@ class Header {
     waitForHeaderCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
+                setTimeout(function () {
+                    return reject(new Error("waitForHeaderCallbackCreation timed out."));
+                }, 1000);
                 (function waitForHeaderCallback() {
-                    if (headerJSCallback)
-                        return resolve();
+                    try {
+                        if (headerJSCallback)
+                            return resolve();
+                    }
+                    catch (err2) {
+                        console.log(err2);
+                    }
                     setTimeout(waitForHeaderCallback, 30);
                 })();
             });
@@ -52,6 +68,28 @@ class Header {
                 var json = JSON.stringify(msgObj);
                 // call native code
                 headerJSCallback(json);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
+
+    // log message to native app
+    logMsg(info) {
+        try {
+            this.waitForHeaderCallbackCreation().then(function () {
+                // format error message into json
+                var msgObj = new Object();
+                msgObj.Message = "LogMsg";
+                msgObj.Data = info;
+                var json = JSON.stringify(msgObj);
+                // call native code
+                headerJSCallback(json);
+            }).catch(function (error) {
+                console.log(error);
             });
         }
         catch (err) {
@@ -83,15 +121,36 @@ class Header {
         }
     }
 
+    // load mok data for browser testing
+    loadMockData() {
+        try {
+            var data = JSON.parse('[{ "Text": "friday", "Row": 3, "Column": 2, "IsWordCompleted": false }, { "Text": "july", "Row": 8, "Column": 4, "IsWordCompleted": false }, { "Text": "car", "Row": 4, "Column": 6, "IsWordCompleted": false }, { "Text": "africa", "Row": 0, "Column": 7, "IsWordCompleted": false }]');
+            this.makeTable($("#wordsList"), data);
+        }
+        catch(err) {
+            this.handleError(err);
+        }
+    }
+
+    // create word list table
     makeTable(container, items) {
-        var table = $("<table/>").addClass('headerTable');
-        var row = $("<tr/>");
-        $.each(items, function (rowCount, item) {
-            var word = item.Text;
-            row.append($("<td/>").text(word));
-        });
-        table.append(row);
-        return container.html(table);
+        try {
+            var table = $("<table/>").addClass('headerTable');
+            var row = $("<tr/>");
+            $.each(items, function (rowCount, item) {
+                var word = item.Text;
+                var wordDiv = $("<div/>").addClass('headerTextDiv');
+                wordDiv.text(word);
+                var td = $("<td/>");
+                td.append(wordDiv);
+                row.append(td);
+            });
+            table.append(row);
+            return container.html(table);
+        }
+        catch(err) {
+            this.handleError(err);
+        }
     }
 
 }

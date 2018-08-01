@@ -265,10 +265,23 @@ namespace WordSearch
             await DisplayAlert("Winner", "Game completed!", "OK");   
         }
 
+        // callback from JS html page
         void HeaderJSCallback(string message)
         {
             System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
             MessageJson msg = new MessageJson(message);
+            switch(msg.Message)
+            {
+                case "OnReady":
+                    Debug.WriteLine("Header html DOM ready.");
+                    break;
+                case "LogMsg":
+                    Debug.WriteLine(msg.Data.ToString());
+                    break;
+                case "Error":
+                    Debug.WriteLine(msg.Data.ToString());
+                    break;
+            }
         }
     }
 }

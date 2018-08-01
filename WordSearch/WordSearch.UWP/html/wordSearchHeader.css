@@ -1,12 +1,55 @@
-﻿body {
-    background-color: #D3D3D3;
+﻿@font-face {
+   font-family: 'digital-7';
+   src: url('digital-7.ttf');
+}
+
+body {
+    background-color: white;    
+}
+
+#wordsList {
+    background-color: lightyellow;
+    height: 50px;
+    text-align:center;
+    position: relative;
+}
+
+#scoreBoard {
+    text-align: center;
+    vertical-align: middle;
+    height: 50px;
+}
+
+#score {
+    float:left;
+    height:100%;
+}
+
+#timeClock {
+    float: right;
+    height: 100%;
+}
+
+.digitalText {
+    color: lightgreen;
+    background-color: darkgreen;
+    font-family: 'digital-7', sans-serif;
+    font-size: xx-large
 }
 
 table.headerTable {
-    border: 0px solid #1C6EA4;
-    background-color: #D3D3D3;
+    border: 0px;
+    background-color: lightblue;
     width: 100%;
-    text-align: center;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
+}
+
+.headerTextDiv {
+    color: black;
+    text-decoration: line-through;
+    font-family: Arial, sans-serif;
 }
 
 table.headerTable td, table.headerTable th {
