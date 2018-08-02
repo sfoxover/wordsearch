@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WordSearch.Controls;
 using WordSearch.Models;
 using WordSearch.Util;
@@ -36,7 +37,7 @@ namespace WordSearch
             HasBeenInitialized = false;
             InitializeComponent();
             Manager = new WordManager();
-            BindingContext = new WordSearchPageViewModel(Navigation, 300, 20);
+            BindingContext = new WordSearchPageViewModel(Navigation, 300, 20, webViewHeader);
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
         }
 
@@ -49,7 +50,7 @@ namespace WordSearch
             Manager.DifficultyLevel = level;
             int secondsRemaining = Manager.GetStartSecondsRemaining();
             int points = Manager.GetPointsPerLetter();
-            BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points);
+            BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader);
             InitializeComponent();
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
         }
@@ -143,8 +144,7 @@ namespace WordSearch
                 // load words in header and strike out completed words
                 if (bOK)
                 {
-                    bOK = LoadWordsHeader();
-                    Debug.Assert(bOK);
+                    LoadWordsHeader();
                 }
             }
             catch (Exception ex)
@@ -230,32 +230,18 @@ namespace WordSearch
         }
 
         // load words in header and highlight completed words
-        public bool LoadWordsHeader()
+        public async Task<bool> LoadWordsHeader()
         {
-            bool bOK = true;
-            try
-            {
-                var msg = new MessageJson();
-                msg.Message = "LoadWordsHeader";
-                msg.Data = Manager.Words;
-                string json = msg.GetJsonString();
-                string script = $"header.handleMsgFromApp('{json}')";
-                webViewHeader.InjectJavascriptAsync(script).ConfigureAwait(false);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"LoadWordsHeader exception, {ex.Message}");
-                bOK = false;
-            }
-            return bOK;
+            return await ViewModel.SignalHtmlPage("LoadWordsHeader", Manager.Words);
         }
 
         // delegate callback to update header text
         private async void OnWordCompletedCallbackAsync(Word word)
         {
-            LoadWordsHeader();
+            await LoadWordsHeader();
             ViewModel.UpdateScore(word.Text.Length);
-            await DisplayAlert("Great job", $"You found the word {word.Text}!", "OK");
+            // signal html page with word complete
+            await ViewModel.SignalHtmlPage("OnWordComplete", word);
         }
 
         // delegate for game completed callback
@@ -263,7 +249,7 @@ namespace WordSearch
         {
             ViewModel.GameCompleted = true;
             await DisplayAlert("Winner", "Game completed!", "OK");   
-        }
+        }       
 
         // callback from JS html page
         void HeaderJSCallback(string message)

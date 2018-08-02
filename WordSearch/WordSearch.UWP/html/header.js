@@ -11,27 +11,7 @@ class Header {
             console.log('Loading mock data');
             header.loadMockData();
         });
-    }
-
-    // pass message and data to native app
-    signalNativeApp(msg, data) {
-        try {
-            this.waitForHeaderCallbackCreation().then(function () {
-                // format message into json
-                var msgObj = new Object();
-                msgObj.Message = msg;
-                msgObj.Data = data;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                headerJSCallback(json);
-            }).catch(function(error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
+    }   
 
     // use promise to wait for C# headerJSCallback object to be created
     waitForHeaderCallbackCreation() {
@@ -95,31 +75,7 @@ class Header {
         catch (err) {
             console.error(err);
         }
-    }
-
-    // handle message from native app
-    handleMsgFromApp(json) {
-        try {
-            var msgObj = JSON.parse(json);
-            var msg = msgObj.Message;
-            var data = msgObj.Data;
-            switch (msg) {
-                case "LoadWordsHeader":
-                    {
-                        this.makeTable($("#wordsList"), data);
-                        break;
-                    }
-                default:
-                    {
-                        this.handleError("Unknown message from app, " + msg);
-                        break;
-                    }
-            }
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
+    }    
 
     // load mok data for browser testing
     loadMockData() {
@@ -139,7 +95,11 @@ class Header {
             var row = $("<tr/>");
             $.each(items, function (rowCount, item) {
                 var word = item.Text;
-                var wordDiv = $("<div/>").addClass('headerTextDiv');
+                var wordDiv = $("<div/>");
+                if (item.IsWordCompleted)
+                    wordDiv.addClass('wordCompleteDiv');
+                else
+                    wordDiv.addClass('wordDiv');
                 wordDiv.text(word);
                 var td = $("<td/>");
                 td.append(wordDiv);
@@ -149,6 +109,60 @@ class Header {
             return container.html(table);
         }
         catch(err) {
+            this.handleError(err);
+        }
+    }
+
+    // pass message and data to native app
+    signalNativeApp(msg, data) {
+        try {
+            this.waitForHeaderCallbackCreation().then(function () {
+                // format message into json
+                var msgObj = new Object();
+                msgObj.Message = msg;
+                msgObj.Data = data;
+                var json = JSON.stringify(msgObj);
+                // call native code
+                headerJSCallback(json);
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+        catch (err) {
+            this.handleError(err);
+        }
+    }
+
+    // handle message from native app
+    handleMsgFromApp(json) {
+        try {
+            var msgObj = JSON.parse(json);
+            var msg = msgObj.Message;
+            var data = msgObj.Data;
+            switch (msg) {
+                case "LoadWordsHeader":
+                    {
+                        this.makeTable($("#wordsList"), data);
+                        break;
+                    }
+                case "OnUpdateScore":
+                    {
+                        $("#score").text(data);
+                        break;
+                    }
+                case "OnUpdateTime":
+                    {
+                        $("#timeClock").text(data);
+                        break;
+                    }
+                default:
+                    {
+                        this.handleError("Unknown message from app, " + msg);
+                        break;
+                    }
+            }
+        }
+        catch (err) {
             this.handleError(err);
         }
     }

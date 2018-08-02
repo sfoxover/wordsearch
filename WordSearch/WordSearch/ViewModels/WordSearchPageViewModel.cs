@@ -5,12 +5,16 @@ using WordSearch.Models;
 using WordSearch.Util;
 using Xamarin.Forms;
 using System.Linq;
+using System.Threading.Tasks;
+using Xam.Plugin.WebView.Abstractions;
 
 namespace WordSearch.ViewModels
 {
     public class WordSearchPageViewModel : BindableBase
     {
         private INavigation Navigation { get; set; }
+
+        private FormsWebView WebView { get; set; }
 
         // countdown timer
         private string _gameTimer;
@@ -64,8 +68,9 @@ namespace WordSearch.ViewModels
             set { SetProperty(ref _htmlTilePageHeight, value); }
         }
 
-        public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter)
+        public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter, FormsWebView webView)
         {
+            WebView = webView;
             Navigation = value;
             StartingSeconds = secondsRemaining;
             SecondsRemaining = secondsRemaining;
@@ -88,7 +93,9 @@ namespace WordSearch.ViewModels
                     SecondsRemaining -= 1;
                     if (SecondsRemaining < 0)
                         SecondsRemaining = 0;
-                    GameTimer = $"Time remaining: {(int)SecondsRemaining} seconds";
+                    var ts = new TimeSpan(0, 0, 0, (int)SecondsRemaining);
+                    GameTimer = $"Time: {ts.Minutes} MIN {ts.Seconds} SEC";
+                    SignalHtmlPage("OnUpdateTime", ScoreBoard);
                     return !GameCompleted;
                 });
             }
@@ -107,12 +114,34 @@ namespace WordSearch.ViewModels
                     double multiplier = SecondsRemaining / StartingSeconds * PointsPerLetter;
                     GameScore += (int)(length * multiplier);
                     ScoreBoard = $"Score: {GameScore}";
+                    SignalHtmlPage("OnUpdateScore", ScoreBoard);
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"UpdateScore exception, {ex.Message}");
             }
+        }
+
+        // send message to html page
+        public async Task<bool> SignalHtmlPage(string message, object data)
+        {
+            bool bOK = true;
+            try
+            {
+                var msg = new MessageJson();
+                msg.Message = message;
+                msg.Data = data;
+                string json = msg.GetJsonString();
+                string script = $"header.handleMsgFromApp('{json}')";
+                await WebView.InjectJavascriptAsync(script).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SignalHtmlPage exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
         }
     }
 }

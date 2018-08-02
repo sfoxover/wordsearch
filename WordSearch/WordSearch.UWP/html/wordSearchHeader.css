@@ -31,8 +31,14 @@ body {
     width: 50%;
 }
 
-.headerTextDiv {
+.wordDiv {
     color: black;
+    font-family: Arial, sans-serif;
+    font-size: xx-large;
+}
+
+.wordCompleteDiv {
+    color: red;
     text-decoration: line-through;
     font-family: Arial, sans-serif;
     font-size: xx-large;
