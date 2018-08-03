@@ -95,7 +95,7 @@ namespace WordSearch.ViewModels
                         SecondsRemaining = 0;
                     var ts = new TimeSpan(0, 0, 0, (int)SecondsRemaining);
                     GameTimer = $"Time: {ts.Minutes} MIN {ts.Seconds} SEC";
-                    SignalHtmlPage("OnUpdateTime", ScoreBoard);
+                    SignalHtmlPage("OnUpdateTime", GameTimer);
                     return !GameCompleted;
                 });
             }

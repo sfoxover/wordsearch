@@ -44,7 +44,7 @@ class Header {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "Error";
-                msgObj.Data = err.Message;
+                msgObj.Data = err;
                 var json = JSON.stringify(msgObj);
                 // call native code
                 headerJSCallback(json);
@@ -153,6 +153,10 @@ class Header {
                 case "OnUpdateTime":
                     {
                         $("#timeClock").text(data);
+                        break;
+                    }
+                case "OnWordComplete":
+                    {
                         break;
                     }
                 default:

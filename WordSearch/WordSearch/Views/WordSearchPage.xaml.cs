@@ -50,8 +50,8 @@ namespace WordSearch
             Manager.DifficultyLevel = level;
             int secondsRemaining = Manager.GetStartSecondsRemaining();
             int points = Manager.GetPointsPerLetter();
-            BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader);
             InitializeComponent();
+            BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader);
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
         }
 
@@ -265,7 +265,10 @@ namespace WordSearch
                     Debug.WriteLine(msg.Data.ToString());
                     break;
                 case "Error":
-                    Debug.WriteLine(msg.Data.ToString());
+                    if (msg.Data != null)
+                    {
+                        Debug.WriteLine(msg.Data.ToString());
+                    }
                     break;
             }
         }
