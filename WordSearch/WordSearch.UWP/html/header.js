@@ -1,12 +1,7 @@
 ﻿// on ready handler
 $(document).ready(function () {    
-    header.signalNativeApp("OnReady");
 
-    var c = document.getElementById("canvas");
-    var ctx = c.getContext("2d");
-    ctx.moveTo(0, 0);
-    ctx.lineTo(200, 100);
-    ctx.stroke();
+    header.signalNativeApp("OnReady");
 
 });
 
@@ -165,6 +160,11 @@ class Header {
                     }
                 case "OnWordComplete":
                     {
+                        // show fireworks
+                        fireworks.start();
+                        setTimeout(function () {
+                            fireworks.pause();
+                        }, 5000);
                         break;
                     }
                 default:

@@ -107,10 +107,10 @@
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="html\fireworks.js" />
     <Content Include="html\header.js" />
     <Content Include="html\jquery-3.3.1.min.js" />
     <Content Include="html\proton.min.js" />
-    <Content Include="html\stats.min.js" />
     <Content Include="html\wordSearchHeader.css" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
