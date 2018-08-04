@@ -85,6 +85,14 @@ class Header {
         try {
             var data = JSON.parse('[{ "Text": "friday", "Row": 3, "Column": 2, "IsWordCompleted": false }, { "Text": "july", "Row": 8, "Column": 4, "IsWordCompleted": false }, { "Text": "car", "Row": 4, "Column": 6, "IsWordCompleted": false }, { "Text": "africa", "Row": 0, "Column": 7, "IsWordCompleted": false }]');
             this.makeTable($("#wordsList"), data);
+
+            // test fireworks
+            setTimeout(function () {
+                fireworks.start(50, 25);
+                setTimeout(function () {
+                    fireworks.pause();
+                    }, 5000);
+            }, 2000);
         }
         catch(err) {
             this.handleError(err);
@@ -161,7 +169,7 @@ class Header {
                 case "OnWordComplete":
                     {
                         // show fireworks
-                        fireworks.start();
+                        fireworks.start(data.Start, data.End);
                         setTimeout(function () {
                             fireworks.pause();
                         }, 5000);

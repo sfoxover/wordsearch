@@ -9,8 +9,14 @@ class Fireworks {
         this._paused = false;
     }
 
-    start() {
-        $("#" + this.CANVAS_NAME).show();
+    start(startPos, endPos) {
+
+        var canvas = $("#" + this.CANVAS_NAME);
+        // highlight just word
+        canvas.css("left", startPos + '%');
+        canvas.css("width", endPos +'%');
+        canvas.show();
+
         if (this._paused) {
             this.resume();
         }

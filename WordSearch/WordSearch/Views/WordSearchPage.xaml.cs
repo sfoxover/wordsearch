@@ -241,7 +241,8 @@ namespace WordSearch
             await LoadWordsHeader();
             ViewModel.UpdateScore(word.Text.Length);
             // signal html page with word complete
-            await ViewModel.SignalHtmlPage("OnWordComplete", word);
+            var textPos = Manager.GetTextPos(word);            
+            await ViewModel.SignalHtmlPage("OnWordComplete", textPos);
         }
 
         // delegate for game completed callback

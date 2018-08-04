@@ -260,6 +260,15 @@ namespace WordSearch.Util
             return result;
         }
 
+        // get text start and end position for header highlight
+        internal object GetTextPos(Word word)
+        {
+            int percentage = 100 / GetLevelWordCount();
+            int startPercentage = Words.IndexOf(word) * percentage;
+            var textPos = new { Word = word.Text, Start = startPercentage, End = percentage };
+            return textPos;
+        }
+
         // get number of words to find based on difficulty
         public int GetLevelWordCount()
         {
