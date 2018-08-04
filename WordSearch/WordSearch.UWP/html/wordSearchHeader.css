@@ -7,6 +7,13 @@ body {
     background-color: white;    
 }
 
+canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #111;
+}
+
 #wordsList {
     background-color: lightblue;
     height: 50px;

@@ -4,8 +4,31 @@
 <head>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="wordSearchHeader.css">
+    <script src="jquery-3.3.1.min.js"></script>
+    <script src="header.js"></script>
+
+    <style>
+        /* NOTE: The styles were added inline because Prefixfree needs access to your styles and they must be inlined if they are on local disk! */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            opacity: .8;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
+
 </head>
 <body>
-    <h4>Game over</h4>
+    <div id="scoreBoard">
+        <div id="score" class="digitalText">score: 0</div>
+        <div id="timeClock" class="digitalText">TIME: 3 MIN 0 SEC</div>
+    </div>
+    <div id="wordsList"></div>
+
+    <canvas id=c></canvas>
+    <script src="fireworks.js"></script>
+
 </body>
 </html>

@@ -1,6 +1,13 @@
 ﻿// on ready handler
 $(document).ready(function () {    
     header.signalNativeApp("OnReady");
+
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+    ctx.moveTo(0, 0);
+    ctx.lineTo(200, 100);
+    ctx.stroke();
+
 });
 
 class Header {
@@ -22,13 +29,14 @@ class Header {
                 }, 1000);
                 (function waitForHeaderCallback() {
                     try {
-                        if (headerJSCallback)
+                        if (headerJSCallback) {
                             return resolve();
+                        }
                     }
-                    catch (err2) {
-                        console.log(err2);
+                    catch (err) {
+                        err;
                     }
-                    setTimeout(waitForHeaderCallback, 30);
+                    setTimeout(waitForHeaderCallback, 100);
                 })();
             });
         }
@@ -174,3 +182,4 @@ class Header {
 }
 // global Header object
 var header = new Header();
+
