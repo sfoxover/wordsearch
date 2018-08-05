@@ -88,9 +88,9 @@ class Header {
 
             // test fireworks
             setTimeout(function () {
-                fireworks.start(50, 25);
+                fire.start(50, 25);
                 setTimeout(function () {
-                    fireworks.pause();
+                    fire.pause();
                     }, 5000);
             }, 2000);
         }
@@ -169,9 +169,9 @@ class Header {
                 case "OnWordComplete":
                     {
                         // show fireworks
-                        fireworks.start(data.Start, data.End);
+                        fire.start(data.Start, data.End);
                         setTimeout(function () {
-                            fireworks.pause();
+                            fire.pause();
                         }, 5000);
                         break;
                     }
