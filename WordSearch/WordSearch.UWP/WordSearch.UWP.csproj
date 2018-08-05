@@ -113,7 +113,10 @@
     <Content Include="html\header.js" />
     <Content Include="html\jquery-3.3.1.min.js" />
     <Content Include="html\proton.min.js" />
+    <Content Include="html\tiles.js" />
     <Content Include="html\wordSearchHeader.css" />
+    <Content Include="html\wordSearchTiles.css" />
+    <Content Include="html\wordSearchTiles.html" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
     <Content Include="Assets\LockScreenLogo.scale-125.png" />

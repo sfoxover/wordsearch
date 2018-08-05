@@ -1,7 +1,7 @@
 ﻿// on ready handler
 $(document).ready(function () {    
 
-    header.signalNativeApp("LoadWordsHeader");
+    header.signalNativeApp("OnReady");
 
 });
 

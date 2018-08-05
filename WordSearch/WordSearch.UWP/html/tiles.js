@@ -1,7 +1,7 @@
 ﻿// on ready handler
 $(document).ready(function () {    
 
-    header.signalNativeApp("LoadWordsHeader");
+    tiles.signalNativeApp("LoadTiles");
 
 });
 
@@ -11,7 +11,7 @@ class Header {
             console.log('Native object loaded');
         }).catch(function (error) {
             console.log('Loading mock data');
-            header.loadMockData();
+            tiles.loadMockData();
         });
     }   
 
@@ -164,16 +164,6 @@ class Header {
                 case "OnUpdateTime":
                     {
                         $("#timeClock").text(data);
-                        break;
-                    }
-                case "OnWordComplete":
-                    {
-                        // show fireworks
-                        fire.start(data.Start, data.End);
-                        setTimeout(function () {
-                            fire.pause();
-                            header.signalNativeApp("LoadWordsHeader");
-                        }, 1000);
                         break;
                     }
                 default:
