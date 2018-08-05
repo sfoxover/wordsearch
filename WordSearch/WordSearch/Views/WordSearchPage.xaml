@@ -7,9 +7,9 @@
         <StyleSheet Source="/Assets/Styles.css" />
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout x:Name="FlexScoreHeader" Orientation="Vertical" BackgroundColor="LightGray" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <webview:FormsWebView x:Name="webViewHeader" ContentType="LocalFile" Source="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}" />
-            <FlexLayout x:Name="FlexTilesView" Wrap="Wrap" HeightRequest="{Binding HtmlTilePageHeight}" WidthRequest="{Binding HtmlPageWidth}"/>
+        <StackLayout x:Name="FlexScoreHeader" Orientation="Vertical" BackgroundColor="LightGray" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="0">
+            <webview:FormsWebView x:Name="webViewHeader" ContentType="LocalFile" Source="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}" Margin="0"/>
+            <webview:FormsWebView x:Name="webViewTiles" ContentType="LocalFile" Source="{Binding WordSearchTilesSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlTilePageHeight}" Margin="0"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -19,12 +19,13 @@ class Header {
     waitForHeaderCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
-                setTimeout(function () {
+                var timerId = setTimeout(function () {
                     return reject(new Error("waitForHeaderCallbackCreation timed out."));
-                }, 1000);
+                }, 3000);
                 (function waitForHeaderCallback() {
                     try {
                         if (headerJSCallback) {
+                            clearTimeout(timerId);
                             return resolve();
                         }
                     }

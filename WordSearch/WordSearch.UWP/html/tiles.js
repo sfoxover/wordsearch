@@ -5,9 +5,9 @@ $(document).ready(function () {
 
 });
 
-class Header {
+class Tiles {
     constructor() {
-        this.waitForHeaderCallbackCreation().then(function () {
+        this.waitForTilesCallbackCreation().then(function () {
             console.log('Native object loaded');
         }).catch(function (error) {
             console.log('Loading mock data');
@@ -15,23 +15,24 @@ class Header {
         });
     }   
 
-    // use promise to wait for C# headerJSCallback object to be created
-    waitForHeaderCallbackCreation() {
+    // use promise to wait for C# tilesJSCallback object to be created
+    waitForTilesCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
-                setTimeout(function () {
-                    return reject(new Error("waitForHeaderCallbackCreation timed out."));
-                }, 1000);
-                (function waitForHeaderCallback() {
+                var timerId = setTimeout(function () {
+                    return reject(new Error("waitForTilesCallbackCreation timed out."));
+                }, 3000);
+                (function waitForTilesCallback() {
                     try {
-                        if (headerJSCallback) {
+                        if (tilesJSCallback) {
+                            clearTimeout(timerId);
                             return resolve();
                         }
                     }
                     catch (err) {
                         err;
                     }
-                    setTimeout(waitForHeaderCallback, 100);
+                    setTimeout(waitForTilesCallback, 100);
                 })();
             });
         }
@@ -43,14 +44,14 @@ class Header {
     // handle errors
     handleError(err) {
         try {
-            this.waitForHeaderCallbackCreation().then(function () {
+            this.waitForTilesCallbackCreation().then(function () {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "Error";
                 msgObj.Data = err;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                headerJSCallback(json);
+                tilesJSCallback(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -63,14 +64,14 @@ class Header {
     // log message to native app
     logMsg(info) {
         try {
-            this.waitForHeaderCallbackCreation().then(function () {
+            this.waitForTilesCallbackCreation().then(function () {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "LogMsg";
                 msgObj.Data = info;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                headerJSCallback(json);
+                tilesJSCallback(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -84,13 +85,13 @@ class Header {
     loadMockData() {
         try {
             var data = JSON.parse('[{ "Text": "friday", "Row": 3, "Column": 2, "IsWordCompleted": false }, { "Text": "july", "Row": 8, "Column": 4, "IsWordCompleted": false }, { "Text": "car", "Row": 4, "Column": 6, "IsWordCompleted": false }, { "Text": "africa", "Row": 0, "Column": 7, "IsWordCompleted": false }]');
-            this.makeTable($("#wordsList"), data);
+            this.makeTable($("#tilesList"), data);
 
             // test fireworks
             setTimeout(function () {
-                fire.start(50, 25);
+                fireworks.start(0, 100);
                 setTimeout(function () {
-                    fire.pause();
+                    fireworks.pause();
                     }, 5000);
             }, 2000);
         }
@@ -102,21 +103,22 @@ class Header {
     // create word list table
     makeTable(container, items) {
         try {
-            var table = $("<table/>").addClass('headerTable');
-            var row = $("<tr/>");
-            $.each(items, function (rowCount, item) {
-                var word = item.Text;
-                var wordDiv = $("<div/>");
-                if (item.IsWordCompleted)
-                    wordDiv.addClass('wordCompleteDiv');
-                else
-                    wordDiv.addClass('wordDiv');
-                wordDiv.text(word);
-                var td = $("<td/>");
-                td.append(wordDiv);
-                row.append(td);
+            var table = $("<table/>").addClass('tilesTable');
+            $.each(items, function (rowsCount, rows) {
+                var tr = $("<tr/>");
+                $.each(rows, function (rowCount, row) {
+                    var div = $("<div/>");
+                    if (row.LetterSelected)
+                        div.addClass('letterDivSelected');
+                    else
+                        div.addClass('letterDiv');
+                    div.text(row.Letter);
+                    var td = $("<td/>");
+                    td.append(div);
+                    tr.append(td);
+                });
+                table.append(tr);
             });
-            table.append(row);
             return container.html(table);
         }
         catch(err) {
@@ -127,14 +129,14 @@ class Header {
     // pass message and data to native app
     signalNativeApp(msg, data) {
         try {
-            this.waitForHeaderCallbackCreation().then(function () {
+            this.waitForTilesCallbackCreation().then(function () {
                 // format message into json
                 var msgObj = new Object();
                 msgObj.Message = msg;
                 msgObj.Data = data;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                headerJSCallback(json);
+                tilesJSCallback(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -151,19 +153,9 @@ class Header {
             var msg = msgObj.Message;
             var data = msgObj.Data;
             switch (msg) {
-                case "LoadWordsHeader":
+                case "LoadTiles":
                     {
-                        this.makeTable($("#wordsList"), data);
-                        break;
-                    }
-                case "OnUpdateScore":
-                    {
-                        $("#score").text(data);
-                        break;
-                    }
-                case "OnUpdateTime":
-                    {
-                        $("#timeClock").text(data);
+                        this.makeTable($("#tilesList"), data);
                         break;
                     }
                 default:
@@ -179,6 +171,6 @@ class Header {
     }
 
 }
-// global Header object
-var header = new Header();
+// global object
+var tiles = new Tiles();
 

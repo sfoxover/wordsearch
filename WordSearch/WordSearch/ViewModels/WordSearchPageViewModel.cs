@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Models;
-using WordSearch.Util;
 using Xamarin.Forms;
-using System.Linq;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions;
 
@@ -14,7 +11,8 @@ namespace WordSearch.ViewModels
     {
         private INavigation Navigation { get; set; }
 
-        private FormsWebView WebView { get; set; }
+        private FormsWebView WebViewHeader { get; set; }
+        private FormsWebView WebViewTiles { get; set; }
 
         // countdown timer
         private string _gameTimer;
@@ -46,6 +44,13 @@ namespace WordSearch.ViewModels
             get { return _wordSearchHeaderSourceHtml; }
             set { SetProperty(ref _wordSearchHeaderSourceHtml, value); }
         }
+        // tile body local html path
+        private string _wordSearchTilesSourceHtml;
+        public string WordSearchTilesSourceHtml
+        {
+            get { return _wordSearchTilesSourceHtml; }
+            set { SetProperty(ref _wordSearchTilesSourceHtml, value); }
+        }
         // local html page width
         private double _htmlPageWidth;
         public double HtmlPageWidth
@@ -68,9 +73,10 @@ namespace WordSearch.ViewModels
             set { SetProperty(ref _htmlTilePageHeight, value); }
         }
 
-        public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter, FormsWebView webView)
+        public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter, FormsWebView webViewHeader, FormsWebView webViewTiles)
         {
-            WebView = webView;
+            WebViewHeader = webViewHeader;
+            WebViewTiles = webViewTiles;
             Navigation = value;
             StartingSeconds = secondsRemaining;
             SecondsRemaining = secondsRemaining;
@@ -81,6 +87,7 @@ namespace WordSearch.ViewModels
             GameCompleted = false;
             ScoreBoard = $"Score: {GameScore}";
             WordSearchHeaderSourceHtml = "html/wordSearchHeader.html";
+            WordSearchTilesSourceHtml = "html/wordSearchTiles.html";
             StartGameTimer();
         }    
 
@@ -95,7 +102,7 @@ namespace WordSearch.ViewModels
                         SecondsRemaining = 0;
                     var ts = new TimeSpan(0, 0, 0, (int)SecondsRemaining);
                     GameTimer = $"Time: {ts.Minutes} MIN {ts.Seconds} SEC";
-                    SignalHtmlPage("OnUpdateTime", GameTimer);
+                    SignalHeaderHtmlPage("OnUpdateTime", GameTimer);
                     return !GameCompleted;
                 });
             }
@@ -114,7 +121,7 @@ namespace WordSearch.ViewModels
                     double multiplier = SecondsRemaining / StartingSeconds * PointsPerLetter;
                     GameScore += (int)(length * multiplier);
                     ScoreBoard = $"Score: {GameScore}";
-                    SignalHtmlPage("OnUpdateScore", ScoreBoard);
+                    SignalHeaderHtmlPage("OnUpdateScore", ScoreBoard);
                 }
             }
             catch (Exception ex)
@@ -123,8 +130,8 @@ namespace WordSearch.ViewModels
             }
         }
 
-        // send message to html page
-        public async Task<bool> SignalHtmlPage(string message, object data)
+        // send message to html header page
+        public async Task<bool> SignalHeaderHtmlPage(string message, object data)
         {
             bool bOK = true;
             try
@@ -134,11 +141,32 @@ namespace WordSearch.ViewModels
                 msg.Data = data;
                 string json = msg.GetJsonString();
                 string script = $"header.handleMsgFromApp('{json}')";
-                await WebView.InjectJavascriptAsync(script).ConfigureAwait(false);
+                await WebViewHeader.InjectJavascriptAsync(script).ConfigureAwait(false);
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"SignalHtmlPage exception, {ex.Message}");
+                Debug.WriteLine($"SignalHeaderHtmlPage exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // send message to html tiles page
+        public async Task<bool> SignalTilesHtmlPage(string message, object data)
+        {
+            bool bOK = true;
+            try
+            {
+                var msg = new MessageJson();
+                msg.Message = message;
+                msg.Data = data;
+                string json = msg.GetJsonString();
+                string script = $"tiles.handleMsgFromApp('{json}')";
+                await WebViewTiles.InjectJavascriptAsync(script).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"SignalTilesHtmlPage exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;

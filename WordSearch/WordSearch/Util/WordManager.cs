@@ -34,7 +34,7 @@ namespace WordSearch.Util
         // array of random words
         public List<Word> Words { get; set; }
         // word list array
-        private TileControlViewModel[,] TileViewModels { get; set; }
+        public TileControlViewModel[,] TileViewModels { get; set; }
         // delegate callback to update header text
         public delegate void WordCompletedDelegate(Word word);
         public event WordCompletedDelegate WordCompletedCallback;

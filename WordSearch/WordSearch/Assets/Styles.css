@@ -3,23 +3,6 @@
     margin:0;
 }
 
-FlexLayout{
-    margin:0;
-}
-
-.FlexScoreHeader {
-    background-color: lightgray;
-    margin-top: 0;
-}
-
-.FlexTilesView {
-    background-color: lightgray;
-    align-items: center;
-    justify-content: center;
-    flex-direction: row;
-    margin-top: 0;
-}
-
 .BlueButton {
     padding-left: 10;
     padding-right: 10;
