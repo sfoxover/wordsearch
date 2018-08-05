@@ -172,7 +172,8 @@ class Header {
                         fire.start(data.Start, data.End);
                         setTimeout(function () {
                             fire.pause();
-                        }, 5000);
+                            header.signalNativeApp("LoadWordsHeader");
+                        }, 1000);
                         break;
                     }
                 default:

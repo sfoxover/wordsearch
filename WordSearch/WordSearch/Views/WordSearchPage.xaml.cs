@@ -238,7 +238,6 @@ namespace WordSearch
         // delegate callback to update header text
         private async void OnWordCompletedCallbackAsync(Word word)
         {
-            await LoadWordsHeader();
             ViewModel.UpdateScore(word.Text.Length);
             // signal html page with word complete
             var textPos = Manager.GetTextPos(word);            
@@ -270,6 +269,9 @@ namespace WordSearch
                     {
                         Debug.WriteLine(msg.Data.ToString());
                     }
+                    break;
+                case "LoadWordsHeader":
+                    LoadWordsHeader();
                     break;
             }
         }
