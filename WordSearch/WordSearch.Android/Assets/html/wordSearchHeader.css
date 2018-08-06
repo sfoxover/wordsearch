@@ -81,20 +81,6 @@ table.headerTable td, table.headerTable th {
 table.headerTable tbody td {
     font-size: 13px;
     color: #000000;
+    align: center;
 }
 
-table.headerTable tfoot td {
-    font-size: 14px;
-}
-
-table.headerTable tfoot .links {
-    text-align: right;
-}
-
-table.headerTable tfoot .links a {
-    display: inline-block;
-    background: #1C6EA4;
-    color: #FFFFFF;
-    padding: 2px 8px;
-    border-radius: 5px;
-}

@@ -70,16 +70,7 @@ namespace WordSearch
                     ViewModel.HtmlPageWidth = width;
                     ViewModel.HtmlHeaderPageHeight = 120;
                     double wordHeight = height - 120;
-                    ViewModel.HtmlTilePageHeight = wordHeight;
-                    if (!HasBeenInitialized)
-                    {
-                        bool bOK = InitalizeDelegates();
-                        Debug.Assert(bOK);
-                        HasBeenInitialized = CalculateTiles(Width, wordHeight);
-                        Debug.Assert(HasBeenInitialized);
-                        if(HasBeenInitialized)
-                            ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
-                    }
+                    ViewModel.HtmlTilePageHeight = wordHeight;                    
                 }
                 return false;
             });
@@ -179,10 +170,27 @@ namespace WordSearch
         // load all tiles
         public async Task<bool> LoadAllTiles()
         {
+            bool bOK = true;
             if (HasBeenInitialized)
-                return await ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
+            {
+                bOK = await ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
+            }
             else
-                return false;
+            {
+                if (!HasBeenInitialized)
+                {
+                    bOK = InitalizeDelegates();
+                    Debug.Assert(bOK);
+                    if (bOK)
+                    {
+                        HasBeenInitialized = CalculateTiles(Width, Height - 120);
+                        Debug.Assert(HasBeenInitialized);
+                        if (HasBeenInitialized)
+                            bOK = await ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
+                    }
+                }
+            }
+            return bOK;
         }
 
         // delegate callback to update header text
