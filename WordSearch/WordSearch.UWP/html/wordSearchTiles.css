@@ -31,11 +31,6 @@ body {
     position: relative;
 }
 
-#tilesList {
-    width: 100%;
-    height: 100%;
-}
-
 .letterDivSelected {
     margin: 0;
     color: red;
@@ -55,22 +50,28 @@ body {
     text-align: center;
 }
 
-table.tilesTable {
-    border: 1px;
-    background-color: lightblue;
+#tilesList {
     width: 100%;
     height: 100%;
+    margin: auto;
 }
 
-    table.tilesTable td, table.tilesTable th {
-        border: 0px solid #FFFFFF;
-        padding: 0px 0px;
-        text-align: center;
-    }
+table.tilesTable {
+    border: 0px;
+    padding: 0px;
+    background-color: lightblue;
+    margin: auto;
+}
 
-    table.tilesTable tbody td {
-        font-size: 13px;
-        color: #000000;
-        text-align: center;
-    }
+table.tilesTable td, table.tilesTable th {
+    border: 0px solid #FFFFFF;
+    padding: 0px;
+    text-align: center;
+}
+
+table.tilesTable tbody td {
+    font-size: 13px;
+    color: #000000;
+    text-align: center;
+}
 

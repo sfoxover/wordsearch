@@ -1,12 +1,16 @@
 ﻿// on ready handler
 $(document).ready(function () {    
 
-    tiles.signalNativeApp("LoadTiles");
+});
 
+$(window).resize(function () {
+    tiles.resizeTiles();
 });
 
 class Tiles {
     constructor() {
+        this.rowCount = 0;
+        this.columnCount = 0;
         this.waitForTilesCallbackCreation().then(function () {
             console.log('Native object loaded');
         }).catch(function (error) {
@@ -100,31 +104,56 @@ class Tiles {
         }
     }
 
+   
+
+    resizeTiles() {
+        try {
+            var tileWidth = (window.innerWidth / this.rowCount);
+            var tileHeight = (window.innerHeight / this.columnCount);
+            // use min of height or width to ensure min tiles required
+            var tileSize = Math.trunc(Math.min(tileWidth, tileHeight));
+            $(".letterDivSelected").width(tileSize + 'px');
+            $(".letterDiv").width(tileSize + 'px');
+            $(".letterDivSelected").height(tileSize + 'px');
+            $(".letterDiv").height(tileSize + 'px');
+            $(".letterDivSelected").css('line-height', tileSize + 'px');
+            $(".letterDiv").css('line-height', tileSize + 'px');
+            // size table
+            $(".tilesTable").width(tileSize * this.rowCount + 'px');
+            $(".tilesTable").height(tileSize * this.columnCount + 'px');
+
+            return tileSize;
+        }
+        catch (err) {
+            this.handleError(err);
+        }
+    }
+
     // create word list table
     makeTable(container, items) {
         try {
-            var table = $("<table/>").addClass('tilesTable');
-            table.width(window.innerWidth);
-            table.height(window.innerHeight);
-
-            $.each(items, function (rowsCount, rows) {
+            var table = $("<table/>").addClass('tilesTable');            
+            this.rowCount = 0;
+            this.columnCount = 0;
+            $.each(items, function (x, rows) {
                 var tr = $("<tr/>");
-                $.each(rows, function (rowCount, row) {
+                $.each(rows, function (y, row) {
                     var div = $("<div/>");
                     if (row.LetterSelected)
                         div.addClass('letterDivSelected');
                     else
                         div.addClass('letterDiv');
                     div.text(row.Letter);
-                    div.css('width', row.TileWidth + 'px');
-                    div.css('height', row.TileHeight + 'px');
-                    div.css('line-height', row.TileHeight + 'px');
                     var td = $("<td/>");
                     td.append(div);
                     tr.append(td);
+                    if (tiles.columnCount == 0)
+                        tiles.rowCount++;
                 });
                 table.append(tr);
+                tiles.columnCount++;
             });
+            this.resizeTiles();            
             return container.html(table);
         }
         catch(err) {

@@ -18,11 +18,10 @@ namespace WordSearch
         WordManager Manager { get; set; }
         // resize counter to avoid flicker
         int PageSizedCounter { get; set; }
-        // is initialized
-        private bool HasBeenInitialized { get; set; }
         // rows and columns
         int Rows { get; set; }
         int Columns { get; set; }
+        private bool HasCaculatedTiles { get; set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -32,9 +31,9 @@ namespace WordSearch
 
         public WordSearchPage()
         {
+            HasCaculatedTiles = false;
             Rows = 0;
             Columns = 0;
-            HasBeenInitialized = false;
             InitializeComponent();
             Manager = new WordManager();
             BindingContext = new WordSearchPageViewModel(Navigation, 300, 20, webViewHeader, webViewTiles);
@@ -44,9 +43,9 @@ namespace WordSearch
 
         public WordSearchPage(WordManager.GameDifficulty level)
         {
+            HasCaculatedTiles = false;
             Rows = 0;
             Columns = 0;
-            HasBeenInitialized = false;            
             Manager = new WordManager();
             Manager.DifficultyLevel = level;
             int secondsRemaining = Manager.GetStartSecondsRemaining();
@@ -70,7 +69,12 @@ namespace WordSearch
                     ViewModel.HtmlPageWidth = width;
                     ViewModel.HtmlHeaderPageHeight = 120;
                     double wordHeight = height - 120;
-                    ViewModel.HtmlTilePageHeight = wordHeight;                    
+                    ViewModel.HtmlTilePageHeight = wordHeight;
+                    // calculate tile row and column count
+                    if (!HasCaculatedTiles)
+                    {
+                        HasCaculatedTiles = CalculateTiles(width, wordHeight);
+                    }
                 }
                 return false;
             });
@@ -107,10 +111,10 @@ namespace WordSearch
                 bOK = CalculateTileWidthHeight(width, height, out int tileWidth, out int tileHeight);
                 Debug.Assert(bOK);
                 // add titles on UI thread
-                var viewModels = new TileControlViewModel[Rows, Columns];
-                for (int column = 0; column < Columns; column++)
+                var viewModels = new TileControlViewModel[Columns, Rows];
+                for (int row = 0; row < Rows; row++)
                 {
-                    for (int row = 0; row < Rows; row++)
+                    for (int column = 0; column < Columns; column++)
                     {
                         // create tile view model
                         TileControlViewModel viewModel = new TileControlViewModel(Manager.TileClickedCallback);
@@ -119,13 +123,15 @@ namespace WordSearch
                         viewModel.TileColum = column;
                         viewModel.TileWidth = tileWidth;
                         viewModel.TileHeight = tileHeight;
-                        viewModels.SetValue(viewModel, row, column);
+                        viewModels.SetValue(viewModel, column, row);
                     }
                 }
                 // initialize word array
                 int maxWordLength = Rows > Columns ? Rows : Columns;
                 bOK = Manager.InitializeWordList(maxWordLength, viewModels);
                 Debug.Assert(bOK);
+                // send tiles to html page
+                ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
             }
             catch (Exception ex)
             {
@@ -165,32 +171,6 @@ namespace WordSearch
         public async Task<bool> LoadWordsHeader()
         {
             return await ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", Manager.Words);
-        }
-
-        // load all tiles
-        public async Task<bool> LoadAllTiles()
-        {
-            bool bOK = true;
-            if (HasBeenInitialized)
-            {
-                bOK = await ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
-            }
-            else
-            {
-                if (!HasBeenInitialized)
-                {
-                    bOK = InitalizeDelegates();
-                    Debug.Assert(bOK);
-                    if (bOK)
-                    {
-                        HasBeenInitialized = CalculateTiles(Width, Height - 120);
-                        Debug.Assert(HasBeenInitialized);
-                        if (HasBeenInitialized)
-                            bOK = await ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
-                    }
-                }
-            }
-            return bOK;
         }
 
         // delegate callback to update header text
@@ -249,10 +229,7 @@ namespace WordSearch
                     {
                         Debug.WriteLine(msg.Data.ToString());
                     }
-                    break;
-                case "LoadTiles":
-                    LoadAllTiles();
-                    break;
+                    break;             
                 default:
                     Debug.Assert(false, $"TilesJSCallback unexpected message {message}");
                     break;
