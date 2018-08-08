@@ -104,23 +104,32 @@ class Tiles {
         }
     }
 
-   
-
+    // resize to fix html page
     resizeTiles() {
         try {
             var tileWidth = (window.innerWidth / this.rowCount);
             var tileHeight = (window.innerHeight / this.columnCount);
             // use min of height or width to ensure min tiles required
             var tileSize = Math.trunc(Math.min(tileWidth, tileHeight));
-            $(".letterDivSelected").width(tileSize + 'px');
+            var paddedSize = tileSize;
+            // adjust for 2px border
+            tileSize -= 4;
+            $(".letterTDStyle").width(tileSize + 'px');
+            $(".letterTDStyle").height(tileSize + 'px');
+
+            tileSize -= 4;
             $(".letterDiv").width(tileSize + 'px');
-            $(".letterDivSelected").height(tileSize + 'px');
             $(".letterDiv").height(tileSize + 'px');
-            $(".letterDivSelected").css('line-height', tileSize + 'px');
             $(".letterDiv").css('line-height', tileSize + 'px');
+
+            $(".letterDivSelected").width(tileSize + 'px');
+            $(".letterDivSelected").height(tileSize + 'px');
+            $(".letterDivSelected").css('line-height', tileSize + 'px');
             // size table
-            $(".tilesTable").width(tileSize * this.rowCount + 'px');
-            $(".tilesTable").height(tileSize * this.columnCount + 'px');
+            var width = paddedSize * this.rowCount;
+            var height = paddedSize * this.columnCount;
+            $(".tilesTable").width(width + 'px');
+            $(".tilesTable").height(height + 'px');
 
             return tileSize;
         }
@@ -146,6 +155,7 @@ class Tiles {
                     div.text(row.Letter);
                     var td = $("<td/>");
                     td.append(div);
+                    td.addClass('letterTDStyle');
                     tr.append(td);
                     if (tiles.columnCount == 0)
                         tiles.rowCount++;

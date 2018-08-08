@@ -42,6 +42,10 @@ body {
     position: relative;
 }
 
+.letterTDStyle {
+    margin: 0;
+}
+
 .digitalText {
     color: white;
     background-color: dodgerblue;
