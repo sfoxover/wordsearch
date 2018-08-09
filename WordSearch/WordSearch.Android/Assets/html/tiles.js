@@ -252,6 +252,15 @@ class Tiles {
                         this.updateTileStates($("#tilesList"), data);
                         break;
                     }
+                case "OnGameCompleted":
+                    {
+                        // load fireworks
+                        fireworks.start(0, 100);
+                        setTimeout(function () {
+                            fireworks.pause();
+                        }, 5000);
+                        break;
+                    }
                 default:
                     {
                         this.handleError("Unknown message from app, " + msg);

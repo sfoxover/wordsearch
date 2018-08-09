@@ -9,7 +9,7 @@ body {
 }
 
 #FireworksCanvas {
-    background: #000000;
+    background: lightblue;
     opacity: .7;
     position: absolute;
     top: 50px;
