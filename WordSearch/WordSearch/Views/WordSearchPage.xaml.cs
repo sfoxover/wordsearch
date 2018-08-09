@@ -188,7 +188,7 @@ namespace WordSearch
         private async void OnGameCompletedCallbackAsync()
         {
             ViewModel.GameCompleted = true;
-            await DisplayAlert("Winner", "Game completed!", "OK");   
+            await ViewModel.SignalTilesHtmlPage("OnGameCompleted", null);
         }       
 
         // callback from JS header html page
@@ -224,9 +224,12 @@ namespace WordSearch
             switch (msg.Message)
             {
                 case "tileClick":
-                    Manager.CheckForSelectedWord(msg.Data as JObject);
-                    // reload tiles
-                    ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
+                    if (!ViewModel.GameCompleted)
+                    {
+                        Manager.CheckForSelectedWord(msg.Data as JObject);
+                        // reload tiles
+                        ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
+                    }
                     break;
                 case "LogMsg":
                     Debug.WriteLine(msg.Data.ToString());

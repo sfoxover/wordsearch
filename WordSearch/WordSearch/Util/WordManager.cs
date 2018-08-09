@@ -348,53 +348,55 @@ namespace WordSearch.Util
                 Debug.Assert(bOK);
                 if (!bOK)
                     return false;
-                tile.LetterSelected = !tile.LetterSelected;
-                bool isPartOfWord = false;
-                foreach (var word in Words)
+                if (!tile.IsPartOfCompletedWord)
                 {
-                    for (int n = 0; n < word.Text.Length; n++)
+                    tile.LetterSelected = !tile.LetterSelected;
+                    bool isPartOfWord = false;
+                    foreach (var word in Words)
                     {
-                        row = (int)word.TilePositions[n].X;
-                        column = (int)word.TilePositions[n].Y;
-                        if (tile.TileRow == row && tile.TileColumn == column)
+                        for (int n = 0; n < word.Text.Length; n++)
                         {
-                            isPartOfWord = true;
-                            // check if whole word is selected
-                            bool selected;
-                            bOK = CheckForCompletedWord(word, out selected);
-                            Debug.Assert(bOK);
-                            if (bOK && selected)
+                            row = (int)word.TilePositions[n].X;
+                            column = (int)word.TilePositions[n].Y;
+                            if (tile.TileRow == row && tile.TileColumn == column)
                             {
-                                // mark tiles as part of completed word so they are not deselected
-                                bOK = MarkTilesAsWordCompleted(word);
+                                isPartOfWord = true;
+                                // check if whole word is selected
+                                bool selected;
+                                bOK = CheckForCompletedWord(word, out selected);
                                 Debug.Assert(bOK);
-                                word.IsWordCompleted = true;                                
-                                // check if all words are selected
-                                bOK = CheckForAllWordsSelected(out bool allSelected);
-                                Debug.Assert(bOK);
-                                if(bOK && allSelected)
+                                if (bOK && selected)
                                 {
-                                    WordCompletedCallback?.Invoke(word);
-                                    GameCompletedCallback?.Invoke();
+                                    // mark tiles as part of completed word so they are not deselected
+                                    bOK = MarkTilesAsWordCompleted(word);
+                                    Debug.Assert(bOK);
+                                    word.IsWordCompleted = true;
+                                    // check if all words are selected
+                                    bOK = CheckForAllWordsSelected(out bool allSelected);
+                                    Debug.Assert(bOK);
+                                    if (bOK && allSelected)
+                                    {
+                                        WordCompletedCallback?.Invoke(word);
+                                        GameCompletedCallback?.Invoke();
+                                    }
+                                    else
+                                    {
+                                        WordCompletedCallback?.Invoke(word);
+                                    }
                                 }
-                                else
-                                {
-                                    WordCompletedCallback?.Invoke(word);
-                                }
+                                break;
                             }
-                            break;
                         }
                     }
+                    // deselect previous click
+                    if (LastFailedTileClicked != null)
+                    {
+                        LastFailedTileClicked.LetterSelected = false;
+                        LastFailedTileClicked = null;
+                    }
+                    if (!isPartOfWord)
+                        LastFailedTileClicked = tile;
                 }
-                // deselect previous click
-                if (LastFailedTileClicked != null)
-                {
-                    LastFailedTileClicked.LetterSelected = false;
-                    LastFailedTileClicked = null;
-                }
-                if (!isPartOfWord)
-                    LastFailedTileClicked = tile;
-
             }
             catch (Exception ex)
             {
