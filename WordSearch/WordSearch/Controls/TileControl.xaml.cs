@@ -17,12 +17,10 @@ namespace WordSearch.Controls
         // test live rendering
         public TileControl()
         {
-            BindingContext = new TileControlViewModel(null);
+            BindingContext = new TileControlViewModel();
             ViewModel.Letter = "a";
             ViewModel.TileRow = 0;
-            ViewModel.TileColum = 0;
-            ViewModel.TileWidth = 90 - 2;
-            ViewModel.TileHeight = 90 - 2;
+            ViewModel.TileColumn = 0;
             ViewModel.LetterSelected = true;
             InitializeComponent();
         }

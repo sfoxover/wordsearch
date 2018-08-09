@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -89,7 +90,6 @@ namespace WordSearch
                 // set up WordManager delegate events                 
                 Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
                 Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
-                Manager.ListenForTileClicks();
             }
             catch (Exception ex)
             {
@@ -117,12 +117,10 @@ namespace WordSearch
                     for (int column = 0; column < Columns; column++)
                     {
                         // create tile view model
-                        TileControlViewModel viewModel = new TileControlViewModel(Manager.TileClickedCallback);
+                        TileControlViewModel viewModel = new TileControlViewModel();
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
-                        viewModel.TileColum = column;
-                        viewModel.TileWidth = tileWidth;
-                        viewModel.TileHeight = tileHeight;
+                        viewModel.TileColumn = column;
                         viewModels.SetValue(viewModel, column, row);
                     }
                 }
@@ -221,6 +219,11 @@ namespace WordSearch
             MessageJson msg = new MessageJson(message);
             switch (msg.Message)
             {
+                case "tileClick":
+                    Manager.CheckForSelectedWord(msg.Data as JObject);
+                    // reload tiles
+                    ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
+                    break;
                 case "LogMsg":
                     Debug.WriteLine(msg.Data.ToString());
                     break;

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Controls;
@@ -38,9 +39,6 @@ namespace WordSearch.Util
         // delegate callback to update header text
         public delegate void WordCompletedDelegate(Word word);
         public event WordCompletedDelegate WordCompletedCallback;
-        // delegate callback for tile click
-        public delegate void TileClickedDelegate(TileControlViewModel tile);
-        public TileClickedDelegate TileClickedCallback;
         // delegate callback for game completed
         public delegate void GameCompletedDelegate();
         public event GameCompletedDelegate GameCompletedCallback;
@@ -52,7 +50,6 @@ namespace WordSearch.Util
         public WordManager()
         {
             WordCompletedCallback = null;
-            TileClickedCallback = null;
             GameCompletedCallback = null;
             TileViewModels = null;
             Words = null;
@@ -335,37 +332,31 @@ namespace WordSearch.Util
             return points;
         }
 
-        public void ListenForTileClicks()
-        {
-            try
-            {
-                TileClickedCallback += ((tile)=>
-                {
-                    Debug.WriteLine($"tile clicked {tile.Letter}");
-                    CheckForSelectedWord(tile);
-                });
-            }
-            catch(Exception ex)
-            {
-                var error = $"ListenForTileClicks exception, {ex.Message}";
-                Debug.WriteLine(error);
-            }
-        }
-
         // change word letter selection if clicked
-        private bool CheckForSelectedWord(TileControlViewModel tile)
+        public bool CheckForSelectedWord(JObject json)
         {
             bool bOK = true;
             try
             {
+                int row = 0;
+                int column = 0;
+                if (json.SelectToken("TileRow", false) != null)
+                    row = (int)json["TileRow"];
+                if (json.SelectToken("TileColumn", false) != null)
+                    column = (int)json["TileColumn"];
+                bOK = GetTileAt(row, column, out TileControlViewModel tile);
+                Debug.Assert(bOK);
+                if (!bOK)
+                    return false;
+                tile.LetterSelected = !tile.LetterSelected;
                 bool isPartOfWord = false;
                 foreach (var word in Words)
                 {
                     for (int n = 0; n < word.Text.Length; n++)
                     {
-                        int row = (int)word.TilePositions[n].X;
-                        int column = (int)word.TilePositions[n].Y;
-                        if (tile.TileRow == row && tile.TileColum == column)
+                        row = (int)word.TilePositions[n].X;
+                        column = (int)word.TilePositions[n].Y;
+                        if (tile.TileRow == row && tile.TileColumn == column)
                         {
                             isPartOfWord = true;
                             // check if whole word is selected

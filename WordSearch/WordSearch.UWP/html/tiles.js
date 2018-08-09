@@ -159,6 +159,10 @@ class Tiles {
                     tr.append(td);
                     if (tiles.columnCount == 0)
                         tiles.rowCount++;
+                    // add div click handler
+                    div.click(function () {
+                        tiles.handleTileClick(row);
+                    });
                 });
                 table.append(tr);
                 tiles.columnCount++;
@@ -169,6 +173,36 @@ class Tiles {
         catch(err) {
             this.handleError(err);
         }
+    }
+
+    // update tile clicked states
+    updateTileStates(container, items) {
+        try {
+            var table = $("<table/>").addClass('tilesTable');
+
+            $("td").each(function () {
+                //alert($(this).html());
+                $(this).html("a");
+            });
+            /*
+            $.each(items, function (x, rows) {
+                $.each(rows, function (y, row) {
+                    var div = table.children().children()[x].children[y];
+                    if (row.LetterSelected)
+                        div.attr("class", 'letterDivSelected');
+                    else
+                        div.attr("class", 'letterDiv');
+                });
+            }); */
+        }
+        catch (err) {
+            this.handleError(err);
+        }
+    }
+
+    // handle tile clicks
+    handleTileClick(row) {
+        this.signalNativeApp('tileClick', row);
     }
 
     // pass message and data to native app
@@ -201,6 +235,11 @@ class Tiles {
                 case "LoadTiles":
                     {
                         this.makeTable($("#tilesList"), data);
+                        break;
+                    }
+                case "UpdateTileSelectedSates":
+                    {
+                        this.updateTileStates($("#tilesList"), data);
                         break;
                     }
                 default:
