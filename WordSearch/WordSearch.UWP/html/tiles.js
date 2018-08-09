@@ -141,34 +141,51 @@ class Tiles {
     // create word list table
     makeTable(container, items) {
         try {
-            var table = $("<table/>").addClass('tilesTable');            
-            this.rowCount = 0;
-            this.columnCount = 0;
-            $.each(items, function (x, rows) {
+            // store values in 2 dimential array
+            var collection = new Array();
+            for (var x = 0; x < items.length; x++) {
+                var column = items[x];              
+                collection[x] = new Array();
+                for (var y = 0; y < column.length; y++) {
+                    var tile = column[y];  
+                    collection[x][y] = tile;                    
+                }                
+            }
+            this.rowCount = collection.length;
+            this.columnCount = collection[0].length;
+
+            // create table elements
+            var table = $("<table/>").addClass('tilesTable');           
+            for (y = 0; y < this.columnCount; y++) {
                 var tr = $("<tr/>");
-                $.each(rows, function (y, row) {
+                for (x = 0; x < this.rowCount; x++) {
+                    var item = collection[x][y];
+                    // create div
                     var div = $("<div/>");
-                    if (row.LetterSelected)
+                    if (item.LetterSelected)
                         div.addClass('letterDivSelected');
                     else
                         div.addClass('letterDiv');
-                    div.text(row.Letter);
+                    div.text(item.Letter);
+                    div.attr('id', 'tile_' + x + '_' + y);
                     var td = $("<td/>");
                     td.append(div);
                     td.addClass('letterTDStyle');
                     tr.append(td);
-                    if (tiles.columnCount == 0)
-                        tiles.rowCount++;
                     // add div click handler
-                    div.click(function () {
-                        tiles.handleTileClick(row);
-                    });
-                });
+                    var ClickHandler = {
+                        value: null,
+                        callback: function () {
+                            tiles.handleTileClick(this);
+                        }
+                    };
+                    div.click($.proxy(ClickHandler.callback, item));
+                }
                 table.append(tr);
-                tiles.columnCount++;
-            });
+            }
+
             this.resizeTiles();            
-            return container.html(table);
+            container.html(table);
         }
         catch(err) {
             this.handleError(err);
@@ -178,22 +195,15 @@ class Tiles {
     // update tile clicked states
     updateTileStates(container, items) {
         try {
-            var table = $("<table/>").addClass('tilesTable');
-
-            $("td").each(function () {
-                //alert($(this).html());
-                $(this).html("a");
-            });
-            /*
             $.each(items, function (x, rows) {
                 $.each(rows, function (y, row) {
-                    var div = table.children().children()[x].children[y];
+                    var div = '#tile_' + x + '_' + y;
                     if (row.LetterSelected)
-                        div.attr("class", 'letterDivSelected');
+                        $(div).attr("class", 'letterDivSelected');
                     else
-                        div.attr("class", 'letterDiv');
+                        $(div).attr("class", 'letterDiv');
                 });
-            }); */
+            }); 
         }
         catch (err) {
             this.handleError(err);

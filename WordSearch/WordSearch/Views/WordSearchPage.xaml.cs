@@ -111,17 +111,17 @@ namespace WordSearch
                 bOK = CalculateTileWidthHeight(width, height, out int tileWidth, out int tileHeight);
                 Debug.Assert(bOK);
                 // add titles on UI thread
-                var viewModels = new TileControlViewModel[Columns, Rows];
-                for (int row = 0; row < Rows; row++)
+                var viewModels = new TileControlViewModel[Rows, Columns];
+                for (int column = 0; column < Columns; column++)
                 {
-                    for (int column = 0; column < Columns; column++)
+                    for (int row = 0; row < Rows; row++)
                     {
                         // create tile view model
                         TileControlViewModel viewModel = new TileControlViewModel();
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColumn = column;
-                        viewModels.SetValue(viewModel, column, row);
+                        viewModels.SetValue(viewModel, row, column);
                     }
                 }
                 // initialize word array
