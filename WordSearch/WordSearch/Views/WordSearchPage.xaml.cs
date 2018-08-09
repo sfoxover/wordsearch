@@ -40,6 +40,7 @@ namespace WordSearch
             BindingContext = new WordSearchPageViewModel(Navigation, 300, 20, webViewHeader, webViewTiles);
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
             webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
+            InitalizeDelegates();
         }
 
         public WordSearchPage(WordManager.GameDifficulty level)
@@ -55,6 +56,7 @@ namespace WordSearch
             BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader, webViewTiles);
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
             webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
+            InitalizeDelegates();
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -130,6 +132,7 @@ namespace WordSearch
                 Debug.Assert(bOK);
                 // send tiles to html page
                 ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
+                LoadWordsHeader();
             }
             catch (Exception ex)
             {
@@ -166,9 +169,10 @@ namespace WordSearch
         }
 
         // load words in header and highlight completed words
-        public async Task<bool> LoadWordsHeader()
+        public void LoadWordsHeader()
         {
-            return await ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", Manager.Words);
+            if(Manager.Words != null && Manager.Words.Count > 0)
+                ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", Manager.Words);
         }
 
         // delegate callback to update header text
