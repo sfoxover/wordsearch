@@ -103,8 +103,14 @@ class Header {
     // create word list table
     makeTable(container, items) {
         try {
-            var table = $("<table/>").addClass('headerTable');
+            var count = items.length;
+            var table = $("<table/>");
+            if (count == 4)
+                table.addClass('headerTable');
+            else 
+                table.addClass('headerTable2');
             var row = $("<tr/>");
+            var addedCount = 0;
             $.each(items, function (rowCount, item) {
                 var word = item.Text;
                 var wordDiv = $("<div/>");
@@ -116,6 +122,14 @@ class Header {
                 var td = $("<td/>");
                 td.append(wordDiv);
                 row.append(td);
+                if (count >= 8)
+                    wordDiv.css('font-size', 'large');
+                addedCount++;
+                // add new table column
+                if (addedCount == 8) {
+                    table.append(row);
+                    row = $("<tr/>");
+                }
             });
             table.append(row);
             return container.html(table);
@@ -188,8 +202,8 @@ class Header {
             this.handleError(err);
         }
     }
-
 }
+
 // global Header object
 var header = new Header();
 
