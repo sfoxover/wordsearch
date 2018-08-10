@@ -260,9 +260,14 @@ namespace WordSearch.Util
         // get text start and end position for header highlight
         internal object GetTextPos(Word word)
         {
-            int percentage = 100 / GetLevelWordCount();
-            int startPercentage = Words.IndexOf(word) * percentage;
-            var textPos = new { Word = word.Text, Start = startPercentage, End = percentage };
+            int count = GetLevelWordCount();
+            int percentage = 100 / count;
+            int wordPos = Words.IndexOf(word);
+            int startPos = wordPos * percentage; 
+            if(wordPos > 8)
+                startPos = (wordPos - 8) * percentage;
+            int endPos = percentage;
+            var textPos = new { Word = word.Text, Start = startPos, End = endPos };
             return textPos;
         }
 
