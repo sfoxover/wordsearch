@@ -9,3 +9,12 @@
     background-color:cornflowerblue;
     color:white;
 }
+
+#webViewHeader{
+    margin:0;
+}
+
+#webViewTiles {
+    margin: 0;
+}
+

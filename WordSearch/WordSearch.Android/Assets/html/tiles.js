@@ -259,6 +259,8 @@ class Tiles {
                         setTimeout(function () {
                             fireworks.pause();
                         }, 5000);
+                        $('#FireworksCanvas').hide();
+                        $('#FireworksCanvas').fadeIn(1000);
                         break;
                     }
                 default:
