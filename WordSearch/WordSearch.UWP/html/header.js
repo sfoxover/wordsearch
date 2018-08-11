@@ -182,13 +182,15 @@ class Header {
                         break;
                     }
                 case "OnWordComplete":
-                    {
+                    {                        
                         // show fireworks
                         fire.start(data.WordPos, data.WordTotal);
                         setTimeout(function () {
                             fire.pause();
                             header.signalNativeApp("LoadWordsHeader");
                         }, 1000);
+                        $('#FireworksCanvas').hide();
+                        $('#FireworksCanvas').fadeIn(1000);
                         break;
                     }
                 default:
