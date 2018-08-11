@@ -189,6 +189,7 @@ namespace WordSearch
         {
             ViewModel.GameCompleted = true;
             await ViewModel.SignalTilesHtmlPage("OnGameCompleted", null);
+            await ViewModel.SignalHeaderHtmlPage("OnGameCompleted", null);
         }       
 
         // callback from JS header html page
