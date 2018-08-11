@@ -267,7 +267,7 @@ namespace WordSearch.Util
             if(wordPos > 8)
                 startPos = (wordPos - 8) * percentage;
             int endPos = percentage;
-            var textPos = new { Word = word.Text, Start = startPos, End = endPos };
+            var textPos = new { Word = word.Text, Start = startPos, End = endPos, WordPos = wordPos, WordTotal = count };
             return textPos;
         }
 

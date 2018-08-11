@@ -4,7 +4,7 @@
 }
 
 body {
-    background-color: white;    
+    background-color: green;    
     margin:0;
 }
 
@@ -76,6 +76,7 @@ table.headerTable {
 table.headerTable td, table.headerTable th {
     border: 0px solid #FFFFFF;
     padding: 2px 2px;
+    width: 25%;
 }
 
 table.headerTable tbody td {
@@ -83,18 +84,21 @@ table.headerTable tbody td {
     color: #000000;
 }
 
-table.headerTable tfoot td {
-    font-size: 14px;
+table.headerTable2 {
+    border: 0px;
+    background-color: lightblue;
+    width: 100%;
+    height: 50px;
+    position: absolute;
+    bottom: 0;
 }
 
-table.headerTable tfoot .links {
-    text-align: right;
+table.headerTable2 td, table.headerTable2 th {
+    border: 0px solid #FFFFFF;
+    padding: 0px;
+    width: 12%;
 }
 
-table.headerTable tfoot .links a {
-    display: inline-block;
-    background: #1C6EA4;
-    color: #FFFFFF;
-    padding: 2px 8px;
-    border-radius: 5px;
+table.headerTable2 tbody td {
+    color: #000000;
 }

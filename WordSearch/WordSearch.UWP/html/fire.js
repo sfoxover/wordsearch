@@ -9,12 +9,31 @@ class Fire {
         this._paused = false;
     }
 
-    start(startPos, endPos) {
-
+    start(wordPos, wordTotal) {
         var canvas = $("#" + this.CANVAS_NAME);
-        // highlight just word
-        canvas.css("left", startPos + '%');
-        canvas.css("width", endPos +'%');
+        // highlight just word        
+        var per = 100 / wordTotal;
+        if (wordTotal > 8) {
+            per = 100 / 8;            
+            if (wordPos > 8) {
+                canvas.css("top", '75%');
+                canvas.css("bottom", '100%');
+                canvas.css("left", per * (wordPos - 8) + '%');
+            }
+            else {
+                canvas.css("top", '50%');
+                canvas.css("bottom", '75%');
+                canvas.css("left", per * wordPos + '%');
+            }
+            canvas.css("width", per + '%');            
+        }
+        else {
+            
+            canvas.css("top", '50px');
+            canvas.css("left", per * wordPos + '%');
+            canvas.css("width", per + '%');
+            canvas.css("bottom", '100%');
+        }
         canvas.show();
 
         if (this._paused) {

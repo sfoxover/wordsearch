@@ -70,8 +70,8 @@ namespace WordSearch
                 if (PageSizedCounter == 0 && height > 0)
                 {
                     ViewModel.HtmlPageWidth = width;
-                    ViewModel.HtmlHeaderPageHeight = 120;
-                    double wordHeight = height - 120;
+                    ViewModel.HtmlHeaderPageHeight = 100;
+                    double wordHeight = height - 100;
                     ViewModel.HtmlTilePageHeight = wordHeight;
                     // calculate tile row and column count
                     if (!HasCaculatedTiles)

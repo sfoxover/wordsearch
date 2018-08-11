@@ -184,7 +184,7 @@ class Header {
                 case "OnWordComplete":
                     {
                         // show fireworks
-                        fire.start(data.Start, data.End);
+                        fire.start(data.WordPos, data.WordTotal);
                         setTimeout(function () {
                             fire.pause();
                             header.signalNativeApp("LoadWordsHeader");
