@@ -193,6 +193,13 @@ class Header {
                         $('#FireworksCanvas').fadeIn(1000);
                         break;
                     }
+                case "OnGameCompleted":
+                    {
+                        fire.pause();
+                        $('#winner').fadeIn(1000);
+                        $('#wordsList').fadeOut(500);
+                        break;
+                    }
                 default:
                     {
                         this.handleError("Unknown message from app, " + msg);
