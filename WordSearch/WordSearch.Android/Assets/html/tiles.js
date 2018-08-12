@@ -1,6 +1,6 @@
 ﻿// on ready handler
 $(document).ready(function () {    
-
+    tiles.signalNativeApp('ping');
 });
 
 $(window).resize(function () {
@@ -245,6 +245,7 @@ class Tiles {
                 case "LoadTiles":
                     {
                         this.makeTable($("#tilesList"), data);
+                        tiles.resizeTiles();
                         break;
                     }
                 case "UpdateTileSelectedSates":
