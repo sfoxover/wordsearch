@@ -18,9 +18,14 @@ namespace WordSearch.Droid
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(bundle);
             FormsWebViewRenderer.Initialize();
+
             global::Xamarin.Forms.Forms.Init(this, bundle);
+
+            this.Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
+
             LoadApplication(new App());
         }
+
     }
 }
 

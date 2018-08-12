@@ -105,7 +105,7 @@ class Header {
         try {
             var count = items.length;
             var table = $("<table/>");
-            if (count == 4)
+            if (count === 4)
                 table.addClass('headerTable');
             else 
                 table.addClass('headerTable2');
@@ -126,7 +126,7 @@ class Header {
                     wordDiv.css('font-size', 'large');
                 addedCount++;
                 // add new table column
-                if (addedCount == 8) {
+                if (addedCount === 8) {
                     table.append(row);
                     row = $("<tr/>");
                 }

@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using WordSearch.Controls;
 using WordSearch.Models;
 using WordSearch.Util;
 using WordSearch.ViewModels;
@@ -40,7 +37,7 @@ namespace WordSearch
             BindingContext = new WordSearchPageViewModel(Navigation, 300, 20, webViewHeader, webViewTiles);
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
             webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
-            InitalizeDelegates();
+            Initalize();
         }
 
         public WordSearchPage(WordManager.GameDifficulty level)
@@ -56,7 +53,7 @@ namespace WordSearch
             BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader, webViewTiles);
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
             webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
-            InitalizeDelegates();
+            Initalize();
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -84,7 +81,7 @@ namespace WordSearch
         }
 
         // set up callbacks
-        private bool InitalizeDelegates()
+        private bool Initalize()
         {
             bool bOK = true;
             try
@@ -92,10 +89,13 @@ namespace WordSearch
                 // set up WordManager delegate events                 
                 Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
                 Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
+                // xamarin essentials screen lock
+               // if (!ScreenLock.IsActive)
+                 //   ScreenLock.RequestActive();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("InitalizeDelegates exception, " + ex.Message);
+                Debug.WriteLine("Initalize exception, " + ex.Message);
                 bOK = false;
             }
             return bOK;
