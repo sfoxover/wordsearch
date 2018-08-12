@@ -19,7 +19,7 @@ namespace WordSearch
         // rows and columns
         int Rows { get; set; }
         int Columns { get; set; }
-        private bool HasCaculatedTiles { get; set; }
+        private bool HasCaculatedTiles { get; set; }        
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -130,7 +130,7 @@ namespace WordSearch
                 int maxWordLength = Rows > Columns ? Rows : Columns;
                 bOK = Manager.InitializeWordList(maxWordLength, viewModels);
                 Debug.Assert(bOK);
-                // send tiles to html page
+                // send tiles to html page   
                 ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
                 LoadWordsHeader();
             }
@@ -220,10 +220,13 @@ namespace WordSearch
         // callback from JS body html page
         void TilesJSCallback(string message)
         {
+            ViewModel.HasTilesPageSignalled = true;
             System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
             MessageJson msg = new MessageJson(message);
             switch (msg.Message)
             {
+                case "ping":
+                    break;
                 case "tileClick":
                     if (!ViewModel.GameCompleted)
                     {

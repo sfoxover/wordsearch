@@ -72,9 +72,12 @@ namespace WordSearch.ViewModels
             get { return _htmlTilePageHeight; }
             set { SetProperty(ref _htmlTilePageHeight, value); }
         }
+        // has the html page loaded
+        public bool HasTilesPageSignalled { get; set; }
 
         public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter, FormsWebView webViewHeader, FormsWebView webViewTiles)
         {
+            HasTilesPageSignalled = false;
             WebViewHeader = webViewHeader;
             WebViewTiles = webViewTiles;
             Navigation = value;
@@ -157,6 +160,14 @@ namespace WordSearch.ViewModels
             bool bOK = true;
             try
             {
+                // wait for page load
+                int waited = 0;
+                while (!HasTilesPageSignalled && waited < 20)
+                {
+                    await Task.Delay(100);
+                    waited++;
+                }
+                Debug.Assert(HasTilesPageSignalled);
                 var msg = new MessageJson();
                 msg.Message = message;
                 msg.Data = data;
