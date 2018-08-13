@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using WordSearch.Controls;
 using WordSearch.Models;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
