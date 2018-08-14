@@ -112,6 +112,7 @@
     <Content Include="html\fireworks.js" />
     <Content Include="html\header.js" />
     <Content Include="html\jquery-3.3.1.min.js" />
+    <Content Include="html\mainlogo.png" />
     <Content Include="html\proton.min.js" />
     <Content Include="html\tiles.js" />
     <Content Include="html\wordSearchHeader.css" />
