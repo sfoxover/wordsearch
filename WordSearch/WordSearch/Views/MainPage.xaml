@@ -1,25 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="WordSearch.Views.MainPage"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             Title="Super Word Search"
-             xmlns:viewModels="clr-namespace:WordSearch.ViewModels"
-             xmlns:button="clr-namespace:ButtonCircle.FormsPlugin.Abstractions;assembly=ButtonCircle.FormsPlugin.Abstractions"
-             mc:Ignorable="d"
-             d:DataContext="{d:DesignInstance viewModels:DesignMainPageViewModel}">
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            x:Class="WordSearch.Views.MainPage"
+            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            Title="Super Word Search"
+            xmlns:viewModels="clr-namespace:WordSearch.ViewModels"
+            xmlns:button="clr-namespace:ButtonCircle.FormsPlugin.Abstractions;assembly=ButtonCircle.FormsPlugin.Abstractions"
+            mc:Ignorable="d"
+            d:DataContext="{d:DesignInstance viewModels:DesignMainPageViewModel}">
     <ContentPage.Resources>
         <StyleSheet Source="/Assets/Styles.css" />
     </ContentPage.Resources>
     <StackLayout Orientation="Vertical">
         <Image Source="{Binding LogoPath}" />
         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-            <button:CircleButton Text="Easy" Command="{Binding NewEasyGameCommand}" FontIcon="Material" Icon="md-directions-bike" FontSize="30" TextColor="Black" HeightRequest="120" WidthRequest="120" 
+            <button:CircleButton Text="Easy" Command="{Binding NewEasyGameCommand}" FontSize="20" TextColor="Black" HeightRequest="120" WidthRequest="120" 
             BorderThickness="5" BorderColor="Black" BackgroundColor="#DCDCDC" />
-            <button:CircleButton Text="Medium" Command="{Binding NewMediumGameCommand}" FontIcon="Material" Icon="md-directions-bike" FontSize="30" TextColor="Black" HeightRequest="120" WidthRequest="120" 
+            <button:CircleButton Text="Medium" Command="{Binding NewMediumGameCommand}" FontSize="20" TextColor="Black" HeightRequest="120" WidthRequest="120" 
             BorderThickness="5" BorderColor="Black" BackgroundColor="#DCDCDC" />
-            <button:CircleButton Text="Hard" Command="{Binding NewHardGameCommand}" FontIcon="FontAwesome" Icon="fa-puzzle-piece" FontSize="30" TextColor="Black" HeightRequest="120" WidthRequest="120" 
+            <button:CircleButton Text="Hard" Command="{Binding NewHardGameCommand}" FontSize="20" TextColor="Black" HeightRequest="120" WidthRequest="120" 
             BorderThickness="5" BorderColor="Black" BackgroundColor="#DCDCDC" />
         </StackLayout>
 
