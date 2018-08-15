@@ -104,6 +104,8 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="html\digital-7.ttf" />
+    <Content Include="Assets\Fonts\fontawesome.ttf" />
+    <Content Include="Assets\Fonts\materialicons.ttf" />
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +167,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core">
       <Version>2.1.1</Version>
+    </PackageReference>
+    <PackageReference Include="Plugins.Forms.ButtonCircle">
+      <Version>2.0.3</Version>
     </PackageReference>
     <PackageReference Include="Xam.Plugin.WebView">
       <Version>2.1.3</Version>

@@ -6,6 +6,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using Xam.Plugin.WebView.Droid;
+using ButtonCircle.FormsPlugin.Droid;
 
 namespace WordSearch.Droid
 {
@@ -20,6 +21,7 @@ namespace WordSearch.Droid
             FormsWebViewRenderer.Initialize();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
+            ButtonCircleRenderer.Init();
 
             this.Window.SetFlags(WindowManagerFlags.KeepScreenOn, WindowManagerFlags.KeepScreenOn);
 
