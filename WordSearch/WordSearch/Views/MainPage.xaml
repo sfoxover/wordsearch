@@ -11,19 +11,22 @@
             mc:Ignorable="d"
             d:DataContext="{d:DesignInstance viewModels:DesignMainPageViewModel}">
     
-    <ContentPage.Resources>
-      <ResourceDictionary MergedWith="theme:MyStyles" />
-    </ContentPage.Resources>
+  <ContentPage.Resources>
+    <ResourceDictionary MergedWith="theme:MyStyles" />
+  </ContentPage.Resources>
   
-    <StackLayout Orientation="Vertical">
-        <Image Source="{Binding LogoPath}" />
-        <Label Text="Click below to start a new game" HorizontalOptions="Center"/>
-        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-              <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewEasyGameCommand}" Text="Easy" Image="{Binding EasyGameImgPath}"/>
-              <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewMediumGameCommand}" Text="Medium" Image="{Binding MediumGameImgPath}"/>
-              <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewHardGameCommand}" Text="Hard" Image="{Binding HardGameImgPath}"/>
-        </StackLayout>
-
+  <StackLayout Orientation="Vertical">
+      
+    <Image Source="{Binding LogoPath}" />
+      
+    <Label Text="Click below to start a new game" HorizontalOptions="Center"/>
+      
+    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+      <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewEasyGameCommand}" Text="Easy" Image="{Binding EasyGameImgPath}"/>
+      <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewMediumGameCommand}" Text="Medium" Image="{Binding MediumGameImgPath}"/>
+      <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewHardGameCommand}" Text="Hard" Image="{Binding HardGameImgPath}"/>
     </StackLayout>
+
+  </StackLayout>
 
 </ContentPage>

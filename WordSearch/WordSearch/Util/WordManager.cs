@@ -17,7 +17,7 @@ namespace WordSearch.Util
         // tile sizes
         private const int TILE_ROWS_LEVEL_EASY = 8;
         private const int TILE_ROWS_LEVEL_MEDIUM = 12;
-        private const int TILE_ROWS_LEVEL_HARD = 20;
+        private const int TILE_ROWS_LEVEL_HARD = 16;
         // words to solve per level
         private const int WORDS_LEVEL_EASY = 4;
         private const int WORDS_LEVEL_MEDIUM = 8;
