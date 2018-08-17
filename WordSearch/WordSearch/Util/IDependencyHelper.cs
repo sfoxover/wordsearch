@@ -7,5 +7,7 @@ namespace WordSearch.Util
     public interface IDependencyHelper
     {
         string GetLocalHtmlPath();
+        // get base path to button images
+        string GetResourceImagesPath();
     }
 }

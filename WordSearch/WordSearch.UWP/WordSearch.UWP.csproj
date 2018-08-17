@@ -109,15 +109,15 @@
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="html\images\appbar.baby.png" />
-    <Content Include="html\images\appbar.leaderboard.png" />
-    <Content Include="html\images\appbar.lightbulb.hue.on.png" />
-    <Content Include="html\images\appbar.lightning.png" />
-    <Content Include="html\images\appbar.man.suitcase.fast.png" />
-    <Content Include="html\images\appbar.man.walk.png" />
-    <Content Include="html\images\appbar.puzzle.png" />
-    <Content Include="html\images\appbar.puzzle.round.png" />
-    <Content Include="html\images\appbar.qr.png" />
+    <Content Include="html\images\baby.png" />
+    <Content Include="html\images\leaderboard.png" />
+    <Content Include="html\images\lightbulbhueon.png" />
+    <Content Include="html\images\lightning.png" />
+    <Content Include="html\images\mansuitcasefast.png" />
+    <Content Include="html\images\manwalk.png" />
+    <Content Include="html\images\puzzle.png" />
+    <Content Include="html\images\puzzleround.png" />
+    <Content Include="html\images\qr.png" />
     <Content Include="html\js\fire.js" />
     <Content Include="html\images\fire.png" />
     <Content Include="html\js\fireworks.js" />

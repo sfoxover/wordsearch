@@ -47,15 +47,16 @@ namespace WordSearch.ViewModels
         public MainPageViewModel(INavigation value)
         {
             Navigation = value;
-            LogoPath = "html/images/mainlogo.png";
             NewEasyGameCommand = new Command(OnNewEasyGameClick);
             NewMediumGameCommand = new Command(OnNewMediumGameClick);
             NewHardGameCommand = new Command(OnNewHardGameClick);
+            // main logo image
+            string basePath = DependencyService.Get<IDependencyHelper>().GetResourceImagesPath();
+            LogoPath = basePath + "mainlogo.png";
             // new game image button paths
-            string basePath = DependencyService.Get<IDependencyHelper>().GetLocalHtmlPath();
-            EasyGameImgPath = "html/images/appbar.baby.png";
-            MediumGameImgPath = "html/images/appbar.man.walk.png";
-            HardGameImgPath = "html/images/appbar.man.suitcase.fast.png";
+            EasyGameImgPath = basePath + "baby.png";
+            MediumGameImgPath = basePath + "manwalk.png";
+            HardGameImgPath = basePath + "mansuitcasefast.png";
         }
 
         public async void OnNewEasyGameClick()

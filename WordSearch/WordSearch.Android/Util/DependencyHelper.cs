@@ -11,5 +11,11 @@ namespace WordSearch.Droid.Util
         {
             return "file:///android_asset/";
         }
+
+        // get base path to button images
+        public string GetResourceImagesPath()
+        {
+            return "";
+        }
     }
 }

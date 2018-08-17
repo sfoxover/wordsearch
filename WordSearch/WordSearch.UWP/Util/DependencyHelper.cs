@@ -11,5 +11,11 @@ namespace WordSearch.UWP.Util
         {
             return "ms-appx-web:///Assets/";
         }
+
+        // get base path to button images
+        public string GetResourceImagesPath()
+        {
+            return "html/images/";
+        }
     }
 }

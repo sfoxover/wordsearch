@@ -131,34 +131,34 @@
     <AndroidAsset Include="Assets\html\wordSearchTiles.html" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\mainlogo.png" />
+    <AndroidResource Include="Resources\drawable\mainlogo.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.baby.png" />
+    <AndroidResource Include="Resources\drawable\baby.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.leaderboard.png" />
+    <AndroidResource Include="Resources\drawable\leaderboard.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.lightbulb.hue.on.png" />
+    <AndroidResource Include="Resources\drawable\lightbulbhueon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.lightning.png" />
+    <AndroidResource Include="Resources\drawable\lightning.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.man.suitcase.fast.png" />
+    <AndroidResource Include="Resources\drawable\mansuitcasefast.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.man.walk.png" />
+    <AndroidResource Include="Resources\drawable\manwalk.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.puzzle.png" />
+    <AndroidResource Include="Resources\drawable\puzzle.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.puzzle.round.png" />
+    <AndroidResource Include="Resources\drawable\puzzleround.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\images\appbar.qr.png" />
+    <AndroidResource Include="Resources\drawable\qr.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

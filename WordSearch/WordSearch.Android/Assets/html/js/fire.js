@@ -55,7 +55,7 @@ class Fire {
             fire.createProton(e.target);
             fire.tick();
         };
-        image.src = 'fire.png';
+        image.src = 'images/fire.png';
     }
 
     createProton(image) {
