@@ -76,7 +76,7 @@
     <Compile Include="Util\DependencyHelper.cs" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\digital-7.ttf" />
+    <AndroidAsset Include="Assets\html\css\digital-7.ttf" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
   </ItemGroup>
@@ -103,38 +103,65 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\fireworks.js" />
+    <AndroidAsset Include="Assets\html\js\fireworks.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\wordSearchHeader.css" />
+    <AndroidAsset Include="Assets\html\css\wordSearchHeader.css" />
     <AndroidAsset Include="Assets\html\wordSearchHeader.html" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\header.js" />
+    <AndroidAsset Include="Assets\html\js\header.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\jquery-3.3.1.min.js" />
+    <AndroidAsset Include="Assets\html\js\jquery-3.3.1.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\proton.min.js" />
+    <AndroidAsset Include="Assets\html\js\proton.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\fire.js" />
+    <AndroidAsset Include="Assets\html\js\fire.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\fire.png" />
+    <AndroidAsset Include="Assets\html\images\fire.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\tiles.js" />
+    <AndroidAsset Include="Assets\html\js\tiles.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\wordSearchTiles.css" />
+    <AndroidAsset Include="Assets\html\css\wordSearchTiles.css" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\html\wordSearchTiles.html" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\mainlogo.png" />
+    <AndroidAsset Include="Assets\html\images\mainlogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.baby.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.leaderboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.lightbulb.hue.on.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.lightning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.man.suitcase.fast.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.man.walk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.puzzle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.puzzle.round.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\images\appbar.qr.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>
