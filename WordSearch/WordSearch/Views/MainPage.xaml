@@ -17,15 +17,15 @@
         <Label Text="Start a new game" HorizontalOptions="Center"/>
         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
             <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
-                <button:CircleButton Text="Easy" Command="{Binding NewEasyGameCommand}" StyleClass="MainButton" BorderThickness="2"/>
+                <button:CircleButton Command="{Binding NewEasyGameCommand}" StyleClass="MainButton" BorderThickness="2" Image="html/images/appbar.baby.png"/>
                 <Label Text="Easy" HorizontalOptions="Center"/>
             </StackLayout>
             <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
-                <button:CircleButton Text="Medium" Command="{Binding NewMediumGameCommand}" StyleClass="MainButton" BorderThickness="2" />
+                <button:CircleButton Command="{Binding NewMediumGameCommand}" StyleClass="MainButton" BorderThickness="2" Image="html/images/appbar.man.walk.png"/>
                 <Label Text="Medium" HorizontalOptions="Center"/>
             </StackLayout>
             <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
-                <button:CircleButton Text="Hard" Command="{Binding NewHardGameCommand}" StyleClass="MainButton" BorderThickness="2" />
+                <button:CircleButton Command="{Binding NewHardGameCommand}" StyleClass="MainButton" BorderThickness="2" Image="html/images/appbar.man.suitcase.fast.png"/>
                 <Label Text="Hard" HorizontalOptions="Center"/>
             </StackLayout>
         </StackLayout>

@@ -26,7 +26,7 @@ namespace WordSearch.ViewModels
         public MainPageViewModel(INavigation value)
         {
             Navigation = value;
-            LogoPath = "html/mainlogo.png";
+            LogoPath = "html/images/mainlogo.png";
             NewEasyGameCommand = new Command(OnNewEasyGameClick);
             NewMediumGameCommand = new Command(OnNewMediumGameClick);
             NewHardGameCommand = new Command(OnNewHardGameClick);

@@ -103,22 +103,31 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <Content Include="html\digital-7.ttf" />
+    <Content Include="html\css\digital-7.ttf" />
     <Content Include="Assets\Fonts\fontawesome.ttf" />
     <Content Include="Assets\Fonts\materialicons.ttf" />
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="html\fire.js" />
-    <Content Include="html\fire.png" />
-    <Content Include="html\fireworks.js" />
-    <Content Include="html\header.js" />
-    <Content Include="html\jquery-3.3.1.min.js" />
-    <Content Include="html\mainlogo.png" />
-    <Content Include="html\proton.min.js" />
-    <Content Include="html\tiles.js" />
-    <Content Include="html\wordSearchHeader.css" />
-    <Content Include="html\wordSearchTiles.css" />
+    <Content Include="html\images\appbar.baby.png" />
+    <Content Include="html\images\appbar.leaderboard.png" />
+    <Content Include="html\images\appbar.lightbulb.hue.on.png" />
+    <Content Include="html\images\appbar.lightning.png" />
+    <Content Include="html\images\appbar.man.suitcase.fast.png" />
+    <Content Include="html\images\appbar.man.walk.png" />
+    <Content Include="html\images\appbar.puzzle.png" />
+    <Content Include="html\images\appbar.puzzle.round.png" />
+    <Content Include="html\images\appbar.qr.png" />
+    <Content Include="html\js\fire.js" />
+    <Content Include="html\images\fire.png" />
+    <Content Include="html\js\fireworks.js" />
+    <Content Include="html\js\header.js" />
+    <Content Include="html\js\jquery-3.3.1.min.js" />
+    <Content Include="html\images\mainlogo.png" />
+    <Content Include="html\js\proton.min.js" />
+    <Content Include="html\js\tiles.js" />
+    <Content Include="html\css\wordSearchHeader.css" />
+    <Content Include="html\css\wordSearchTiles.css" />
     <Content Include="html\wordSearchTiles.html" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-100.png" />
