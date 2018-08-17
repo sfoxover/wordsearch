@@ -14,13 +14,20 @@
     </ContentPage.Resources>
     <StackLayout Orientation="Vertical">
         <Image Source="{Binding LogoPath}" />
+        <Label Text="Start a new game" HorizontalOptions="Center"/>
         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-            <button:CircleButton Text="Easy" Command="{Binding NewEasyGameCommand}" FontSize="20" TextColor="Black" HeightRequest="120" WidthRequest="120" 
-            BorderThickness="5" BorderColor="Black" BackgroundColor="#DCDCDC" />
-            <button:CircleButton Text="Medium" Command="{Binding NewMediumGameCommand}" FontSize="20" TextColor="Black" HeightRequest="120" WidthRequest="120" 
-            BorderThickness="5" BorderColor="Black" BackgroundColor="#DCDCDC" />
-            <button:CircleButton Text="Hard" Command="{Binding NewHardGameCommand}" FontSize="20" TextColor="Black" HeightRequest="120" WidthRequest="120" 
-            BorderThickness="5" BorderColor="Black" BackgroundColor="#DCDCDC" />
+            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
+                <button:CircleButton Text="Easy" Command="{Binding NewEasyGameCommand}" StyleClass="MainButton" BorderThickness="2"/>
+                <Label Text="Easy" HorizontalOptions="Center"/>
+            </StackLayout>
+            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
+                <button:CircleButton Text="Medium" Command="{Binding NewMediumGameCommand}" StyleClass="MainButton" BorderThickness="2" />
+                <Label Text="Medium" HorizontalOptions="Center"/>
+            </StackLayout>
+            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
+                <button:CircleButton Text="Hard" Command="{Binding NewHardGameCommand}" StyleClass="MainButton" BorderThickness="2" />
+                <Label Text="Hard" HorizontalOptions="Center"/>
+            </StackLayout>
         </StackLayout>
 
     </StackLayout>

@@ -3,11 +3,14 @@
     margin:0;
 }
 
-.BlueButton {
-    padding-left: 10;
-    padding-right: 10;
-    background-color:cornflowerblue;
-    color:white;
+.MainButton {
+    font-size: 20;
+    color: Black;
+    height: 90;
+    width: 90;
+    border: 2;
+    border-color: black;
+    background-color: #DCDCDC;
 }
 
 #webViewHeader{
