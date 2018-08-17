@@ -7,27 +7,21 @@
             Title="Super Word Search"
             xmlns:viewModels="clr-namespace:WordSearch.ViewModels"
             xmlns:button="clr-namespace:ButtonCircle.FormsPlugin.Abstractions;assembly=ButtonCircle.FormsPlugin.Abstractions"
+            xmlns:theme="clr-namespace:WordSearch.Assets;assembly=WordSearch"
             mc:Ignorable="d"
             d:DataContext="{d:DesignInstance viewModels:DesignMainPageViewModel}">
+    
     <ContentPage.Resources>
-        <StyleSheet Source="/Assets/Styles.css" />
+      <ResourceDictionary MergedWith="theme:MyStyles" />
     </ContentPage.Resources>
+  
     <StackLayout Orientation="Vertical">
         <Image Source="{Binding LogoPath}" />
         <Label Text="Click below to start a new game" HorizontalOptions="Center"/>
         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
-                <button:CircleButton Command="{Binding NewEasyGameCommand}" StyleClass="MainButton" BorderThickness="2" Image="{Binding EasyGameImgPath}"/>
-                <Label Text="Easy" HorizontalOptions="Center"/>
-            </StackLayout>
-            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
-                <button:CircleButton Command="{Binding NewMediumGameCommand}" StyleClass="MainButton" BorderThickness="2" Image="{Binding MediumGameImgPath}"/>
-                <Label Text="Medium" HorizontalOptions="Center"/>
-            </StackLayout>
-            <StackLayout Orientation="Vertical" HorizontalOptions="CenterAndExpand">
-                <button:CircleButton Command="{Binding NewHardGameCommand}" StyleClass="MainButton" BorderThickness="2" Image="{Binding HardGameImgPath}"/>
-                <Label Text="Hard" HorizontalOptions="Center"/>
-            </StackLayout>
+              <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewEasyGameCommand}" Text="Easy" Image="{Binding EasyGameImgPath}"/>
+              <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewMediumGameCommand}" Text="Medium" Image="{Binding MediumGameImgPath}"/>
+              <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewHardGameCommand}" Text="Hard" Image="{Binding HardGameImgPath}"/>
         </StackLayout>
 
     </StackLayout>

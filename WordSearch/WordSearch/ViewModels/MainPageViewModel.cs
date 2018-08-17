@@ -53,9 +53,9 @@ namespace WordSearch.ViewModels
             NewHardGameCommand = new Command(OnNewHardGameClick);
             // new game image button paths
             string basePath = DependencyService.Get<IDependencyHelper>().GetLocalHtmlPath();
-            EasyGameImgPath = basePath + "html/images/appbar.baby.png";
-            MediumGameImgPath = basePath + "html/images/appbar.man.walk.png";
-            HardGameImgPath = basePath + "html/images/appbar.man.suitcase.fast.png";
+            EasyGameImgPath = "html/images/appbar.baby.png";
+            MediumGameImgPath = "html/images/appbar.man.walk.png";
+            HardGameImgPath = "html/images/appbar.man.suitcase.fast.png";
         }
 
         public async void OnNewEasyGameClick()

@@ -1,5 +1,4 @@
-﻿using ButtonCircle.FormsPlugin.UWP;
-using System;
+﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -44,7 +43,6 @@ namespace WordSearch.UWP
 
                 FormsWebViewRenderer.Initialize();
                 Xamarin.Forms.Forms.Init(e);
-                ButtonCircleRenderer.Init();
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
