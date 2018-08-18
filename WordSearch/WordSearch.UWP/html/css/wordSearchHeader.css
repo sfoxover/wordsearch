@@ -46,21 +46,21 @@ body {
 .wordDiv {
     color: black;
     font-family: Arial, sans-serif;
-    font-size: xx-large;
+    font-size: large;
 }
 
 .wordCompleteDiv {
     color: red;
     text-decoration: line-through;
     font-family: Arial, sans-serif;
-    font-size: xx-large;
+    font-size: large;
 }
 
 .digitalText {
     color: white;
     background-color: dodgerblue;
     font-family: 'digital-7', sans-serif;
-    font-size: xx-large;
+    font-size: 24px;
     text-align: center;
 }
 

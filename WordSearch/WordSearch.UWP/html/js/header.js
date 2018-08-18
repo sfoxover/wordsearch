@@ -122,11 +122,13 @@ class Header {
                 var td = $("<td/>");
                 td.append(wordDiv);
                 row.append(td);
-                if (count >= 8)
-                    wordDiv.css('font-size', 'large');
+                if (count >= 16)
+                    wordDiv.css('font-size', 'small');
+                else if (count >= 8)
+                    wordDiv.css('font-size', 'medium');
                 addedCount++;
                 // add new table column
-                if (addedCount === 8) {
+                if ((count === 8 && addedCount === 4) || (count >= 16 && addedCount === 8)) {
                     table.append(row);
                     row = $("<tr/>");
                 }
