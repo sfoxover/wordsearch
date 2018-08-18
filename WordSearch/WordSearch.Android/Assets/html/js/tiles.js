@@ -269,7 +269,7 @@ class Tiles {
                         fireworks.start(0, 100);
                         setTimeout(function () {
                             fireworks.pause();
-                        }, 5000);
+                        }, 10000);
                         $('#FireworksCanvas').hide();
                         $('#FireworksCanvas').fadeIn(1000);                     
                         break;
