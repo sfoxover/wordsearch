@@ -195,7 +195,7 @@ namespace WordSearch
         // callback from JS header html page
         void HeaderJSCallback(string message)
         {
-            System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
+            ViewModel.HasHeaderPageSignalled = true;
             MessageJson msg = new MessageJson(message);
             switch(msg.Message)
             {

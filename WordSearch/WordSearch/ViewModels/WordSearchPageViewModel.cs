@@ -74,10 +74,12 @@ namespace WordSearch.ViewModels
         }
         // has the html page loaded
         public bool HasTilesPageSignalled { get; set; }
+        public bool HasHeaderPageSignalled { get; set; }
 
         public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter, FormsWebView webViewHeader, FormsWebView webViewTiles)
         {
             HasTilesPageSignalled = false;
+            HasHeaderPageSignalled = false;
             WebViewHeader = webViewHeader;
             WebViewTiles = webViewTiles;
             Navigation = value;
@@ -139,6 +141,14 @@ namespace WordSearch.ViewModels
             bool bOK = true;
             try
             {
+                // wait for page load
+                int waited = 0;
+                while (!HasHeaderPageSignalled && waited < 20)
+                {
+                    await Task.Delay(100);
+                    waited++;
+                }
+                Debug.Assert(HasHeaderPageSignalled);
                 var msg = new MessageJson();
                 msg.Message = message;
                 msg.Data = data;
