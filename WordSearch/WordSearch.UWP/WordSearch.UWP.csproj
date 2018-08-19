@@ -110,6 +110,7 @@
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="html\highScores.html" />
     <Content Include="html\images\baby.png" />
     <Content Include="html\images\leaderboard.png" />
     <Content Include="html\images\lightbulbhueon.png" />

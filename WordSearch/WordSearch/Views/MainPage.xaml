@@ -7,9 +7,7 @@
             Title="Super Word Search"
             xmlns:viewModels="clr-namespace:WordSearch.ViewModels"
             xmlns:button="clr-namespace:ButtonCircle.FormsPlugin.Abstractions;assembly=ButtonCircle.FormsPlugin.Abstractions"
-            xmlns:theme="clr-namespace:WordSearch.Assets;assembly=WordSearch"
-            mc:Ignorable="d"
-            d:DataContext="{d:DesignInstance viewModels:DesignMainPageViewModel}">
+            xmlns:theme="clr-namespace:WordSearch.Assets;assembly=WordSearch">
     
   <ContentPage.Resources>
     <ResourceDictionary MergedWith="theme:MyStyles" />
@@ -27,6 +25,10 @@
       <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewHardGameCommand}" Text="Hard" Image="{Binding HardGameImgPath}"/>
     </StackLayout>
 
-  </StackLayout>
+    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+        <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding ShowHighScoresCommand}" Text="High scores" Image="{Binding HighScoresImgPath}"/>
+    </StackLayout>
+
+    </StackLayout>
 
 </ContentPage>

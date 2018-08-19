@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WordSearch.Util;
+using WordSearch.Views;
 using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
@@ -38,11 +39,19 @@ namespace WordSearch.ViewModels
             get { return _hardGameImgPath; }
             set { SetProperty(ref _hardGameImgPath, value); }
         }
+        // high scores button image
+        private string _highScoresImgPath;
+        public string HighScoresImgPath
+        {
+            get { return _highScoresImgPath; }
+            set { SetProperty(ref _highScoresImgPath, value); }
+        }
 
         // new game command click
         public Command NewEasyGameCommand { get; }
         public Command NewMediumGameCommand { get; }
         public Command NewHardGameCommand { get; }
+        public Command ShowHighScoresCommand { get; }
 
         public MainPageViewModel(INavigation value)
         {
@@ -50,6 +59,7 @@ namespace WordSearch.ViewModels
             NewEasyGameCommand = new Command(OnNewEasyGameClick);
             NewMediumGameCommand = new Command(OnNewMediumGameClick);
             NewHardGameCommand = new Command(OnNewHardGameClick);
+            ShowHighScoresCommand = new Command(OnShowHighScoresClick);
             // main logo image
             string basePath = DependencyService.Get<IDependencyHelper>().GetResourceImagesPath();
             LogoPath = basePath + "mainlogo.png";
@@ -57,6 +67,7 @@ namespace WordSearch.ViewModels
             EasyGameImgPath = basePath + "baby.png";
             MediumGameImgPath = basePath + "manwalk.png";
             HardGameImgPath = basePath + "mansuitcasefast.png";
+            HighScoresImgPath = basePath + "leaderboard.png";
         }
 
         public async void OnNewEasyGameClick()
@@ -72,6 +83,11 @@ namespace WordSearch.ViewModels
         public async void OnNewHardGameClick()
         {
             await Navigation.PushAsync(new WordSearchPage(WordManager.GameDifficulty.hard));
+        }
+
+        public async void OnShowHighScoresClick()
+        {
+            await Navigation.PushAsync(new HighScoresPage());
         }
     }
 }
