@@ -103,6 +103,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
+    <Content Include="html\css\bootstrap.min.css" />
     <Content Include="html\css\digital-7.ttf" />
     <Content Include="Assets\Fonts\fontawesome.ttf" />
     <Content Include="Assets\Fonts\materialicons.ttf" />
@@ -118,6 +119,7 @@
     <Content Include="html\images\puzzle.png" />
     <Content Include="html\images\puzzleround.png" />
     <Content Include="html\images\qr.png" />
+    <Content Include="html\js\bootstrap.min.js" />
     <Content Include="html\js\fire.js" />
     <Content Include="html\images\fire.png" />
     <Content Include="html\js\fireworks.js" />
