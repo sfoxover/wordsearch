@@ -261,6 +261,8 @@ namespace WordSearch
                 var score = new Score(name, Manager, ViewModel);
                 bool bOK = score.SaveRecord();
                 Debug.Assert(bOK);
+                // back to main page
+                Navigation.PopToRootAsync();
             }
             catch (Exception ex)
             {
