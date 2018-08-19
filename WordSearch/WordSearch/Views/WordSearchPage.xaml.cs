@@ -235,6 +235,9 @@ namespace WordSearch
                         ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
                     }
                     break;
+                case "hightscoreName":
+                    SaveHighScore(msg.Data as string);
+                    break;
                 case "LogMsg":
                     Debug.WriteLine(msg.Data.ToString());
                     break;
@@ -247,6 +250,21 @@ namespace WordSearch
                 default:
                     Debug.Assert(false, $"TilesJSCallback unexpected message {message}");
                     break;
+            }
+        }
+
+        // save user score
+        private void SaveHighScore(string name)
+        {
+            try
+            {
+                var score = new Score(name, Manager, ViewModel);
+                bool bOK = score.SaveRecord();
+                Debug.Assert(bOK);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("SaveHighScore exception, " + ex.Message);
             }
         }
     }

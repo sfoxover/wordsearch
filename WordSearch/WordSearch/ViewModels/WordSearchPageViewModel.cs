@@ -34,7 +34,7 @@ namespace WordSearch.ViewModels
         // points per letter
         private double PointsPerLetter { get; set; }
         // game score
-        private int GameScore { get; set; }
+        public int GameScore { get; set; }
         // is game completed
         public bool GameCompleted { get; set; }
         // header local html path
