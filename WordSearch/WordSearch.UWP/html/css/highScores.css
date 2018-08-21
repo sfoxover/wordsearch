@@ -1,0 +1,93 @@
+﻿:root {
+    --text-color: black;
+    --text-color-selected: black;
+    --tile-bk-color: #CCCCCC;
+    --tile-bk-color-selected: #ADD8E6;
+    --tile-border-color: #7A7A7A;
+    --tile-border-color-selected: #1E90FF;
+    --div-bk-color: #ADD8E6;
+    --div-border-radius: 0px;
+    --div-border-size: 1px;
+    --div-margin-bottom: 15px;
+}
+
+body {
+    background-color: var(--div-bk-color);
+    margin: 0;
+    overflow: hidden;
+}
+
+.letterDiv {
+    margin: 0;
+    color: var(--text-color);
+    background-color: var(--tile-bk-color);
+    font-family: Arial, sans-serif;
+    font-size: xx-large;
+    border: var(--div-border-size) solid var(--tile-border-color);
+    border-radius: var(--div-border-radius);
+    text-align: center;
+    position: relative;
+}
+
+.letterDivSelected {
+    margin: 0;
+    color: var(--text-color-selected);
+    background-color: var(--tile-bk-color-selected);
+    font-family: Arial, sans-serif;
+    font-size: xx-large;
+    border: var(--div-border-size) solid var(--tile-border-color-selected);
+    border-radius: var(--div-border-radius);
+    text-align: center;
+    position: relative;
+}
+
+.letterTDStyle {
+    margin: 0;
+}
+
+#tilesList {
+    width: 100%;
+    height: 100%;
+    margin: auto;
+    margin-bottom: var(--div-margin-bottom);
+    background-color: var(--div-bk-color);
+}
+
+table.tilesTable {
+    border: 0px;
+    padding: 0px;
+    background-color: var(--div-bk-color);
+    margin: auto;
+}
+
+table.tilesTable td, table.tilesTable th {
+    border: 0px solid #FFFFFF;
+    padding: 0px;
+    text-align: center;
+}
+
+table.tilesTable tbody td {
+    text-align: center;
+}
+
+#FireworksCanvas {
+    background: #000000;
+    opacity: .7;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+
+#highScoreName {
+    background: #000000;
+    opacity: .7;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    /*display: none;*/
+}

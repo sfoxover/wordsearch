@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using WordSearch.Util;
 using WordSearch.ViewModels;
@@ -42,6 +43,24 @@ namespace WordSearch.Models
             catch(Exception ex)
             {
                 Debug.WriteLine($"SaveRecord exception {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // load all score records
+        public static bool LoadAllRecords(out List<Score> results)
+        {
+            bool bOK = true;
+            results = new List<Score>();
+            try
+            {
+                var realm = Realm.GetInstance();
+                results = realm.All<Score>().ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadAllRecords exception {ex.Message}");
                 bOK = false;
             }
             return bOK;
