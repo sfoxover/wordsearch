@@ -63,7 +63,7 @@ namespace WordSearch.ViewModels
                 msg.Message = message;
                 msg.Data = data;
                 string json = msg.GetJsonString();
-                string script = $"header.handleMsgFromApp('{json}')";
+                string script = $"highScores.handleMsgFromApp('{json}')";
                 await WebView.InjectJavascriptAsync(script).ConfigureAwait(false);
             }
             catch (Exception ex)

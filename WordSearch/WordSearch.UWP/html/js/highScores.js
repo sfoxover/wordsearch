@@ -3,10 +3,6 @@ $(document).ready(function () {
     highScores.signalNativeApp('ping');
 });
 
-$(window).resize(function () {
-    highScores.resizeTiles();
-});
-
 class HighScores {
     constructor() {
         this.waitForCallbackCreation().then(function () {
@@ -22,9 +18,9 @@ class HighScores {
         try {
             return new Promise(function (resolve, reject) {
                 var timerId = setTimeout(function () {
-                    return reject(new Error("waitForTilesCallbackCreation timed out."));
+                    return reject(new Error("waitForCallbackCreation timed out."));
                 }, 3000);
-                (function waitForTilesCallback() {
+                (function waitForCallback() {
                     try {
                         if (scoresJSCallback) {
                             clearTimeout(timerId);
@@ -34,7 +30,7 @@ class HighScores {
                     catch (err) {
                         err;
                     }
-                    setTimeout(waitForTilesCallback, 100);
+                    setTimeout(waitForCallback, 100);
                 })();
             });
         }
@@ -46,7 +42,7 @@ class HighScores {
     // handle errors
     handleError(err) {
         try {
-            this.waitForTilesCallbackCreation().then(function () {
+            this.waitForCallbackCreation().then(function () {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "Error";
@@ -66,7 +62,7 @@ class HighScores {
     // log message to native app
     logMsg(info) {
         try {
-            this.waitForTilesCallbackCreation().then(function () {
+            this.waitForCallbackCreation().then(function () {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "LogMsg";
@@ -100,70 +96,9 @@ class HighScores {
         }
     }
 
-    // resize to fix html page
-    resizeTiles() {
-        try {
-            var divBottomMarginValue = parseInt(getComputedStyle(document.documentElement, null).getPropertyValue('--div-margin-bottom'));
-            var tileWidth = (window.innerWidth / this.rowCount);
-            var tileHeight = ((window.innerHeight - divBottomMarginValue) / this.columnCount);
-            // use min of height or width to ensure min tiles required
-            var tileSize = Math.trunc(Math.min(tileWidth, tileHeight));
-            var paddedSize = tileSize;
-            // adjust for 2px border
-            var borderSizeValue = parseInt(getComputedStyle(document.documentElement, null).getPropertyValue('--div-border-size'));
-            if (borderSizeValue <= 0)
-                borderSizeValue = 1;
-            tileSize -= borderSizeValue * 2;
-            $(".letterTDStyle").width(tileSize + 'px');
-            $(".letterTDStyle").height(tileSize + 'px');
-
-            tileSize -= borderSizeValue * 2;
-            $(".letterDiv").width(tileSize + 'px');
-            $(".letterDiv").height(tileSize + 'px');
-            $(".letterDiv").css('line-height', tileSize + 'px');
-
-            $(".letterDivSelected").width(tileSize + 'px');
-            $(".letterDivSelected").height(tileSize + 'px');
-            $(".letterDivSelected").css('line-height', tileSize + 'px');
-            // size table
-            var width = paddedSize * this.rowCount;
-            var height = paddedSize * this.columnCount;
-            $(".tilesTable").width(width + 'px');
-            $(".tilesTable").height(height + 'px');     
-
-            // use smaller font for large number of tiles
-            if (this.rowCount >= 16) {
-                $(".letterDiv").css('font-size', 'medium');
-                $(".letterDivSelected").css('font-size', 'medium');
-            }
-            else if (this.rowCount >= 12) {
-                $(".letterDiv").css('font-size', 'large');
-                $(".letterDivSelected").css('font-size', 'large');
-            }
-
-            return tileSize;
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
-
     // create word list table
     makeTable(container, items) {
         try {
-            // store values in 2 dimential array
-            var collection = new Array();
-            for (var x = 0; x < items.length; x++) {
-                var column = items[x];              
-                collection[x] = new Array();
-                for (var y = 0; y < column.length; y++) {
-                    var tile = column[y];  
-                    collection[x][y] = tile;                    
-                }                
-            }
-            this.rowCount = collection.length;
-            this.columnCount = collection[0].length;
-
             // create table elements
             var table = $("<table/>").addClass('tilesTable');           
             for (y = 0; y < this.columnCount; y++) {
@@ -200,35 +135,12 @@ class HighScores {
         catch(err) {
             this.handleError(err);
         }
-    }
-
-    // update tile clicked states
-    updateTileStates(container, items) {
-        try {
-            $.each(items, function (x, rows) {
-                $.each(rows, function (y, row) {
-                    var div = '#tile_' + x + '_' + y;
-                    if (row.LetterSelected)
-                        $(div).attr("class", 'letterDivSelected');
-                    else
-                        $(div).attr("class", 'letterDiv');
-                });
-            }); 
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
-
-    // handle tile clicks
-    handleTileClick(row) {
-        this.signalNativeApp('tileClick', row);
-    }
+    }   
 
     // pass message and data to native app
     signalNativeApp(msg, data) {
         try {
-            this.waitForTilesCallbackCreation().then(function () {
+            this.waitForCallbackCreation().then(function () {
                 // format message into json
                 var msgObj = new Object();
                 msgObj.Message = msg;
@@ -254,8 +166,7 @@ class HighScores {
             switch (msg) {
                 case "LoadHighScores":
                     {
-                        this.makeTable($("#tilesList"), data);
-                        tiles.resizeTiles();
+                        this.makeTable($("#highScores"), data);
                         break;
                     }
                 default:

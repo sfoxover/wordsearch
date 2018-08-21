@@ -24,9 +24,9 @@ namespace WordSearch.Views
 
         public HighScoresPage()
         {
+            InitializeComponent();
             BindingContext = new HighScoresPageViewModel(Navigation, webViewHighScores);
             webViewHighScores.AddLocalCallback("scoresJSCallback", ScoresJSCallback);
-            InitializeComponent();
             ViewModel.LoadHighScoreData();
         }
 
