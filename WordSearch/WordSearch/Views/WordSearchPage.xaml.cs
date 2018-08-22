@@ -236,7 +236,7 @@ namespace WordSearch
                     }
                     break;
                 case "hightscoreName":
-                    SaveHighScore(msg.Data as string);
+                    SaveHighScore(msg.Data.ToString());
                     break;
                 case "LogMsg":
                     Debug.WriteLine(msg.Data.ToString());

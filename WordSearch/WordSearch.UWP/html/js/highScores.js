@@ -100,37 +100,19 @@ class HighScores {
     makeTable(container, items) {
         try {
             // create table elements
-            var table = $("<table/>").addClass('tilesTable');           
-            for (y = 0; y < this.columnCount; y++) {
-                var tr = $("<tr/>");
-                for (x = 0; x < this.rowCount; x++) {
-                    var item = collection[x][y];
-                    // create div
-                    var div = $("<div/>");
-                    if (item.LetterSelected)
-                        div.addClass('letterDivSelected');
-                    else
-                        div.addClass('letterDiv');
-                    div.text(item.Letter);
-                    div.attr('id', 'tile_' + x + '_' + y);
-                    var td = $("<td/>");
-                    td.append(div);
-                    td.addClass('letterTDStyle');
-                    tr.append(td);
-                    // add div click handler
-                    var ClickHandler = {
-                        value: null,
-                        callback: function () {
-                            tiles.handleTileClick(this);
-                        }
-                    };
-                    div.click($.proxy(ClickHandler.callback, item));
-                }
-                table.append(tr);
-            }     
-
-            this.resizeTiles();            
-            container.html(table);
+            var table = $('#highScoreTable');   
+            var body = $('<tbody/>');
+            $.each(items, function (rowCount, item) {
+                var row = $("<tr/>");
+                var name = item.Name;
+                var score = item.Points;
+                var date = item.Date;
+                row.append($("<td/>").text(name));
+                row.append($("<td/>").text(score));
+                row.append($("<td/>").text(date));
+                body.append(row);
+            });
+            table.append(body);
         }
         catch(err) {
             this.handleError(err);

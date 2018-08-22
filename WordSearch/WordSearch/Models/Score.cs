@@ -63,7 +63,7 @@ namespace WordSearch.Models
             try
             {
                 var realm = Realm.GetInstance();
-                results = realm.All<Score>().ToList();
+                results = realm.All<Score>().OrderByDescending(item => item.Points).ToList();
             }
             catch (Exception ex)
             {
