@@ -274,9 +274,11 @@ class Tiles {
                         fireworks.start(0, 100);
                         setTimeout(function () {
                             fireworks.pause();
+                        }, 20000);
+                        setTimeout(function () {
                             // show high score dialog
                             tiles.showHighScoreDialog();
-                        }, 10000);
+                        }, 5000);
                         $('#FireworksCanvas').hide();
                         $('#FireworksCanvas').fadeIn(1000);                     
                         break;
