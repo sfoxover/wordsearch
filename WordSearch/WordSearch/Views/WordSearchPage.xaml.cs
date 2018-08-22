@@ -188,8 +188,11 @@ namespace WordSearch
         private async void OnGameCompletedCallbackAsync()
         {
             ViewModel.GameCompleted = true;
-            await ViewModel.SignalTilesHtmlPage("OnGameCompleted", null);
-            await ViewModel.SignalHeaderHtmlPage("OnGameCompleted", null);
+            // get ranking
+            bool bOK = Score.GetScoreRank(ViewModel.GameScore, out int ranking);
+            var rank = new { Score = ViewModel.GameScore, Rank = ranking };
+            await ViewModel.SignalTilesHtmlPage("OnGameCompleted", rank);
+            await ViewModel.SignalHeaderHtmlPage("OnGameCompleted", rank);
         }       
 
         // callback from JS header html page

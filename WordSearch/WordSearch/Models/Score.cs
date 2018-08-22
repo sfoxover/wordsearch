@@ -102,5 +102,24 @@ namespace WordSearch.Models
             }
             return bOK;
         }
+
+        // get new score rank
+        public static bool GetScoreRank(int score, out int ranking)
+        {
+            bool bOK = true;
+            ranking = 1;
+            try
+            {
+                var realm = Realm.GetInstance();
+                var count = realm.All<Score>().Where(item => item.Points > score).Count();
+                ranking = count + 1;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"GetScoreRank exception {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
     }
 }
