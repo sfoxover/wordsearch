@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Realms;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,14 @@ using WordSearch.ViewModels;
 
 namespace WordSearch.Models
 {
+    public class DateFormatConverter : IsoDateTimeConverter
+    {
+        public DateFormatConverter(string format)
+        {
+            DateTimeFormat = format;
+        }
+    }
+
     [JsonObject(MemberSerialization.OptIn)]
     public class Score : RealmObject
     {
@@ -22,6 +31,7 @@ namespace WordSearch.Models
         [JsonProperty]
         public int Level { get; set; }
         [JsonProperty]
+        [JsonConverter(typeof(DateFormatConverter), "dd MMMM yyyy h:mm tt")]
         public DateTimeOffset Date { get; set; }
 
         public Score()

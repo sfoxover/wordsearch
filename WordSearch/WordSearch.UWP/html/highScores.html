@@ -12,15 +12,20 @@
 <body>
 
     <div id="highScores">
+        <div class="p-3 bg-primary text-center text-white mb-0">High Score Rankings</div>
         <table class="table table-striped" id="highScoreTable">
             <thead>
                 <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Score</th>
-                    <th scope="col">Date</th>
+                    <th scope="col" class="text-center">Rank</th>
+                    <th scope="col" class="text-center">Name</th>
+                    <th scope="col" class="text-center">Score</th>
+                    <th scope="col" class="text-center">Date</th>
                 </tr>
             </thead>
         </table>
+        <div class="col-md-4 text-center fixed-bottom">
+            <button id="closeButton" type="button" class="btn btn-primary btn-lg btn-block mb-2">Close</button>
+        </div>
     </div>
 
 </body>

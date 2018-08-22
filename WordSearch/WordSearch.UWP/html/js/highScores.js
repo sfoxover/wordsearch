@@ -1,6 +1,9 @@
 ﻿// on ready handler
 $(document).ready(function () {    
     highScores.signalNativeApp('ping');
+
+    // close window
+    $('#closeButton').click(() => highScores.closeWindow());
 });
 
 class HighScores {
@@ -102,15 +105,18 @@ class HighScores {
             // create table elements
             var table = $('#highScoreTable');   
             var body = $('<tbody/>');
+            var rank = 1;
             $.each(items, function (rowCount, item) {
                 var row = $("<tr/>");
                 var name = item.Name;
                 var score = item.Points;
                 var date = item.Date;
-                row.append($("<td/>").text(name));
-                row.append($("<td/>").text(score));
-                row.append($("<td/>").text(date));
+                row.append($("<td/>").text(rank).addClass('text-center'));
+                row.append($("<td/>").text(name).addClass('text-center'));
+                row.append($("<td/>").text(score).addClass('text-center'));
+                row.append($("<td/>").text(date).addClass('text-center'));
                 body.append(row);
+                rank++;
             });
             table.append(body);
         }
@@ -157,6 +163,16 @@ class HighScores {
                         break;
                     }
             }
+        }
+        catch (err) {
+            this.handleError(err);
+        }
+    }
+
+    // close window
+    closeWindow() {
+        try {
+            highScores.signalNativeApp('closeWindow', name);
         }
         catch (err) {
             this.handleError(err);

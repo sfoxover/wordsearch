@@ -40,6 +40,10 @@ namespace WordSearch.Views
             {
                 case "ping":
                     break;
+                case "closeWindow":
+                    // back to main page
+                    Navigation.PopToRootAsync();
+                    break;
                 case "Error":
                     if (msg.Data != null)
                     {
@@ -55,18 +59,8 @@ namespace WordSearch.Views
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height); // must be called
-            // use size counter to avoid resize flicker
-            PageSizedCounter++;
-            Device.StartTimer(new TimeSpan(0, 0, 0, 0, 50), () =>
-            {
-                PageSizedCounter--;
-                if (PageSizedCounter == 0 && height > 0)
-                {
-                    ViewModel.HtmlPageWidth = width;
-                    ViewModel.HtmlPageHeight = height;
-                }
-                return false;
-            });
+            ViewModel.HtmlPageWidth = width;
+            ViewModel.HtmlPageHeight = height;
         }       
     }
 }
