@@ -82,5 +82,25 @@ namespace WordSearch.Models
             }
             return bOK;
         }
+
+        // delete all scores
+        internal static bool DeleteAllRecords()
+        {
+            bool bOK = true;
+            try
+            {
+                var realm = Realm.GetInstance();
+                realm.Write(() =>
+                {
+                    realm.RemoveAll<Score>();
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"DeleteAllRecords exception {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
     }
 }

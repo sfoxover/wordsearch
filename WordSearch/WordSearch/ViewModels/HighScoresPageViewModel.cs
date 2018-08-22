@@ -74,6 +74,16 @@ namespace WordSearch.ViewModels
             return bOK;
         }
 
+        // clear high scores from database
+        internal void ClearHighScores()
+        {
+            bool bOK = Score.DeleteAllRecords();
+            if (bOK)
+            {
+                SignalHtmlPage("LoadHighScores", null);
+            }
+        }
+
         // load high scores from database
         public void LoadHighScoreData()
         {

@@ -4,6 +4,9 @@ $(document).ready(function () {
 
     // close window
     $('#closeButton').click(() => highScores.closeWindow());
+
+    // clear Scores
+    $('#clearScores').click(() => highScores.clearScores());
 });
 
 class HighScores {
@@ -118,6 +121,7 @@ class HighScores {
                 body.append(row);
                 rank++;
             });
+            $("#highScoreTable tbody").remove();
             table.append(body);
         }
         catch(err) {
@@ -173,6 +177,16 @@ class HighScores {
     closeWindow() {
         try {
             highScores.signalNativeApp('closeWindow', name);
+        }
+        catch (err) {
+            this.handleError(err);
+        }
+    }
+
+    // clear high scores
+    clearScores() {
+        try {
+            highScores.signalNativeApp('clearScores');
         }
         catch (err) {
             this.handleError(err);

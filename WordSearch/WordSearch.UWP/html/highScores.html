@@ -3,6 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/highScores.css">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/jquery-3.3.1.min.js"></script>
@@ -12,7 +13,7 @@
 <body>
 
     <div id="highScores">
-        <div class="p-3 bg-primary text-center text-white mb-0">High Score Rankings</div>
+        <div class="p-3 bg-primary text-center text-white">High Score Rankings<button id="clearScores" type="button" class="btn btn-link text-info float-right">clear scores</button></div>
         <table class="table table-striped" id="highScoreTable">
             <thead>
                 <tr>
@@ -23,8 +24,8 @@
                 </tr>
             </thead>
         </table>
-        <div class="col-md-4 text-center fixed-bottom">
-            <button id="closeButton" type="button" class="btn btn-primary btn-lg btn-block mb-2">Close</button>
+        <div class="container-fluid fixed-bottom">
+            <button id="closeButton" type="button" class="btn btn-primary btn-xs btn-block mb-2">Close</button>
         </div>
     </div>
 

@@ -44,6 +44,9 @@ namespace WordSearch.Views
                     // back to main page
                     Navigation.PopToRootAsync();
                     break;
+                case "clearScores":
+                    ViewModel.ClearHighScores();
+                    break;
                 case "Error":
                     if (msg.Data != null)
                     {
