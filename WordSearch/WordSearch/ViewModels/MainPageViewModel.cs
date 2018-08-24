@@ -10,7 +10,6 @@ namespace WordSearch.ViewModels
 {
 	public class MainPageViewModel : BindableBase
     {
-        private INavigation Navigation { get; set; }
         // main logo image path
         private string _logoPath;
         public string LogoPath
@@ -53,9 +52,9 @@ namespace WordSearch.ViewModels
         public Command NewHardGameCommand { get; }
         public Command ShowHighScoresCommand { get; }
 
-        public MainPageViewModel(INavigation value)
+        public MainPageViewModel(INavigation navigation)
+             : base(navigation)
         {
-            Navigation = value;
             NewEasyGameCommand = new Command(OnNewEasyGameClick);
             NewMediumGameCommand = new Command(OnNewMediumGameClick);
             NewHardGameCommand = new Command(OnNewHardGameClick);

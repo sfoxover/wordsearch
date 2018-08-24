@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
 {
     public abstract class BindableBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        // Store navigation reference
+        internal INavigation Navigation { get; set; }
+
+        public BindableBase(INavigation navigation)
+        {
+            Navigation = navigation;
+        }
 
         protected virtual bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
         {
@@ -45,6 +54,22 @@ namespace WordSearch.ViewModels
         protected virtual void OnPropertyChanged(PropertyChangedEventArgs args)
         {
             PropertyChanged?.Invoke(this, args);
+        }
+
+        // back to main page
+        internal void CloseWindow()
+        {
+            try
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    Navigation.PopToRootAsync(true);
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"CloseWindow exception {ex.Message}");
+            }
         }
     }
 }

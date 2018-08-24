@@ -11,7 +11,6 @@ namespace WordSearch.ViewModels
 {
     public class HighScoresPageViewModel : BindableBase
     {
-        private INavigation Navigation { get; set; }
         // reference to web page
         private FormsWebView WebView { get; set; }
         private string _sourceHtml;
@@ -37,11 +36,11 @@ namespace WordSearch.ViewModels
         // has the html page loaded
         public bool HasHtmlPageSignalled { get; set; }
 
-        public HighScoresPageViewModel(INavigation value, FormsWebView webView)
+        public HighScoresPageViewModel(INavigation navigation, FormsWebView webView)
+            : base(navigation)
         {
             HasHtmlPageSignalled = false;
             WebView = webView;
-            Navigation = value;
             SourceHtml = "html/highScores.html";
         }
 

@@ -119,7 +119,7 @@ namespace WordSearch
                     for (int row = 0; row < Rows; row++)
                     {
                         // create tile view model
-                        TileControlViewModel viewModel = new TileControlViewModel();
+                        TileControlViewModel viewModel = new TileControlViewModel(Navigation);
                         viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColumn = column;
@@ -265,7 +265,7 @@ namespace WordSearch
                 bool bOK = score.SaveRecord();
                 Debug.Assert(bOK);
                 // back to main page
-                Navigation.PopToRootAsync();
+                ViewModel.CloseWindow();
             }
             catch (Exception ex)
             {

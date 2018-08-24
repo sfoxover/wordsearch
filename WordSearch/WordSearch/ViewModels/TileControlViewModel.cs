@@ -34,7 +34,8 @@ namespace WordSearch.ViewModels
         // is this tile part of cmpleted word
         public bool IsPartOfCompletedWord { get; set; }
 
-        public TileControlViewModel()
+        public TileControlViewModel(INavigation navigation) 
+            : base(navigation)
         {
             IsPartOfCompletedWord = false;
             SetDefaultValues();

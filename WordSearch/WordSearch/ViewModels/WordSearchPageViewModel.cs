@@ -9,8 +9,6 @@ namespace WordSearch.ViewModels
 {
     public class WordSearchPageViewModel : BindableBase
     {
-        private INavigation Navigation { get; set; }
-
         private FormsWebView WebViewHeader { get; set; }
         private FormsWebView WebViewTiles { get; set; }
 
@@ -76,13 +74,13 @@ namespace WordSearch.ViewModels
         public bool HasTilesPageSignalled { get; set; }
         public bool HasHeaderPageSignalled { get; set; }
 
-        public WordSearchPageViewModel(INavigation value, int secondsRemaining, int pointsPerLetter, FormsWebView webViewHeader, FormsWebView webViewTiles)
+        public WordSearchPageViewModel(INavigation navigation, int secondsRemaining, int pointsPerLetter, FormsWebView webViewHeader, FormsWebView webViewTiles)
+             : base(navigation)
         {
             HasTilesPageSignalled = false;
             HasHeaderPageSignalled = false;
             WebViewHeader = webViewHeader;
             WebViewTiles = webViewTiles;
-            Navigation = value;
             StartingSeconds = secondsRemaining;
             SecondsRemaining = secondsRemaining;
             PointsPerLetter = pointsPerLetter;

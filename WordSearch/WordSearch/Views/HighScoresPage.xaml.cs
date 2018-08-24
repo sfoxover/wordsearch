@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WordSearch.Models;
+using WordSearch.Util;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -42,8 +43,7 @@ namespace WordSearch.Views
                     break;
                 case "closeWindow":
                     // back to main page
-                    Navigation.PopToRootAsync();
-                    //base.OnBackButtonPressed();
+                    ViewModel.CloseWindow();
                     break;
                 case "clearScores":
                     ViewModel.ClearHighScores();
@@ -65,6 +65,6 @@ namespace WordSearch.Views
             base.OnSizeAllocated(width, height); // must be called
             ViewModel.HtmlPageWidth = width;
             ViewModel.HtmlPageHeight = height;
-        }       
+        }
     }
 }
