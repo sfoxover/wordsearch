@@ -43,6 +43,7 @@ namespace WordSearch.Views
                 case "closeWindow":
                     // back to main page
                     Navigation.PopToRootAsync();
+                    //base.OnBackButtonPressed();
                     break;
                 case "clearScores":
                     ViewModel.ClearHighScores();

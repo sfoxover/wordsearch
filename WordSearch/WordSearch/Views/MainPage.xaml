@@ -15,7 +15,7 @@
   
   <StackLayout Orientation="Vertical">
       
-    <Image Source="{Binding LogoPath}" />
+    <Image Source="{Binding LogoPath}" HeightRequest="300"/>
       
     <Label Text="Click below to start a new game" HorizontalOptions="Center"/>
       
