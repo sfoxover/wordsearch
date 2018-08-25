@@ -187,15 +187,20 @@ namespace WordSearch
             // Randomly hide words in hard level
             Device.StartTimer(TimeSpan.FromSeconds(5), () =>
             {
-                if (!ViewModel.GameCompleted)
+                if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
                 {
-                    Manager.HideHardLevelWords();
-                    Manager.GetWordsList(out List<Word> hiddenWords);
-                    if (hiddenWords != null && hiddenWords.Count > 0)
-                        ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", hiddenWords);
+                    Manager.HideHardLevelWords();                   
                     LoadHiddenHardModeHeader();
                     Debug.WriteLine($"LoadHiddenHardModeHeader() {DateTime.Now.ToString()}");
                 }
+                else
+                {
+                    Manager.ShowAllHardLevelWords();
+                }
+                // Refresh words header
+                Manager.GetWordsList(out List<Word> words);
+                if (words != null && words.Count > 0)
+                    ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", words);
                 return false;
             });
         }
@@ -256,7 +261,7 @@ namespace WordSearch
                 case "ping":
                     break;
                 case "tileClick":
-                    if (!ViewModel.GameCompleted)
+                    if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
                     {
                         Manager.CheckForSelectedWord(msg.Data as JObject);
                         // reload tiles

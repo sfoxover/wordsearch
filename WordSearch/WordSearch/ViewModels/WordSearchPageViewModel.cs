@@ -27,7 +27,7 @@ namespace WordSearch.ViewModels
             set { SetProperty(ref _scoreBoard, value); }
         }
         // countdown timer
-        private double SecondsRemaining { get; set; }
+        internal double SecondsRemaining { get; set; }
         private double StartingSeconds { get; set; }
         // points per letter
         private double PointsPerLetter { get; set; }
@@ -103,8 +103,15 @@ namespace WordSearch.ViewModels
                     SecondsRemaining -= 1;
                     if (SecondsRemaining < 0)
                         SecondsRemaining = 0;
-                    var ts = new TimeSpan(0, 0, 0, (int)SecondsRemaining);
-                    GameTimer = $"Time: {ts.Minutes} MIN {ts.Seconds} SEC";
+                    if (SecondsRemaining > 0)
+                    {
+                        var ts = new TimeSpan(0, 0, 0, (int)SecondsRemaining);
+                        GameTimer = $"Time: {ts.Minutes} MIN {ts.Seconds} SEC";
+                    }
+                    else
+                    {
+                        GameTimer = "GAME OVER.";
+                    }
                     SignalHeaderHtmlPage("OnUpdateTime", GameTimer);
                     return !GameCompleted;
                 });
