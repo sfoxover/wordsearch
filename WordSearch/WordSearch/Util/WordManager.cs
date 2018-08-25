@@ -17,7 +17,7 @@ namespace WordSearch.Util
         // tile sizes
         private const int TILE_ROWS_LEVEL_EASY = 8;
         private const int TILE_ROWS_LEVEL_MEDIUM = 12;
-        private const int TILE_ROWS_LEVEL_HARD = 16;
+        private const int TILE_ROWS_LEVEL_HARD = 12;
         // words to solve per level
         private const int WORDS_LEVEL_EASY = 4;
         private const int WORDS_LEVEL_MEDIUM = 8;
@@ -30,9 +30,9 @@ namespace WordSearch.Util
         private const int POINTS_PER_LETTER_EASY = 10;
         private const int POINTS_PER_LETTER_MEDIUM = 20;
         private const int POINTS_PER_LETTER_HARD = 50;
-
         // array of random words
-        public List<Word> Words { get; set; }
+        private List<Word> Words { get; set; }
+        private static object WordsLock = new object();
         // word list array
         public TileControlViewModel[,] TileViewModels { get; set; }
         // delegate callback to update header text
@@ -111,7 +111,10 @@ namespace WordSearch.Util
                                 // found next word that fits ok
                                 filterList.Add(text);
                                 Debug.WriteLine($"PlaceWordsInTiles adding word {text}");
-                                Words.Add(word);
+                                lock (WordsLock)
+                                {
+                                    Words.Add(word);
+                                }
                                 count++;
                                 tries = 0;
                             }
@@ -141,15 +144,18 @@ namespace WordSearch.Util
             bool bOK = true;
             try
             {
-                foreach (var word in Words) 
+                lock (WordsLock)
                 {
-                    for (int n = 0; n < word.Text.Length; n++)
+                    foreach (var word in Words)
                     {
-                        char ch = word.Text[n];
-                        int row = (int)word.TilePositions[n].X;
-                        int column = (int)word.TilePositions[n].Y;
-                        TileViewModels[row, column].Letter = $"{ch}";
-                        TileViewModels[row, column].LetterSelected = false;
+                        for (int n = 0; n < word.Text.Length; n++)
+                        {
+                            char ch = word.Text[n];
+                            int row = (int)word.TilePositions[n].X;
+                            int column = (int)word.TilePositions[n].Y;
+                            TileViewModels[row, column].Letter = $"{ch}";
+                            TileViewModels[row, column].LetterSelected = false;
+                        }
                     }
                 }
             }
@@ -187,12 +193,15 @@ namespace WordSearch.Util
                         {
                             // test for collision with existing words
                             bool bHasCollision = false;
-                            foreach(var existingWord in Words)
+                            lock (WordsLock)
                             {
-                                if(existingWord.HasCollision(word))
+                                foreach (var existingWord in Words)
                                 {
-                                    bHasCollision = true;
-                                    break;
+                                    if (existingWord.HasCollision(word))
+                                    {
+                                        bHasCollision = true;
+                                        break;
+                                    }
                                 }
                             }
                             if(!bHasCollision)
@@ -216,6 +225,15 @@ namespace WordSearch.Util
                 bOK = false;
             }
             return bOK;
+        }
+
+        // Get copy of words list
+        internal void GetWordsList(out List<Word> words)
+        {
+            lock(WordsLock)
+            {
+                words = Words;
+            }
         }
 
         // get tile from array
@@ -261,7 +279,11 @@ namespace WordSearch.Util
         {
             int count = GetLevelWordCount();
             int percentage = 100 / count;
-            int wordPos = Words.IndexOf(word);
+            int wordPos = -1;
+            lock (WordsLock)
+            {
+                wordPos = Words.IndexOf(word);
+            }
             int startPos = wordPos * percentage; 
             if(wordPos > 8)
                 startPos = (wordPos - 8) * percentage;
@@ -356,39 +378,42 @@ namespace WordSearch.Util
                 {
                     tile.LetterSelected = !tile.LetterSelected;
                     bool isPartOfWord = false;
-                    foreach (var word in Words)
+                    lock (WordsLock)
                     {
-                        for (int n = 0; n < word.Text.Length; n++)
+                        foreach (var word in Words)
                         {
-                            row = (int)word.TilePositions[n].X;
-                            column = (int)word.TilePositions[n].Y;
-                            if (tile.TileRow == row && tile.TileColumn == column)
+                            for (int n = 0; n < word.Text.Length; n++)
                             {
-                                isPartOfWord = true;
-                                // check if whole word is selected
-                                bool selected;
-                                bOK = CheckForCompletedWord(word, out selected);
-                                Debug.Assert(bOK);
-                                if (bOK && selected)
+                                row = (int)word.TilePositions[n].X;
+                                column = (int)word.TilePositions[n].Y;
+                                if (tile.TileRow == row && tile.TileColumn == column)
                                 {
-                                    // mark tiles as part of completed word so they are not deselected
-                                    bOK = MarkTilesAsWordCompleted(word);
+                                    isPartOfWord = true;
+                                    // check if whole word is selected
+                                    bool selected;
+                                    bOK = CheckForCompletedWord(word, out selected);
                                     Debug.Assert(bOK);
-                                    word.IsWordCompleted = true;
-                                    // check if all words are selected
-                                    bOK = CheckForAllWordsSelected(out bool allSelected);
-                                    Debug.Assert(bOK);
-                                    if (bOK && allSelected)
+                                    if (bOK && selected)
                                     {
-                                        WordCompletedCallback?.Invoke(word);
-                                        GameCompletedCallback?.Invoke();
+                                        // mark tiles as part of completed word so they are not deselected
+                                        bOK = MarkTilesAsWordCompleted(word);
+                                        Debug.Assert(bOK);
+                                        word.IsWordCompleted = true;
+                                        // check if all words are selected
+                                        bOK = CheckForAllWordsSelected(out bool allSelected);
+                                        Debug.Assert(bOK);
+                                        if (bOK && allSelected)
+                                        {
+                                            WordCompletedCallback?.Invoke(word);
+                                            GameCompletedCallback?.Invoke();
+                                        }
+                                        else
+                                        {
+                                            WordCompletedCallback?.Invoke(word);
+                                        }
                                     }
-                                    else
-                                    {
-                                        WordCompletedCallback?.Invoke(word);
-                                    }
+                                    break;
                                 }
-                                break;
                             }
                         }
                     }
@@ -467,14 +492,17 @@ namespace WordSearch.Util
             allSelected = true;
             try
             {
-                foreach (var word in Words)
+                lock (WordsLock)
                 {
-                    if(!word.IsWordCompleted)
+                    foreach (var word in Words)
                     {
-                        allSelected = false;
-                        break;
+                        if (!word.IsWordCompleted)
+                        {
+                            allSelected = false;
+                            break;
+                        }
                     }
-                }               
+                }
             }
             catch (Exception ex)
             {
@@ -484,6 +512,46 @@ namespace WordSearch.Util
                 allSelected = false;
             }
             return bOK;
+        }
+
+        // Randomly hide and show words in hard level
+        internal void HideHardLevelWords()
+        {
+            try
+            {
+                lock (WordsLock)
+                {
+                    Debug.Assert(Words.Count != 0);
+                    if (Words.Count == 0)
+                        return;
+                    Word visibleWord = null;
+                    int tries = 0;
+                    // Try and find a random non completed word to make visible
+                    while (tries < Defines.MAX_RANDOM_TRIES)
+                    {
+                        int num = Random.Next(Words.Count);
+                        var word = Words[num];
+                        if(!word.IsWordCompleted)
+                        {
+                            visibleWord = word;
+                            break;
+                        }
+                        tries++;
+                    }
+                    foreach (var word in Words)
+                    {
+                        if (!word.IsWordCompleted && word != visibleWord)
+                            word.IsWordHidden = true;
+                        else
+                            word.IsWordHidden = false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var error = $"HideHardLevelWords exception, {ex.Message}";
+                Debug.WriteLine(error);
+            }
         }
     }
 }

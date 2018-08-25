@@ -116,6 +116,8 @@ class Header {
                 var wordDiv = $("<div/>");
                 if (item.IsWordCompleted)
                     wordDiv.addClass('wordCompleteDiv');
+                else if (item.IsWordHidden)
+                    wordDiv.addClass('wordHiddenDiv');
                 else
                     wordDiv.addClass('wordDiv');
                 wordDiv.text(word);

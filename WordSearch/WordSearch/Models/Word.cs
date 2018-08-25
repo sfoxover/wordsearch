@@ -28,6 +28,9 @@ namespace WordSearch.Models
         // flag when whole word is completed
         [JsonProperty]
         public bool IsWordCompleted { get; set; }
+        // Hide some words in hard level
+        [JsonProperty]
+        public bool IsWordHidden { get; set; }
 
         public Word(string text)
         {
@@ -36,6 +39,7 @@ namespace WordSearch.Models
             Row = 0;
             Column = 0;
             IsWordCompleted = false;
+            IsWordHidden = false;
         }       
 
         // test if word fits direction

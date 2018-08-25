@@ -3,13 +3,20 @@
    src: url('digital-7.ttf');
 }
 
+:root {
+    --text-color: black;
+    --text-color-hidden: #ADD8E6;
+    --text-color-selected: black;
+    --div-bk-color: #ADD8E6;
+}
+
 body {
-    background-color: lightblue;
+    background-color: var(--div-bk-color);
     margin: 0;
 }
 
 #FireworksCanvas {
-    background: lightblue;
+    background: var(--div-bk-color);
     opacity: .7;
     position: absolute;
     top: 50px;
@@ -18,11 +25,11 @@ body {
     height: 50px;
     display: none;
 }
- 
+
 #wordsList {
-    background-color: lightblue;
+    background-color: var(--div-bk-color);
     height: 50px;
-    text-align:center;
+    text-align: center;
     position: relative;
 }
 
@@ -49,6 +56,12 @@ body {
     font-size: large;
 }
 
+.wordHiddenDiv {
+    color: var(--text-color-hidden);
+    font-family: Arial, sans-serif;
+    font-size: large;
+}
+
 .wordCompleteDiv {
     color: red;
     text-decoration: line-through;
@@ -66,7 +79,7 @@ body {
 
 table.headerTable {
     border: 0px;
-    background-color: lightblue;
+    background-color: var(--div-bk-color);
     width: 100%;
     height: 50px;
     position: absolute;
@@ -86,7 +99,7 @@ table.headerTable tbody td {
 
 table.headerTable2 {
     border: 0px;
-    background-color: lightblue;
+    background-color: var(--div-bk-color);
     width: 100%;
     height: 50px;
     position: absolute;
@@ -105,7 +118,7 @@ table.headerTable2 tbody td {
 
 #winner {
     display: none;
-    background-color: lightblue;
+    background-color: var(--div-bk-color);
     text-align: center;
     width: 100%;
     height: 50px;

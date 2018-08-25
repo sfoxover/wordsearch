@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WordSearch.Models;
 using WordSearch.Util;
 using WordSearch.ViewModels;
@@ -19,7 +21,7 @@ namespace WordSearch
         // rows and columns
         int Rows { get; set; }
         int Columns { get; set; }
-        private bool HasCaculatedTiles { get; set; }        
+        private bool HasCaculatedTiles { get; set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -171,8 +173,31 @@ namespace WordSearch
         // load words in header and highlight completed words
         public void LoadWordsHeader()
         {
-            if(Manager.Words != null && Manager.Words.Count > 0)
-                ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", Manager.Words);
+            // Randomly hide words in hard level
+            if(Manager.DifficultyLevel == WordManager.GameDifficulty.hard)
+                LoadHiddenHardModeHeader();
+            Manager.GetWordsList(out List<Word> words);
+            if(words != null && words.Count > 0)
+                ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", words);
+        }
+
+        // Selected random visable word for hard mode
+        public void LoadHiddenHardModeHeader()
+        {
+            // Randomly hide words in hard level
+            Device.StartTimer(TimeSpan.FromSeconds(5), () =>
+            {
+                if (!ViewModel.GameCompleted)
+                {
+                    Manager.HideHardLevelWords();
+                    Manager.GetWordsList(out List<Word> hiddenWords);
+                    if (hiddenWords != null && hiddenWords.Count > 0)
+                        ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", hiddenWords);
+                    LoadHiddenHardModeHeader();
+                    Debug.WriteLine($"LoadHiddenHardModeHeader() {DateTime.Now.ToString()}");
+                }
+                return false;
+            });
         }
 
         // delegate callback to update header text
