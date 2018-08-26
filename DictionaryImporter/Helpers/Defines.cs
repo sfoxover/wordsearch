@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WordSearch
+namespace DictionaryImporter.Helpers
 {
     public class Defines
     {
-        // maximum attempts to find a random value that fits constraints 
-        public const int MAX_RANDOM_TRIES = 100;
         // game difficulty enum
         public enum GameDifficulty { easy, medium, hard };
+        // Min max word sizes.
+        public static int MIN_WORD_SIZE = 4;
+        public static int MAX_WORD_SIZE = 12;
     }
 }

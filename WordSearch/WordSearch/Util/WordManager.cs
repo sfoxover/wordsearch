@@ -11,9 +11,8 @@ namespace WordSearch.Util
     public class WordManager
     {
         static Random Random = new Random();
-        // game difficulty enum
-        public enum GameDifficulty { easy, medium, hard};
-        public GameDifficulty DifficultyLevel { get; set; }
+        // Difficulty level
+        public Defines.GameDifficulty DifficultyLevel { get; set; }
         // tile sizes
         private const int TILE_ROWS_LEVEL_EASY = 8;
         private const int TILE_ROWS_LEVEL_MEDIUM = 12;
@@ -53,7 +52,7 @@ namespace WordSearch.Util
             TileViewModels = null;
             Words = null;
             LastFailedTileClicked = null;
-            DifficultyLevel = GameDifficulty.easy;
+            DifficultyLevel = Defines.GameDifficulty.easy;
         }
 
         // create new word tile multi dimentional array
@@ -260,13 +259,13 @@ namespace WordSearch.Util
             int result = 0;
             switch(DifficultyLevel)
             {
-                case GameDifficulty.easy:
+                case Defines.GameDifficulty.easy:
                     result = TILE_ROWS_LEVEL_EASY;
                     break;
-                case GameDifficulty.medium:
+                case Defines.GameDifficulty.medium:
                     result = TILE_ROWS_LEVEL_MEDIUM;
                     break;
-                case GameDifficulty.hard:
+                case Defines.GameDifficulty.hard:
                     result = TILE_ROWS_LEVEL_HARD;
                     break;
             }
@@ -298,13 +297,13 @@ namespace WordSearch.Util
             int count = 0;
             switch(DifficultyLevel)
             {
-                case GameDifficulty.easy:
+                case Defines.GameDifficulty.easy:
                     count = WORDS_LEVEL_EASY;
                     break;
-                case GameDifficulty.medium:
+                case Defines.GameDifficulty.medium:
                     count = WORDS_LEVEL_MEDIUM;
                     break;
-                case GameDifficulty.hard:
+                case Defines.GameDifficulty.hard:
                     count = WORDS_LEVEL_HARD;
                     break;
                 default:
@@ -320,13 +319,13 @@ namespace WordSearch.Util
             int secondsRemaining = 0;
             switch (DifficultyLevel)
             {
-                case GameDifficulty.easy:
+                case Defines.GameDifficulty.easy:
                     secondsRemaining = START_SECS_EASY;
                     break;
-                case GameDifficulty.medium:
+                case Defines.GameDifficulty.medium:
                     secondsRemaining = START_SECS_MEDIUM;
                     break;
-                case GameDifficulty.hard:
+                case Defines.GameDifficulty.hard:
                     secondsRemaining = START_SECS_HARD;
                     break;
                 default:
@@ -342,13 +341,13 @@ namespace WordSearch.Util
             int points = 0;
             switch (DifficultyLevel)
             {
-                case GameDifficulty.easy:
+                case Defines.GameDifficulty.easy:
                     points = POINTS_PER_LETTER_EASY;
                     break;
-                case GameDifficulty.medium:
+                case Defines.GameDifficulty.medium:
                     points = POINTS_PER_LETTER_MEDIUM;
                     break;
-                case GameDifficulty.hard:
+                case Defines.GameDifficulty.hard:
                     points = POINTS_PER_LETTER_HARD;
                     break;
                 default:

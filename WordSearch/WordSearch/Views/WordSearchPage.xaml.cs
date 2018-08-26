@@ -44,7 +44,7 @@ namespace WordSearch
             Initalize();
         }
 
-        public WordSearchPage(WordManager.GameDifficulty level)
+        public WordSearchPage(Defines.GameDifficulty level)
         {
             HasCaculatedTiles = false;
             Rows = 0;
@@ -176,7 +176,7 @@ namespace WordSearch
         public void LoadWordsHeader()
         {
             // Randomly hide words in hard level
-            if (Manager.DifficultyLevel == WordManager.GameDifficulty.hard && !HasStartedHardModeTimer)
+            if (Manager.DifficultyLevel == Defines.GameDifficulty.hard && !HasStartedHardModeTimer)
             {
                 HasStartedHardModeTimer = true;
                 LoadHiddenHardModeHeader();

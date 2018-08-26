@@ -7,6 +7,7 @@ using Xamarin.Forms;
 
 namespace WordSearch.Models
 {
+    // Word model for game tiles
     [JsonObject(MemberSerialization.OptIn)]
     public class Word
     {
@@ -31,6 +32,9 @@ namespace WordSearch.Models
         // Hide some words in hard level
         [JsonProperty]
         public bool IsWordHidden { get; set; }
+        // Word difficulty level
+        [JsonProperty]
+        public Defines.GameDifficulty WordDifficulty { get; set; }
 
         public Word(string text)
         {

@@ -1,0 +1,38 @@
+﻿<Window x:Class="DictionaryImporter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DictionaryImporter"
+        mc:Ignorable="d"
+        Title="Super Word Search Word Importer" Height="600" Width="800">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Assets/MyStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+       
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <Label Style="{StaticResource LabelStyle}" Content="Max word length" />
+            <TextBox Text="{Binding MaxWordSize}" Style="{StaticResource TextBoxStyle}"/>
+            <Button HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" Command="{Binding LoadDictionaryCommand}" Content="Load dictionary file"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+            <Label Style="{StaticResource LabelStyle}" Content="Word Difficuly Level" />
+            <ComboBox MinWidth="100" DisplayMemberPath="Item1" SelectedValuePath="Item2" SelectedValue="{Binding SelectedDifficulty}" ItemsSource="{Binding DifficultyLevels}" HorizontalAlignment="Left"/>
+            <Button HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" Command="{Binding AddSelectedWordsCommand}" Content="Add selected words"/>
+        </StackPanel>
+        <ListBox Grid.Row="2" Style="{StaticResource ListBoxStyle}" ItemsSource="{Binding WordsList}"/>
+
+    </Grid>
+</Window>

@@ -71,17 +71,17 @@ namespace WordSearch.ViewModels
 
         public async void OnNewEasyGameClick()
         {
-            await Navigation.PushAsync(new WordSearchPage(WordManager.GameDifficulty.easy));
+            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.easy));
         }
 
         public async void OnNewMediumGameClick()
         {
-            await Navigation.PushAsync(new WordSearchPage(WordManager.GameDifficulty.medium));
+            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.medium));
         }
 
         public async void OnNewHardGameClick()
         {
-            await Navigation.PushAsync(new WordSearchPage(WordManager.GameDifficulty.hard));
+            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.hard));
         }
 
         public async void OnShowHighScoresClick()
