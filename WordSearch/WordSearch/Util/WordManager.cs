@@ -25,7 +25,7 @@ namespace WordSearch.Util
         // start seconds per level
         private const int START_SECS_EASY = 300;
         private const int START_SECS_MEDIUM = 240;
-        private const int START_SECS_HARD = 240;
+        private const int START_SECS_HARD = 300;
         // start seconds per level
         private const int POINTS_PER_LETTER_EASY = 10;
         private const int POINTS_PER_LETTER_MEDIUM = 20;

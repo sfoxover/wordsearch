@@ -22,7 +22,8 @@ namespace WordSearch
         int Rows { get; set; }
         int Columns { get; set; }
         private bool HasCaculatedTiles { get; set; }
-
+        // Flag to only start timer 1 time
+        private bool HasStartedHardModeTimer { get; set; }
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
         {
@@ -32,6 +33,7 @@ namespace WordSearch
         public WordSearchPage()
         {
             HasCaculatedTiles = false;
+            HasStartedHardModeTimer = false;
             Rows = 0;
             Columns = 0;
             InitializeComponent();
@@ -174,8 +176,11 @@ namespace WordSearch
         public void LoadWordsHeader()
         {
             // Randomly hide words in hard level
-            if(Manager.DifficultyLevel == WordManager.GameDifficulty.hard)
+            if (Manager.DifficultyLevel == WordManager.GameDifficulty.hard && !HasStartedHardModeTimer)
+            {
+                HasStartedHardModeTimer = true;
                 LoadHiddenHardModeHeader();
+            }
             Manager.GetWordsList(out List<Word> words);
             if(words != null && words.Count > 0)
                 ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", words);
