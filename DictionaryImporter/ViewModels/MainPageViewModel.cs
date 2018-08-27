@@ -35,12 +35,19 @@ namespace DictionaryImporter.ViewModels
         // Button command handlers.
         public ButtonCommand AddSelectedWordsCommand { get; set; }
         public ButtonCommand LoadDictionaryCommand { get; set; }
-        // Words listbox
-        private ObservableCollection<string> _wordsList = null;
-        public ObservableCollection<string> WordsList
+        // Existing words listbox
+        private ObservableCollection<string> _existingWordsList = null;
+        public ObservableCollection<string> ExistingWordsList
         {
-            get { return _wordsList; }
-            set { SetProperty(ref _wordsList, value); }
+            get { return _existingWordsList; }
+            set { SetProperty(ref _existingWordsList, value); }
+        }
+        // New words listbox
+        private ObservableCollection<string> _newWordsList = null;
+        public ObservableCollection<string> NewWordsList
+        {
+            get { return _newWordsList; }
+            set { SetProperty(ref _newWordsList, value); }
         }
 
         public MainPageViewModel()
@@ -52,7 +59,8 @@ namespace DictionaryImporter.ViewModels
         {
             AddSelectedWordsCommand = new ButtonCommand(AddSelectedWordsClicked);
             LoadDictionaryCommand = new ButtonCommand(LoadDictionaryClicked);
-            WordsList = new ObservableCollection<string>();
+            NewWordsList = new ObservableCollection<string>();
+            ExistingWordsList = new ObservableCollection<string>();
             DifficultyLevels = new ObservableCollection<Tuple<string, int>>();
             DifficultyLevels.Add(new Tuple<string, int>("Easy", 0));
             DifficultyLevels.Add(new Tuple<string, int>("Medium", 1));
@@ -89,8 +97,9 @@ namespace DictionaryImporter.ViewModels
             var words = File.ReadAllLines(path);
             var filtered = from item in words
                            where item.Length >= Defines.MIN_WORD_SIZE && item.Length <= Convert.ToInt32(MaxWordSize) && !item.Contains("'s")
-                           select item;
-            WordsList = new ObservableCollection<string>(filtered);
+                           orderby item ascending
+                           select item;                           
+            NewWordsList = new ObservableCollection<string>(filtered);
         }
 
         // Save selected words in database

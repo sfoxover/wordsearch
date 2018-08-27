@@ -23,16 +23,23 @@
         </Grid.RowDefinitions>
        
         <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Label Style="{StaticResource LabelStyle}" Content="Max word length" />
+            <Label Style="{StaticResource LabelStyle}" Content="New words max length" />
             <TextBox Text="{Binding MaxWordSize}" Style="{StaticResource TextBoxStyle}"/>
             <Button HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" Command="{Binding LoadDictionaryCommand}" Content="Load dictionary file"/>
         </StackPanel>
         <StackPanel Orientation="Horizontal" Grid.Row="1">
-            <Label Style="{StaticResource LabelStyle}" Content="Word Difficuly Level" />
+            <Label Style="{StaticResource LabelStyle}" Content="New words difficuly level" />
             <ComboBox MinWidth="100" DisplayMemberPath="Item1" SelectedValuePath="Item2" SelectedValue="{Binding SelectedDifficulty}" ItemsSource="{Binding DifficultyLevels}" HorizontalAlignment="Left"/>
             <Button HorizontalAlignment="Left" Style="{StaticResource ButtonStyle}" Command="{Binding AddSelectedWordsCommand}" Content="Add selected words"/>
         </StackPanel>
-        <ListBox Grid.Row="2" Style="{StaticResource ListBoxStyle}" ItemsSource="{Binding WordsList}"/>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ListBox Grid.Column="0" Style="{StaticResource ListBoxStyle}" ItemsSource="{Binding NewWordsList}"/>
+            <ListBox Grid.Column="1" Style="{StaticResource ListBoxStyle}" ItemsSource="{Binding ExistingWordsList}"/>
+        </Grid>
 
     </Grid>
 </Window>
