@@ -4,6 +4,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using DictionaryImporter.Models;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace DictionaryImporter.ViewModels
 {
@@ -66,6 +69,8 @@ namespace DictionaryImporter.ViewModels
             DifficultyLevels.Add(new Tuple<string, int>("Medium", 1));
             DifficultyLevels.Add(new Tuple<string, int>("Hard", 2));
             SelectedDifficulty = 0;
+            // Load existing items list.
+            LoadExistingList();
         }
 
         // Load text file
@@ -105,8 +110,25 @@ namespace DictionaryImporter.ViewModels
         // Save selected words in database
         private void AddSelectedWordsClicked(object sender, EventArgs e)
         {
-
+            List<Word> words = new List<Word>();
+            foreach(var text in NewWordsList)
+            {
+                Word word = new Word(text);
+                word.WordDifficulty = (Defines.GameDifficulty)SelectedDifficulty;
+                words.Add(word);
+            }
+            bool bOK = Word.SaveRecords(words);
+            Debug.Assert(bOK);
+            // Refresh existing items list.
+            LoadExistingList();
         }
 
+        // Load existing items.
+        private void LoadExistingList()
+        {
+            bool bOK = Word.LoadRecords(Defines.GameDifficulty.hard, out List<Word> results);
+            Debug.Assert(bOK);
+            ExistingWordsList = new ObservableCollection<string>();
+        }
     }
 }

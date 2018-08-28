@@ -4,6 +4,8 @@ using System.Windows;
 using DictionaryImporter.Helpers;
 using Realms;
 using System.Diagnostics;
+using System;
+using System.Linq;
 
 namespace DictionaryImporter.Models
 {
@@ -36,6 +38,10 @@ namespace DictionaryImporter.Models
         [JsonProperty]
         public Defines.GameDifficulty WordDifficulty { get; set; }
 
+        public Word()
+        {
+        }
+
         public Word(string text)
         {
             TilePositions = null;
@@ -47,7 +53,7 @@ namespace DictionaryImporter.Models
             WordDifficulty = Defines.GameDifficulty.easy;
         }
 
-        public bool SaveRecords(List<Word> data)
+        public static bool SaveRecords(List<Word> words)
         {
             bool bOK = true;
             try
@@ -55,12 +61,33 @@ namespace DictionaryImporter.Models
                 var realm = Realm.GetInstance();
                 realm.Write(() =>
                 {
-                    realm.Add(data);
+                    foreach (var word in words)
+                    {
+                        realm.Add(word);
+                    }
                 });
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"SaveRecords exception {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        // Load all records with a difficulty filter.
+        public static bool LoadRecords(Defines.GameDifficulty difficulty, out List<Word> results)
+        {
+            results = null;
+            bool bOK = true;
+            try
+            {
+                var realm = Realm.GetInstance();
+                results = realm.All<Word>().Where(item => item.WordDifficulty >= difficulty).ToList();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadRecords exception {ex.Message}");
                 bOK = false;
             }
             return bOK;
