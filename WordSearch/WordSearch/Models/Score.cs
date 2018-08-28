@@ -1,11 +1,12 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using Realms;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using WordSearch.Util;
 using WordSearch.ViewModels;
 
@@ -20,9 +21,10 @@ namespace WordSearch.Models
     }
 
     [JsonObject(MemberSerialization.OptIn)]
-    public class Score : RealmObject
+    public class Score 
     {
         [JsonProperty]
+        [Key]
         public int Id { get; set; }
         [JsonProperty]
         public string Name { get; set; }
@@ -46,16 +48,16 @@ namespace WordSearch.Models
             Date = DateTimeOffset.Now;
         }
 
-        public bool SaveRecord()
+        public async Task<bool> SaveRecord()
         {
             bool bOK = true;
             try
             {
-                var realm = Realm.GetInstance();
-                realm.Write(() =>
+                using (var db = new DbContextScores())
                 {
-                    realm.Add(this);
-                });
+                    db.Scores.Add(this);
+                    await db.SaveChangesAsync();
+                }
             }
             catch(Exception ex)
             {
@@ -72,8 +74,11 @@ namespace WordSearch.Models
             results = new List<Score>();
             try
             {
-                var realm = Realm.GetInstance();
-                results = realm.All<Score>().OrderByDescending(item => item.Points).ToList();
+                using (var db = new DbContextScores())
+                {
+                    db.Database.EnsureCreated();
+                    results = db.Scores.OrderByDescending(item => item.Points).ToList();
+                }
             }
             catch (Exception ex)
             {
@@ -84,16 +89,17 @@ namespace WordSearch.Models
         }
 
         // delete all scores
-        internal static bool DeleteAllRecords()
+        internal static async Task<bool> DeleteAllRecords()
         {
             bool bOK = true;
             try
             {
-                var realm = Realm.GetInstance();
-                realm.Write(() =>
+                using (var db = new DbContextScores())
                 {
-                    realm.RemoveAll<Score>();
-                });
+                    foreach (var score in db.Scores)
+                        db.Scores.Remove(score);
+                    await db.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -110,9 +116,12 @@ namespace WordSearch.Models
             ranking = 1;
             try
             {
-                var realm = Realm.GetInstance();
-                var count = realm.All<Score>().Where(item => item.Points > score).Count();
-                ranking = count + 1;
+                using (var db = new DbContextScores())
+                {
+                    db.Database.EnsureCreated();
+                    var count = db.Scores.Where(item => item.Points > score).Count();
+                    ranking = count + 1;
+                }
             }
             catch (Exception ex)
             {

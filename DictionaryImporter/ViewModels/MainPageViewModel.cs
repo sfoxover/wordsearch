@@ -114,7 +114,7 @@ namespace DictionaryImporter.ViewModels
             foreach(var text in NewWordsList)
             {
                 Word word = new Word(text);
-                word.WordDifficulty = SelectedDifficulty;
+                word.WordDifficulty = (Defines.GameDifficulty)SelectedDifficulty;
                 words.Add(word);
             }
             bool bOK = Word.SaveRecords(words);

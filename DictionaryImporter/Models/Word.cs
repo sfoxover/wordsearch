@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Windows;
 using DictionaryImporter.Helpers;
-using Realms;
 using System.Diagnostics;
 using System;
 using System.Linq;
@@ -11,7 +10,7 @@ namespace DictionaryImporter.Models
 {
     // Word model for database import tool
     [JsonObject(MemberSerialization.OptIn)]
-    public class Word : RealmObject
+    public class Word 
     {
         // word direction enum
         public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
@@ -25,9 +24,9 @@ namespace DictionaryImporter.Models
         [JsonProperty]
         public int Column { get; set; }
         // word bearing
-        public int Direction { get; set; }
+        public WordDirection Direction { get; set; }
         // reference to tile objects used in this word
-        public RealmList<Point> TilePositions { get; set; }
+        public List<Point> TilePositions { get; set; }
         // flag when whole word is completed
         [JsonProperty]
         public bool IsWordCompleted { get; set; }
@@ -36,7 +35,7 @@ namespace DictionaryImporter.Models
         public bool IsWordHidden { get; set; }
         // Word difficulty level
         [JsonProperty]
-        public int WordDifficulty { get; set; }
+        public Defines.GameDifficulty WordDifficulty { get; set; }
 
         public Word()
         {
@@ -50,7 +49,7 @@ namespace DictionaryImporter.Models
             Column = 0;
             IsWordCompleted = false;
             IsWordHidden = false;
-            WordDifficulty = (int)Defines.GameDifficulty.easy;
+            WordDifficulty = Defines.GameDifficulty.easy;
         }
 
         public static bool SaveRecords(List<Word> words)

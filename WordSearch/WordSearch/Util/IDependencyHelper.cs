@@ -9,5 +9,7 @@ namespace WordSearch.Util
         string GetLocalHtmlPath();
         // get base path to button images
         string GetResourceImagesPath();
+        // Get database file path.
+        string GetLocalDatabaseFilePath(string filename);
     }
 }

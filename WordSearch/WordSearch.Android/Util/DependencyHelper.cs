@@ -1,6 +1,7 @@
 ﻿using System;
 using WordSearch.Util;
 using WordSearch.Droid.Util;
+using System.IO;
 
 [assembly: Xamarin.Forms.Dependency(typeof(DependencyHelper))]
 namespace WordSearch.Droid.Util
@@ -16,6 +17,13 @@ namespace WordSearch.Droid.Util
         public string GetResourceImagesPath()
         {
             return "";
+        }
+
+        // Get database file path.
+        string GetLocalDatabaseFilePath(string filename)
+        {
+            string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            return Path.Combine(path, filename);
         }
     }
 }

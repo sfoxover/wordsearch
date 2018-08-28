@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using WordSearch.Util;
 using WordSearch.UWP.Util;
 
@@ -16,6 +17,13 @@ namespace WordSearch.UWP.Util
         public string GetResourceImagesPath()
         {
             return "html/images/";
+        }
+
+        // Get database file path.
+        string GetLocalDatabaseFilePath(string filename)
+        {
+            string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            return Path.Combine(path, filename);
         }
     }
 }

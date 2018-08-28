@@ -74,22 +74,22 @@ namespace WordSearch.ViewModels
         }
 
         // clear high scores from database
-        internal void ClearHighScores()
+        internal async void ClearHighScores()
         {
-            bool bOK = Score.DeleteAllRecords();
+            bool bOK = await Score.DeleteAllRecords();
             if (bOK)
             {
-                SignalHtmlPage("LoadHighScores", null);
+                await SignalHtmlPage("LoadHighScores", null);
             }
         }
 
         // load high scores from database
-        public void LoadHighScoreData()
+        public async void LoadHighScoreData()
         {
             bool bOK = Score.LoadAllRecords(out List<Score> results);
             if(bOK)
             {
-                SignalHtmlPage("LoadHighScores", results);
+                await SignalHtmlPage("LoadHighScores", results);
             }
         }
     }

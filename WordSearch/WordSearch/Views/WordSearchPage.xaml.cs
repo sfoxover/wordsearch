@@ -292,12 +292,12 @@ namespace WordSearch
         }
 
         // save user score
-        private void SaveHighScore(string name)
+        private async void SaveHighScore(string name)
         {
             try
             {
                 var score = new Score(name, Manager, ViewModel);
-                bool bOK = score.SaveRecord();
+                bool bOK = await score.SaveRecord();
                 Debug.Assert(bOK);
                 // back to main page
                 ViewModel.CloseWindow();
