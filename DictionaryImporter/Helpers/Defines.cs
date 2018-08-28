@@ -11,5 +11,7 @@ namespace DictionaryImporter.Helpers
         // Min max word sizes.
         public static int MIN_WORD_SIZE = 4;
         public static int MAX_WORD_SIZE = 12;
+        // word direction enum
+        public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
     }
 }

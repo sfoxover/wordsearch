@@ -183,8 +183,8 @@ namespace WordSearch.Util
                     int column = Random.Next(columns);
                     word.Row = row;
                     word.Column = column;
-                    var directions = new List<Word.WordDirection>();
-                    foreach (Word.WordDirection direction in Enum.GetValues(typeof(Word.WordDirection)))
+                    var directions = new List<Defines.WordDirection>();
+                    foreach (Defines.WordDirection direction in Enum.GetValues(typeof(Defines.WordDirection)))
                     {
                         // test if word fits
                         word.Direction = direction;

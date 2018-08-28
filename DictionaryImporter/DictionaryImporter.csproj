@@ -58,6 +58,7 @@
     <Compile Include="Assets\MyStyles.xaml.cs">
       <DependentUpon>MyStyles.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DbContextWords.cs" />
     <Compile Include="ViewModels\BindableBase.cs" />
     <Compile Include="ViewModels\ButtonCommand.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />

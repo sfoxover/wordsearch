@@ -20,7 +20,7 @@ namespace WordSearch.Droid.Util
         }
 
         // Get database file path.
-        string GetLocalDatabaseFilePath(string filename)
+        string IDependencyHelper.GetLocalDatabaseFilePath(string filename)
         {
             string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
             return Path.Combine(path, filename);

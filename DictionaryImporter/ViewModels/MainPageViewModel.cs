@@ -108,7 +108,7 @@ namespace DictionaryImporter.ViewModels
         }
 
         // Save selected words in database
-        private void AddSelectedWordsClicked(object sender, EventArgs e)
+        private async void AddSelectedWordsClicked(object sender, EventArgs e)
         {
             List<Word> words = new List<Word>();
             foreach(var text in NewWordsList)
@@ -117,7 +117,7 @@ namespace DictionaryImporter.ViewModels
                 word.WordDifficulty = (Defines.GameDifficulty)SelectedDifficulty;
                 words.Add(word);
             }
-            bool bOK = Word.SaveRecords(words);
+            bool bOK = await Word.SaveRecords(words);
             Debug.Assert(bOK);
             // Refresh existing items list.
             LoadExistingList();

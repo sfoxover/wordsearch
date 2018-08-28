@@ -1,6 +1,8 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Text;
 using Xamarin.Forms;
@@ -11,8 +13,8 @@ namespace WordSearch.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Word
     {
-        // word direction enum
-        public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
+        [Key]
+        public int Id { get; set; }
         // random word
         [JsonProperty]
         public string Text { get; set; }
@@ -23,14 +25,18 @@ namespace WordSearch.Models
         [JsonProperty]
         public int Column { get; set; }
         // word bearing
-        public WordDirection Direction { get; set; }
+        [NotMapped]
+        public Defines.WordDirection Direction { get; set; }
         // reference to tile objects used in this word
+        [NotMapped]
         public List<Point> TilePositions { get; set; }
         // flag when whole word is completed
         [JsonProperty]
+        [NotMapped]
         public bool IsWordCompleted { get; set; }
         // Hide some words in hard level
         [JsonProperty]
+        [NotMapped]
         public bool IsWordHidden { get; set; }
         // Word difficulty level
         [JsonProperty]
@@ -55,28 +61,28 @@ namespace WordSearch.Models
                 int wordLen = Text.Length;
                 switch (Direction)
                 {
-                    case WordDirection.LeftToRight:
+                    case Defines.WordDirection.LeftToRight:
                         bOK = (Row + wordLen) <= rows;
                         break;
-                    case WordDirection.TopToBottom:
+                    case Defines.WordDirection.TopToBottom:
                         bOK = (Column + wordLen) <= columns;
                         break;
-                    case WordDirection.RightToLeft:
+                    case Defines.WordDirection.RightToLeft:
                         bOK = (Row - wordLen) >= 0;
                         break;
-                    case WordDirection.BottomToTop:
+                    case Defines.WordDirection.BottomToTop:
                         bOK = (Column - wordLen) >= 0;
                         break;
-                    case WordDirection.TopLeftToBottomRight:
+                    case Defines.WordDirection.TopLeftToBottomRight:
                         bOK = (Row + wordLen) <= rows && (Column + wordLen) <= columns;
                         break;
-                    case WordDirection.TopRightToBottomLeft:
+                    case Defines.WordDirection.TopRightToBottomLeft:
                         bOK = (Row - wordLen) >= 0 && (Column + wordLen) <= columns;
                         break;
-                    case WordDirection.BottomLeftToTopRight:
+                    case Defines.WordDirection.BottomLeftToTopRight:
                         bOK = (Row + wordLen) <= rows && (Column - wordLen) >= 0;
                         break;
-                    case WordDirection.BottomRightToTopLeft:
+                    case Defines.WordDirection.BottomRightToTopLeft:
                         bOK = (Row - wordLen) >= 0 && (Column - wordLen) >= 0;
                         break;
                     default:
@@ -120,35 +126,35 @@ namespace WordSearch.Models
         }
 
         // get next position based on direction
-        internal void GetNextPosition(WordDirection direction, ref int row, ref int column)
+        internal void GetNextPosition(Defines.WordDirection direction, ref int row, ref int column)
         {
             switch (direction)
             {
-                case WordDirection.LeftToRight:
+                case Defines.WordDirection.LeftToRight:
                     row++;
                     break;
-                case WordDirection.TopToBottom:
+                case Defines.WordDirection.TopToBottom:
                     column++;
                     break;
-                case WordDirection.RightToLeft:
+                case Defines.WordDirection.RightToLeft:
                     row--;
                     break;
-                case WordDirection.BottomToTop:
+                case Defines.WordDirection.BottomToTop:
                     column--;
                     break;
-                case WordDirection.TopLeftToBottomRight:
+                case Defines.WordDirection.TopLeftToBottomRight:
                     row++;
                     column++;
                     break;
-                case WordDirection.TopRightToBottomLeft:
+                case Defines.WordDirection.TopRightToBottomLeft:
                     row--;
                     column++;
                     break;
-                case WordDirection.BottomLeftToTopRight:
+                case Defines.WordDirection.BottomLeftToTopRight:
                     row++;
                     column--;
                     break;
-                case WordDirection.BottomRightToTopLeft:
+                case Defines.WordDirection.BottomRightToTopLeft:
                     row--;
                     column--;
                     break;

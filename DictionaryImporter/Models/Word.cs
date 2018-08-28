@@ -5,6 +5,9 @@ using DictionaryImporter.Helpers;
 using System.Diagnostics;
 using System;
 using System.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Threading.Tasks;
 
 namespace DictionaryImporter.Models
 {
@@ -12,8 +15,8 @@ namespace DictionaryImporter.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Word 
     {
-        // word direction enum
-        public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
+        [Key]
+        public int Id { get; set; }
         // random word
         [JsonProperty]
         public string Text { get; set; }
@@ -24,14 +27,18 @@ namespace DictionaryImporter.Models
         [JsonProperty]
         public int Column { get; set; }
         // word bearing
-        public WordDirection Direction { get; set; }
+        [NotMapped]
+        public Defines.WordDirection Direction { get; set; }
         // reference to tile objects used in this word
+        [NotMapped]
         public List<Point> TilePositions { get; set; }
         // flag when whole word is completed
         [JsonProperty]
+        [NotMapped]
         public bool IsWordCompleted { get; set; }
         // Hide some words in hard level
         [JsonProperty]
+        [NotMapped]
         public bool IsWordHidden { get; set; }
         // Word difficulty level
         [JsonProperty]
@@ -52,19 +59,16 @@ namespace DictionaryImporter.Models
             WordDifficulty = Defines.GameDifficulty.easy;
         }
 
-        public static bool SaveRecords(List<Word> words)
+        public static async Task<bool> SaveRecords(List<Word> words)
         {
             bool bOK = true;
             try
             {
-                var realm = Realm.GetInstance();
-                realm.Write(() =>
+                using (var db = new DbContextWords())
                 {
-                    foreach (var word in words)
-                    {
-                        realm.Add(word);
-                    }
-                });
+                    await db.Words.AddRangeAsync(words);
+                    await db.SaveChangesAsync();
+                }
             }
             catch (Exception ex)
             {
@@ -81,9 +85,14 @@ namespace DictionaryImporter.Models
             bool bOK = true;
             try
             {
-                Console.WriteLine(RealmConfiguration.GetPathToRealm());
-                var realm = Realm.GetInstance();
-                results = realm.All<Word>().ToList();
+                using (var db = new DbContextWords())
+                {
+                    db.Database.EnsureCreated();
+                    results = (from item in db.Words
+                              where item.WordDifficulty >= difficulty
+                              orderby item ascending
+                              select item).ToList();
+                }
             }
             catch (Exception ex)
             {
