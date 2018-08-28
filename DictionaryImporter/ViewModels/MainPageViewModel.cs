@@ -114,7 +114,7 @@ namespace DictionaryImporter.ViewModels
             foreach(var text in NewWordsList)
             {
                 Word word = new Word(text);
-                word.WordDifficulty = (Defines.GameDifficulty)SelectedDifficulty;
+                word.WordDifficulty = SelectedDifficulty;
                 words.Add(word);
             }
             bool bOK = Word.SaveRecords(words);
@@ -129,6 +129,10 @@ namespace DictionaryImporter.ViewModels
             bool bOK = Word.LoadRecords(Defines.GameDifficulty.hard, out List<Word> results);
             Debug.Assert(bOK);
             ExistingWordsList = new ObservableCollection<string>();
+            foreach(var word in results)
+            {
+                ExistingWordsList.Add(word.Text);
+            }
         }
     }
 }

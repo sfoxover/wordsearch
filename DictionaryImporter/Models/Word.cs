@@ -25,9 +25,9 @@ namespace DictionaryImporter.Models
         [JsonProperty]
         public int Column { get; set; }
         // word bearing
-        public WordDirection Direction { get; set; }
+        public int Direction { get; set; }
         // reference to tile objects used in this word
-        public List<Point> TilePositions { get; set; }
+        public RealmList<Point> TilePositions { get; set; }
         // flag when whole word is completed
         [JsonProperty]
         public bool IsWordCompleted { get; set; }
@@ -36,7 +36,7 @@ namespace DictionaryImporter.Models
         public bool IsWordHidden { get; set; }
         // Word difficulty level
         [JsonProperty]
-        public Defines.GameDifficulty WordDifficulty { get; set; }
+        public int WordDifficulty { get; set; }
 
         public Word()
         {
@@ -50,7 +50,7 @@ namespace DictionaryImporter.Models
             Column = 0;
             IsWordCompleted = false;
             IsWordHidden = false;
-            WordDifficulty = Defines.GameDifficulty.easy;
+            WordDifficulty = (int)Defines.GameDifficulty.easy;
         }
 
         public static bool SaveRecords(List<Word> words)
@@ -82,8 +82,9 @@ namespace DictionaryImporter.Models
             bool bOK = true;
             try
             {
+                Console.WriteLine(RealmConfiguration.GetPathToRealm());
                 var realm = Realm.GetInstance();
-                results = realm.All<Word>().Where(item => item.WordDifficulty >= difficulty).ToList();
+                results = realm.All<Word>().ToList();
             }
             catch (Exception ex)
             {
