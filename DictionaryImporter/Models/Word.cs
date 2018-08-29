@@ -89,7 +89,7 @@ namespace DictionaryImporter.Models
                 {
                     db.Database.EnsureCreated();
                     results = (from item in db.Words
-                              where item.WordDifficulty >= difficulty
+                              where item.WordDifficulty <= difficulty
                               orderby item ascending
                               select item).ToList();
                 }
