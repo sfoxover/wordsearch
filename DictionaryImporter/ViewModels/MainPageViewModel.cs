@@ -80,6 +80,7 @@ namespace DictionaryImporter.ViewModels
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.DefaultExt = ".txt";
             dlg.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
+            dlg.InitialDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
             var regValue = Registry.GetValue(RegPath, "WordsListFile", null);
             if (regValue != null)
                 path = regValue.ToString();

@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
 using System.Text;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace WordSearch.Models
 {
@@ -13,10 +14,9 @@ namespace WordSearch.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Word
     {
-        [Key]
-        public int Id { get; set; }
         // random word
         [JsonProperty]
+        [Key]
         public string Text { get; set; }
         // start row position
         [JsonProperty]
@@ -197,6 +197,30 @@ namespace WordSearch.Models
                 return true;
             }
             return false;
+        }
+
+        // Load all records with a difficulty filter.
+        public static bool LoadRecords(Defines.GameDifficulty difficulty, out List<Word> results)
+        {
+            results = null;
+            bool bOK = true;
+            try
+            {
+                using (var db = new DbContextWords())
+                {
+                    db.Database.EnsureCreated();
+                    results = (from item in db.Words
+                               where item.WordDifficulty <= difficulty
+                               orderby item ascending
+                               select item).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"LoadRecords exception {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
         }
     }
 }

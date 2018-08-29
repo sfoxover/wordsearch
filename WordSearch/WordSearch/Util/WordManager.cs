@@ -85,6 +85,7 @@ namespace WordSearch.Util
                 Words = new List<Word>();
                 // load words database
                 var wordDb = new WordDatabase();
+                wordDb.LoadWordsDB(DifficultyLevel);
                 int count = 0;
                 int tries = 0;
                 int total = GetLevelWordCount();
@@ -92,7 +93,7 @@ namespace WordSearch.Util
                 while (count < total && tries < Defines.MAX_RANDOM_TRIES)
                 {
                     string text;
-                    bOK = wordDb.GetNextRandomWord(maxWordLength, filterList, out text);
+                    bOK = wordDb.GetNextRandomWord(maxWordLength, DifficultyLevel, filterList, out text);
                     Debug.Assert(bOK);
                     if (bOK)
                     {

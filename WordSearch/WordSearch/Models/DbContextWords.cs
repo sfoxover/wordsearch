@@ -15,7 +15,7 @@ namespace WordSearch.Models
 
         public DbContextWords()
         {
-            DBPath = DependencyService.Get<IDependencyHelper>().GetLocalDatabaseFilePath("words.db3");
+            DBPath = DependencyService.Get<IDependencyHelper>().GetAssetsDatabaseFilePath("words.db3");
             Debug.WriteLine("DbContextScores path: " + DBPath);
         }
 

@@ -15,10 +15,9 @@ namespace DictionaryImporter.Models
     [JsonObject(MemberSerialization.OptIn)]
     public class Word 
     {
-        [Key]
-        public int Id { get; set; }
         // random word
         [JsonProperty]
+        [Key]
         public string Text { get; set; }
         // start row position
         [JsonProperty]

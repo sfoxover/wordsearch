@@ -16,7 +16,7 @@ namespace DictionaryImporter.Models
 
         public DbContextWords()
         {
-            string path = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+            string path = System.AppDomain.CurrentDomain.BaseDirectory;
             DBPath = Path.Combine(path, "words.db3");
             Debug.WriteLine("DbContextScores path: " + DBPath);
         }

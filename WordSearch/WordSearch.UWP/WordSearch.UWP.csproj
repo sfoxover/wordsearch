@@ -107,6 +107,7 @@
     <Content Include="html\css\digital-7.ttf" />
     <Content Include="Assets\Fonts\fontawesome.ttf" />
     <Content Include="Assets\Fonts\materialicons.ttf" />
+    <Content Include="Assets\words.db3" />
     <None Include="WordSearch.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>

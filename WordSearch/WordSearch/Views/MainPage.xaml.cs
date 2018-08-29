@@ -1,4 +1,5 @@
-﻿using WordSearch.ViewModels;
+﻿using WordSearch.Util;
+using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -16,6 +17,8 @@ namespace WordSearch.Views
         {
             InitializeComponent();
             BindingContext = new MainPageViewModel(Navigation);
+            // Verify words db exists
+            DependencyService.Get<IDependencyHelper>().CheckWordsDBFileExists("words.db3");
         }
     }
 }

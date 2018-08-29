@@ -2,21 +2,40 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using WordSearch.Models;
 
 namespace WordSearch.Util
 {
     public class WordDatabase
     {
-        // source of words
-        private string[] WordList = { "Africa", "Air", "Aladdin", "Alaska", "America", "Apple", "Appleseed", "April", "As", "Asia", "Atari", "August", "Bad", "Brown", "Bear",
-            "Wear", "Who", "Police", "Box", "Car", "House", "Mouse", "Fox", "Clown", "July", "Friday"  };
         static Random Random = new Random();
+        List<Word> WordList { get; set; }
         public WordDatabase()
         {
+            WordList = null;
+        }
+
+        // Load words database into memory
+        public bool LoadWordsDB(Defines.GameDifficulty difficulty)
+        {
+            bool bOK = false;
+            try
+            {
+                bOK = Word.LoadRecords(difficulty, out List<Word> results);
+                Debug.Assert(bOK);
+                if (bOK)
+                    WordList = new List<Word>(results);
+            }
+            catch (Exception ex)
+            {
+                var error = $"LoadWordsDB exception, {ex.Message}";
+                Debug.WriteLine(error);
+            }
+            return bOK;
         }
 
         // get next random word with filter list
-        public bool GetNextRandomWord(int maxWordLength, List<string> wordListFilter, out string result)
+        public bool GetNextRandomWord(int maxWordLength, Defines.GameDifficulty difficulty, List<string> wordListFilter, out string result)
         {
             bool bOK = false;
             result = "";
@@ -25,8 +44,8 @@ namespace WordSearch.Util
                 int tries = 0;
                 while (tries < Defines.MAX_RANDOM_TRIES)
                 {
-                    int num = Random.Next(WordList.Length);
-                    string text = WordList[num].ToLower();
+                    int num = Random.Next(WordList.Count);
+                    string text = WordList[num].Text.ToLower();
                     if (text.Length <= maxWordLength && !wordListFilter.Contains(text))
                     {
                         result = text;
