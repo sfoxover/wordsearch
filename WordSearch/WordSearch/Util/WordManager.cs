@@ -85,7 +85,10 @@ namespace WordSearch.Util
                 Words = new List<Word>();
                 // load words database
                 var wordDb = new WordDatabase();
-                wordDb.LoadWordsDB(DifficultyLevel);
+                bOK = wordDb.LoadWordsDB(DifficultyLevel);
+                Debug.Assert(bOK);
+                if (!bOK)
+                    return false;
                 int count = 0;
                 int tries = 0;
                 int total = GetLevelWordCount();

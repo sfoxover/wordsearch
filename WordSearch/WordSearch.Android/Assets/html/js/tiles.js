@@ -277,7 +277,7 @@ class Tiles {
                         }, 20000);
                         setTimeout(function () {
                             // show high score dialog
-                            tiles.showHighScoreDialog();
+                            tiles.showHighScoreDialog(data);
                         }, 5000);
                         $('#FireworksCanvas').hide();
                         $('#FireworksCanvas').fadeIn(1000);                     
@@ -295,8 +295,9 @@ class Tiles {
         }
     }
 
-    showHighScoreDialog() {
+    showHighScoreDialog(data) {
         try {
+            $('#labelRank').text('You are ranked #' + data.Rank + ' for your score of ' + data.Score);
             $('#highScoreModal').modal();
             $('#highScoreModal').on('shown.bs.modal', ()=> {
                 $('#hightscore-name').trigger('focus');
