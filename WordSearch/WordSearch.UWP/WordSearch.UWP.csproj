@@ -113,6 +113,7 @@
   <ItemGroup>
     <Content Include="html\css\highScores.css" />
     <Content Include="html\highScores.html" />
+    <Content Include="html\images\ajax-loader.gif" />
     <Content Include="html\images\baby.png" />
     <Content Include="html\images\leaderboard.png" />
     <Content Include="html\images\lightbulbhueon.png" />

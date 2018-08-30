@@ -12,6 +12,13 @@ namespace WordSearch.ViewModels
         private FormsWebView WebViewHeader { get; set; }
         private FormsWebView WebViewTiles { get; set; }
 
+        // Loading screen visible.
+        private bool _isLoading = true;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { SetProperty(ref _isLoading, value); }
+        }
         // countdown timer
         private string _gameTimer;
         public string GameTimer
