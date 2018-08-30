@@ -188,7 +188,14 @@ namespace WordSearch.Util
                     word.Row = row;
                     word.Column = column;
                     var directions = new List<Defines.WordDirection>();
+                    var directionsToTest = new List<Defines.WordDirection>();
                     foreach (Defines.WordDirection direction in Enum.GetValues(typeof(Defines.WordDirection)))
+                        directionsToTest.Add(direction);
+                    directionsToTest.Add(Defines.WordDirection.TopLeftToBottomRight);
+                    directionsToTest.Add(Defines.WordDirection.TopRightToBottomLeft);
+                    directionsToTest.Add(Defines.WordDirection.BottomLeftToTopRight);
+                    directionsToTest.Add(Defines.WordDirection.BottomRightToTopLeft);
+                    foreach (Defines.WordDirection direction in directionsToTest)
                     {
                         // test if word fits
                         word.Direction = direction;
