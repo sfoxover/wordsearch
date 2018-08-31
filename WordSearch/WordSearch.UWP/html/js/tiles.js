@@ -201,6 +201,12 @@ class Tiles {
 
             this.resizeTiles();            
             container.html(table);
+
+            // Signal page is ready
+            var timer = setTimeout(() => {
+                clearTimeout(timer);
+                tiles.signalNativeApp('tilePageReady');
+            }, 1000);
         }
         catch(err) {
             this.handleError(err);

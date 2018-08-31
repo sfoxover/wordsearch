@@ -265,6 +265,10 @@ namespace WordSearch
             {
                 case "ping":
                     break;
+                case "tilePageReady":
+                    ViewModel.IsLoading = false;
+                    FlexScoreHeader.BackgroundColor = Color.LightBlue;
+                    break;
                 case "tileClick":
                     if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
                     {

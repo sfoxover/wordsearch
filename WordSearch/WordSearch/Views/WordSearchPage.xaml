@@ -3,12 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"      
              Title="Super Word Search"
              xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
+             xmlns:Helpers="clr-namespace:WordSearch.Util"
              x:Class="WordSearch.WordSearchPage">
-    <ContentPage.Content>       
-        <StackLayout x:Name="FlexScoreHeader" Orientation="Vertical" BackgroundColor="LightBlue" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <webview:FormsWebView x:Name="webViewHeader" Margin="0" ContentType="LocalFile" Source="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}"/>
-            <webview:FormsWebView x:Name="webViewTiles" Margin="0" ContentType="LocalFile" Source="{Binding WordSearchTilesSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlTilePageHeight}"/>
-            <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}"/>
+    <ContentPage.Content>
+        <StackLayout x:Name="FlexScoreHeader" Orientation="Vertical" BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+            <StackLayout.Resources>
+                <Helpers:NegateBooleanConverter x:Key="inverter"/>
+            </StackLayout.Resources>
+            <ActivityIndicator HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" BackgroundColor="White" Color="Black"/>
+            <webview:FormsWebView IsVisible="{Binding IsLoading, Converter={StaticResource inverter}" x:Name="webViewHeader" Margin="0" ContentType="LocalFile" Source="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}"/>
+            <webview:FormsWebView IsVisible="{Binding IsLoading, Converter={StaticResource inverter}" x:Name="webViewTiles" Margin="0" ContentType="LocalFile" Source="{Binding WordSearchTilesSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlTilePageHeight}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
