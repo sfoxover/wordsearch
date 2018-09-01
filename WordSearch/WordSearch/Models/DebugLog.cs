@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
@@ -9,6 +10,8 @@ namespace WordSearch.Models
     {
         [Key]
         public int Id { get; set; }
+        [JsonProperty]
+        [JsonConverter(typeof(DateFormatConverter), "dd MMMM yyyy h:mm tt")]
         // event created time
         public DateTime CreatedDate { get; set; }
         // log text

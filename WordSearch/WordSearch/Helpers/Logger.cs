@@ -1,5 +1,8 @@
 ﻿using Serilog;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using WordSearch.Models;
 
 namespace WordSearch.Helpers
@@ -17,9 +20,6 @@ namespace WordSearch.Helpers
         public void Debug(string text)
         {
             Log.Debug(Defines.TAG, text);
-#if DEBUG
-            LogToDbAsync(text);
-#endif
             System.Diagnostics.Debug.WriteLine(text);
         }
 
@@ -62,6 +62,45 @@ namespace WordSearch.Helpers
             {
                 Log.Error(Defines.TAG, "LogToDbAsync exception, " + ex.Message);
             }
+        }
+
+        internal bool LoadAllRecords(out List<DebugLog> results)
+        {
+            bool bOK = true;
+            results = new List<DebugLog>();
+            try
+            {
+                using (var db = new DbContextLogs())
+                {
+                    results = db.Logs.OrderByDescending(item => item.CreatedDate).ToList();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"LoadAllRecords exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
+        }
+
+        internal async Task<bool> DeleteAllRecords()
+        {
+            bool bOK = true;
+            try
+            {
+                using (var db = new DbContextLogs())
+                {
+                    foreach (var data in db.Logs)
+                        db.Logs.Remove(data);
+                    await db.SaveChangesAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"DeleteAllRecords exception, {ex.Message}");
+                bOK = false;
+            }
+            return bOK;
         }
     }
 }

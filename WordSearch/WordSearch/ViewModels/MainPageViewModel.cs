@@ -45,6 +45,13 @@ namespace WordSearch.ViewModels
             get { return _highScoresImgPath; }
             set { SetProperty(ref _highScoresImgPath, value); }
         }
+        // Show debug logs
+        private string _logsImgPath;
+        public string LogsImgPath
+        {
+            get { return _logsImgPath; }
+            set { SetProperty(ref _logsImgPath, value); }
+        }
         // Screen width and height
         public double ScreenWidth { get; set; }
         public double ScreenHeight { get; set; }
@@ -54,6 +61,7 @@ namespace WordSearch.ViewModels
         public Command NewMediumGameCommand { get; }
         public Command NewHardGameCommand { get; }
         public Command ShowHighScoresCommand { get; }
+        public Command ShowLogsCommand { get; }
 
         public MainPageViewModel(INavigation navigation)
              : base(navigation)
@@ -62,6 +70,7 @@ namespace WordSearch.ViewModels
             NewMediumGameCommand = new Command(OnNewMediumGameClick);
             NewHardGameCommand = new Command(OnNewHardGameClick);
             ShowHighScoresCommand = new Command(OnShowHighScoresClick);
+            ShowLogsCommand = new Command(ShowLogsClick);
             // main logo image
             string basePath = DependencyService.Get<IDependencyHelper>().GetResourceImagesPath();
             LogoPath = basePath + "mainlogo.png";
@@ -69,7 +78,8 @@ namespace WordSearch.ViewModels
             EasyGameImgPath = basePath + "baby.png";
             MediumGameImgPath = basePath + "manwalk.png";
             HardGameImgPath = basePath + "mansuitcasefast.png";
-            HighScoresImgPath = basePath + "leaderboard.png";
+            HighScoresImgPath = basePath + "leaderboard.png"; 
+            LogsImgPath = basePath + "qr.png";
             ScreenWidth = 0;
             ScreenHeight = 0;
         }
@@ -91,7 +101,12 @@ namespace WordSearch.ViewModels
 
         public async void OnShowHighScoresClick()
         {
-            await Navigation.PushAsync(new HighScoresPage());
+            await Navigation.PushAsync(new HighScoresPage(ScreenWidth, ScreenHeight));
+        }
+
+        public async void ShowLogsClick()
+        {
+            await Navigation.PushAsync(new LogFilesPage(ScreenWidth, ScreenHeight));
         }
     }
 }

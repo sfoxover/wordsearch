@@ -57,14 +57,19 @@ namespace WordSearch.Droid.Helpers
                     }
                 }
                 if (File.Exists(filePath))
+                {
                     return new Tuple<bool, string>(true, "");
+                }
                 else
+                {
                     error = $"CheckWordsDBFileExists failed to copy file {filename}";
+                    Logger.Instance.Error(error);
+                }
             }
             catch (Exception ex)
             {
                 error = $"CheckWordsDBFileExists exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error(error);
             }
             return new Tuple<bool, string>(false, error);
         }

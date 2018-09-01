@@ -15,18 +15,18 @@ namespace WordSearch.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class HighScoresPage : ContentPage
     {
-        // resize counter to avoid flicker
-        int PageSizedCounter { get; set; }
         // get access to ViewModel
         private HighScoresPageViewModel ViewModel
         {
             get { return BindingContext as HighScoresPageViewModel; }
         }
 
-        public HighScoresPage()
+        public HighScoresPage(double width, double height)
         {
             InitializeComponent();
             BindingContext = new HighScoresPageViewModel(Navigation, webViewHighScores);
+            ViewModel.HtmlPageWidth = width;
+            ViewModel.HtmlPageHeight = height;
             webViewHighScores.AddLocalCallback("scoresJSCallback", ScoresJSCallback);
             ViewModel.LoadHighScoreData();
         }
@@ -51,20 +51,13 @@ namespace WordSearch.Views
                 case "Error":
                     if (msg.Data != null)
                     {
-                        Debug.WriteLine(msg.Data.ToString());
+                        Logger.Instance.Error(msg.Data.ToString());
                     }
                     break;
                 default:
                     Debug.Assert(false, $"ScoresJSCallback unexpected message {message}");
                     break;
             }
-        }
-
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height); // must be called
-            ViewModel.HtmlPageWidth = width;
-            ViewModel.HtmlPageHeight = height;
         }
     }
 }

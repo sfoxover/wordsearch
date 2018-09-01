@@ -21,8 +21,6 @@ namespace WordSearch
         // rows and columns
         int Rows { get; set; }
         int Columns { get; set; }
-        // Ready tile state
-        private volatile bool HasCaculatedTiles = false;
         // Flag to only start timer 1 time
         private bool HasStartedHardModeTimer { get; set; }
         // Screen width and height
@@ -245,7 +243,7 @@ namespace WordSearch
                     case "Error":
                         if (msg.Data != null)
                         {
-                            Debug.WriteLine(msg.Data.ToString());
+                            Logger.Instance.Error(msg.Data.ToString());
                         }
                         break;
                     case "LoadWordsHeader":
@@ -295,7 +293,7 @@ namespace WordSearch
                     case "Error":
                         if (msg.Data != null)
                         {
-                            Debug.WriteLine(msg.Data.ToString());
+                            Logger.Instance.Error(msg.Data.ToString());
                         }
                         break;
                     default:

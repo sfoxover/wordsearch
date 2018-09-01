@@ -8,26 +8,27 @@
             xmlns:viewModels="clr-namespace:WordSearch.ViewModels"
             xmlns:button="clr-namespace:ButtonCircle.FormsPlugin.Abstractions;assembly=ButtonCircle.FormsPlugin.Abstractions"
             xmlns:theme="clr-namespace:WordSearch.Assets;assembly=WordSearch">
-    
-  <ContentPage.Resources>
-    <ResourceDictionary MergedWith="theme:MyStyles" />
-  </ContentPage.Resources>
-  
-  <StackLayout Orientation="Vertical">
-      
-    <Image Source="{Binding LogoPath}" HeightRequest="300"/>
-      
-    <Label Text="Click below to start a new game" HorizontalOptions="Center"/>
-      
-    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-      <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewEasyGameCommand}" Text="Easy" Image="{Binding EasyGameImgPath}"/>
-      <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewMediumGameCommand}" Text="Medium" Image="{Binding MediumGameImgPath}"/>
-      <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewHardGameCommand}" Text="Hard" Image="{Binding HardGameImgPath}"/>
-    </StackLayout>
 
-    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
-        <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding ShowHighScoresCommand}" Text="High scores" Image="{Binding HighScoresImgPath}"/>
-    </StackLayout>
+    <ContentPage.Resources>
+        <ResourceDictionary MergedWith="theme:MyStyles" />
+    </ContentPage.Resources>
+
+    <StackLayout Orientation="Vertical">
+
+        <Image Source="{Binding LogoPath}" HeightRequest="300"/>
+
+        <Label Text="Click below to start a new game" HorizontalOptions="Center"/>
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewEasyGameCommand}" Text="Easy" Image="{Binding EasyGameImgPath}"/>
+            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewMediumGameCommand}" Text="Medium" Image="{Binding MediumGameImgPath}"/>
+            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding NewHardGameCommand}" Text="Hard" Image="{Binding HardGameImgPath}"/>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding ShowHighScoresCommand}" Text="High scores" Image="{Binding HighScoresImgPath}"/>
+            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding ShowLogsCommand}" Text="Debug logs" Image="{Binding LogsImgPath}"/>
+        </StackLayout>
 
     </StackLayout>
 
