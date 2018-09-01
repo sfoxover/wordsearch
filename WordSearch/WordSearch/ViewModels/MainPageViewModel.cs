@@ -45,6 +45,9 @@ namespace WordSearch.ViewModels
             get { return _highScoresImgPath; }
             set { SetProperty(ref _highScoresImgPath, value); }
         }
+        // Screen width and height
+        public double ScreenWidth { get; set; }
+        public double ScreenHeight { get; set; }
 
         // new game command click
         public Command NewEasyGameCommand { get; }
@@ -67,21 +70,23 @@ namespace WordSearch.ViewModels
             MediumGameImgPath = basePath + "manwalk.png";
             HardGameImgPath = basePath + "mansuitcasefast.png";
             HighScoresImgPath = basePath + "leaderboard.png";
+            ScreenWidth = 0;
+            ScreenHeight = 0;
         }
 
         public async void OnNewEasyGameClick()
         {
-            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.easy));
+            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.easy, ScreenWidth, ScreenHeight));
         }
 
         public async void OnNewMediumGameClick()
         {
-            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.medium));
+            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.medium, ScreenWidth, ScreenHeight));
         }
 
         public async void OnNewHardGameClick()
         {
-            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.hard));
+            await Navigation.PushAsync(new WordSearchPage(Defines.GameDifficulty.hard, ScreenWidth, ScreenHeight));
         }
 
         public async void OnShowHighScoresClick()

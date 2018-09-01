@@ -20,5 +20,12 @@ namespace WordSearch.Views
             // Verify words db exists
             DependencyService.Get<IDependencyHelper>().CheckWordsDBFileExists("words.db3");
         }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height); // must be called
+            ViewModel.ScreenWidth = width;
+            ViewModel.ScreenHeight = height;
+        }
     }
 }

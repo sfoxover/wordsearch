@@ -12,5 +12,7 @@ namespace WordSearch
         public enum GameDifficulty { easy, medium, hard };
         // word direction enum
         public enum WordDirection { LeftToRight, TopToBottom, RightToLeft, BottomToTop, TopLeftToBottomRight, TopRightToBottomLeft, BottomLeftToTopRight, BottomRightToTopLeft };
+        // Header html page height
+        public const int HEADER_HTML_HEIGHT = 100;
     }
 }

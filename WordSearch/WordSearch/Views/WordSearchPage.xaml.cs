@@ -21,81 +21,65 @@ namespace WordSearch
         // rows and columns
         int Rows { get; set; }
         int Columns { get; set; }
-        private bool HasCaculatedTiles { get; set; }
+        // Ready tile state
+        private volatile bool HasCaculatedTiles = false;
         // Flag to only start timer 1 time
         private bool HasStartedHardModeTimer { get; set; }
+        // Screen width and height
+        public double ScreenWidth { get; set; }
+        public double ScreenHeight { get; set; }
+        public double TilesScreenHeight { get; set; }
+
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
         {
             get { return BindingContext as WordSearchPageViewModel; }
         }
 
-        public WordSearchPage()
+        public WordSearchPage(Defines.GameDifficulty level, double width, double height)
         {
-            HasCaculatedTiles = false;
-            HasStartedHardModeTimer = false;
-            Rows = 0;
-            Columns = 0;
             InitializeComponent();
-            Manager = new WordManager();
-            BindingContext = new WordSearchPageViewModel(Navigation, 300, 20, webViewHeader, webViewTiles);
-            webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
-            webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
-            Initalize();
-        }
-
-        public WordSearchPage(Defines.GameDifficulty level)
-        {
-            HasCaculatedTiles = false;
             Rows = 0;
             Columns = 0;
+            // Create word manager
             Manager = new WordManager();
             Manager.DifficultyLevel = level;
+            // set up WordManager delegate events                 
+            Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
+            Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
+            // Databinding
             int secondsRemaining = Manager.GetStartSecondsRemaining();
             int points = Manager.GetPointsPerLetter();
-            InitializeComponent();
             BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader, webViewTiles);
+            // Html callbacks
             webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
             webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
-            Initalize();
+            Initalize(width, height);
         }
 
-        protected override void OnSizeAllocated(double width, double height)
-        {
-            base.OnSizeAllocated(width, height); // must be called
-            // use size counter to avoid resize flicker
-            PageSizedCounter++;
-            Device.StartTimer(new TimeSpan(0, 0, 0, 0, 50), () =>
-            {
-                PageSizedCounter--;
-                if (PageSizedCounter == 0 && height > 0)
-                {
-                    ViewModel.HtmlPageWidth = width;
-                    ViewModel.HtmlHeaderPageHeight = 100;
-                    double wordHeight = height - 100;
-                    ViewModel.HtmlTilePageHeight = wordHeight;
-                    // calculate tile row and column count
-                    if (!HasCaculatedTiles)
-                    {
-                        HasCaculatedTiles = CalculateTiles(width, wordHeight);
-                    }
-                }
-                return false;
-            });
-        }
-
-        // set up callbacks
-        private bool Initalize()
+        // Initialize tiles
+        private bool Initalize(double width, double height)
         {
             bool bOK = true;
             try
             {                
-                // set up WordManager delegate events                 
-                Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
-                Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
+                // Set sizes
+                ScreenWidth = width;
+                ScreenHeight = height;
+                TilesScreenHeight = height - Defines.HEADER_HTML_HEIGHT;
+                ViewModel.HtmlPageWidth = width;
+                ViewModel.HtmlHeaderPageHeight = 100;
+                double wordHeight = height - 100;
+                ViewModel.HtmlTilePageHeight = wordHeight;
+                Task.Run(() =>
+                {
+                    CalculateTiles();
+                    LoadWordsTiles();
+                    LoadWordsHeader();
+                });
                 // xamarin essentials screen lock
-               // if (!ScreenLock.IsActive)
-                 //   ScreenLock.RequestActive();
+                // if (!ScreenLock.IsActive)
+                //   ScreenLock.RequestActive();
             }
             catch (Exception ex)
             {
@@ -106,16 +90,18 @@ namespace WordSearch
         }       
 
         // calculate for portrait mode orientation
-        private bool CalculateTiles(double width, double height)
+        private bool CalculateTiles()
         {
             bool bOK = true;
             try
             {
-                if (height <= 0)
+                if (TilesScreenHeight <= 0)
                     return false;
                 // work out tile width and height and count based on orientation and difficulty level selected
-                bOK = CalculateTileWidthHeight(width, height, out int tileWidth, out int tileHeight);
+                bOK = CalculateTileWidthHeight(out int tileWidth, out int tileHeight);
                 Debug.Assert(bOK);
+                Rows = (int)(ScreenWidth / tileWidth);
+                Columns = (int)(TilesScreenHeight / tileHeight);
                 // add titles on UI thread
                 var viewModels = new TileControlViewModel[Rows, Columns];
                 for (int column = 0; column < Columns; column++)
@@ -133,10 +119,7 @@ namespace WordSearch
                 // initialize word array
                 int maxWordLength = Rows > Columns ? Rows : Columns;
                 bOK = Manager.InitializeWordList(maxWordLength, viewModels);
-                Debug.Assert(bOK);
-                // send tiles to html page   
-                ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
-                LoadWordsHeader();
+                Debug.Assert(bOK);              
             }
             catch (Exception ex)
             {
@@ -147,22 +130,20 @@ namespace WordSearch
         }
 
         // work out tile width and height and count based on orientation and difficulty level selected
-        private bool CalculateTileWidthHeight(double width, double height, out int tileWidth, out int tileHeight)
+        private bool CalculateTileWidthHeight(out int tileWidth, out int tileHeight)
         {
             bool bOK = true;
             tileWidth = 0;
             tileHeight = 0;
             try
             {
-                if (height <= 0)
+                if (TilesScreenHeight <= 0)
                     return false;
                 int tiles = Manager.GetMinRequiredTiles();
-                tileWidth = (int)(width / tiles);
-                tileHeight = (int)(height / tiles);
+                tileWidth = (int)(ScreenWidth / tiles);
+                tileHeight = (int)(TilesScreenHeight / tiles);
                 // use min of height or width to ensure min tiles required
-                tileWidth = tileHeight = Math.Min(tileWidth, tileHeight);
-                Rows = (int)(width / tileWidth);
-                Columns = (int)(height / tileHeight);
+                tileWidth = tileHeight = Math.Min(tileWidth, tileHeight);                
             }
             catch (Exception ex)
             {
@@ -172,18 +153,37 @@ namespace WordSearch
             return bOK;
         }
 
+        // Send tiles array to html page
+        public void LoadWordsTiles()
+        {
+            try
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
+                });
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("LoadWordsTiles exception, " + ex.Message);
+            }
+        }
+
         // load words in header and highlight completed words
         public void LoadWordsHeader()
         {
-            // Randomly hide words in hard level
-            if (Manager.DifficultyLevel == Defines.GameDifficulty.hard && !HasStartedHardModeTimer)
+            Device.BeginInvokeOnMainThread(() =>
             {
-                HasStartedHardModeTimer = true;
-                LoadHiddenHardModeHeader();
-            }
-            Manager.GetWordsList(out List<Word> words);
-            if(words != null && words.Count > 0)
-                ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", words);
+                // Randomly hide words in hard level
+                if (Manager.DifficultyLevel == Defines.GameDifficulty.hard && !HasStartedHardModeTimer)
+                {
+                    HasStartedHardModeTimer = true;
+                    LoadHiddenHardModeHeader();
+                }
+                Manager.GetWordsList(out List<Word> words);
+                if (words != null && words.Count > 0)
+                    ViewModel.SignalHeaderHtmlPage("LoadWordsHeader", words);
+            });
         }
 
         // Selected random visable word for hard mode
