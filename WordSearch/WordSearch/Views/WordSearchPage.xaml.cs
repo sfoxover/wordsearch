@@ -41,28 +41,28 @@ namespace WordSearch
             InitializeComponent();
             Rows = 0;
             Columns = 0;
-            // Create word manager
-            Manager = new WordManager();
-            Manager.DifficultyLevel = level;
-            // set up WordManager delegate events                 
-            Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
-            Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
-            // Databinding
-            int secondsRemaining = Manager.GetStartSecondsRemaining();
-            int points = Manager.GetPointsPerLetter();
-            BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader, webViewTiles);
-            // Html callbacks
-            webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
-            webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
-            Initalize(width, height);
+            InitalizeHeaderAndTiles(level, width, height);
         }
 
         // Initialize tiles
-        private bool Initalize(double width, double height)
+        private bool InitalizeHeaderAndTiles(Defines.GameDifficulty level, double width, double height)
         {
             bool bOK = true;
             try
-            {                
+            {
+                // Create word manager
+                Manager = new WordManager();
+                Manager.DifficultyLevel = level;
+                // set up WordManager delegate events                 
+                Manager.GameCompletedCallback += OnGameCompletedCallbackAsync;
+                Manager.WordCompletedCallback += OnWordCompletedCallbackAsync;
+                // Databinding
+                int secondsRemaining = Manager.GetStartSecondsRemaining();
+                int points = Manager.GetPointsPerLetter();
+                BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader, webViewTiles);
+                // Html callbacks
+                webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
+                webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
                 // Set sizes
                 ScreenWidth = width;
                 ScreenHeight = height;
@@ -83,7 +83,7 @@ namespace WordSearch
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Initalize exception, " + ex.Message);
+                Debug.WriteLine("InitalizeHeaderAndTiles exception, " + ex.Message);
                 bOK = false;
             }
             return bOK;
