@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
+using WordSearch.Helpers;
 using WordSearch.Models;
 using Xam.Plugin.WebView.Abstractions;
 using Xamarin.Forms;
@@ -67,7 +68,7 @@ namespace WordSearch.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"SignalHtmlPage exception, {ex.Message}");
+                Logger.Instance.Error($"SignalHtmlPage exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;

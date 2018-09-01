@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using WordSearch.Models;
 
-namespace WordSearch.Util
+namespace WordSearch.Helpers
 {
     public class WordDatabase
     {
@@ -28,8 +28,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"LoadWordsDB exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"LoadWordsDB exception, {ex.Message}");
             }
             return bOK;
         }
@@ -57,8 +56,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"GetNextRandomWord exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"GetNextRandomWord exception, {ex.Message}");
             }
             return bOK;
         }

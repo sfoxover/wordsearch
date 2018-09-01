@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using Windows.Storage;
-using WordSearch.Util;
-using WordSearch.UWP.Util;
+using WordSearch.Helpers;
+using WordSearch.UWP.Helpers;
 
 [assembly: Xamarin.Forms.Dependency(typeof(DependencyHelper))]
-namespace WordSearch.UWP.Util
+namespace WordSearch.UWP.Helpers
 {
     public class DependencyHelper : IDependencyHelper
     {

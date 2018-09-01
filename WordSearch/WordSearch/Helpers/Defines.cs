@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WordSearch
+namespace WordSearch.Helpers
 {
     public class Defines
     {
+        public static string TAG = "Super Word Search";
         // maximum attempts to find a random value that fits constraints 
         public const int MAX_RANDOM_TRIES = 100;
         // game difficulty enum

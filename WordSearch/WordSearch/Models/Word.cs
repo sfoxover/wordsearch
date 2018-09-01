@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics;
-using System.Text;
+using WordSearch.Helpers;
 using Xamarin.Forms;
 using System.Linq;
 
@@ -92,8 +92,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                var error = $"WordFits exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"WordFits exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -118,8 +117,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                var error = $"CalculateTilePositions exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"CalculateTilePositions exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -192,8 +190,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                var error = $"HasCollision exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"HasCollision exception, {ex.Message}");
                 return true;
             }
             return false;
@@ -217,7 +214,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"LoadRecords exception {ex.Message}");
+                Logger.Instance.Error($"LoadRecords exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;

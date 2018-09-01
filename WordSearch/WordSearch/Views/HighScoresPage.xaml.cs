@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WordSearch.Models;
-using WordSearch.Util;
+using WordSearch.Helpers;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;

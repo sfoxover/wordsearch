@@ -6,7 +6,7 @@ using WordSearch.Models;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 
-namespace WordSearch.Util
+namespace WordSearch.Helpers
 {
     public class WordManager
     {
@@ -33,7 +33,7 @@ namespace WordSearch.Util
         private List<Word> Words { get; set; }
         private static object WordsLock = new object();
         // word list array
-        public TileControlViewModel[,] TileViewModels { get; set; }
+        public Tile[,] TileViewModels { get; set; }
         // delegate callback to update header text
         public delegate void WordCompletedDelegate(Word word);
         public event WordCompletedDelegate WordCompletedCallback;
@@ -43,7 +43,7 @@ namespace WordSearch.Util
        
 
         // previous clicked title that is not part of word
-        private TileControlViewModel LastFailedTileClicked { get; set; }
+        private Tile LastFailedTileClicked { get; set; }
 
         public WordManager()
         {
@@ -56,7 +56,7 @@ namespace WordSearch.Util
         }
 
         // create new word tile multi dimentional array
-        public bool InitializeWordList(int maxWordLength, TileControlViewModel[,] viewModels)
+        public bool InitializeWordList(int maxWordLength, Tile[,] viewModels)
         {
             bool bOK = true;
             try
@@ -69,8 +69,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"InitializeWordList exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"InitializeWordList exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -134,8 +133,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"PlaceWordsInTiles exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"PlaceWordsInTiles exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -164,8 +162,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"RefreshWordTileStates exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"RefreshWordTileStates exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -230,8 +227,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"SelectRandomPose exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"SelectRandomPose exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -247,18 +243,17 @@ namespace WordSearch.Util
         }
 
         // get tile from array
-        public bool GetTileAt(int row, int column, out TileControlViewModel tile)
+        public bool GetTileAt(int row, int column, out Tile tile)
         {
             bool bOK = true;
             tile = null;
             try
             {
-                tile = TileViewModels.GetValue(row, column) as TileControlViewModel;
+                tile = TileViewModels.GetValue(row, column) as Tile;
             }
             catch (Exception ex)
             {
-                var error = $"GetTileAt exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"GetTileAt exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -287,19 +282,27 @@ namespace WordSearch.Util
         // get text start and end position for header highlight
         internal object GetTextPos(Word word)
         {
-            int count = GetLevelWordCount();
-            int percentage = 100 / count;
-            int wordPos = -1;
-            lock (WordsLock)
+            try
             {
-                wordPos = Words.IndexOf(word);
+                int count = GetLevelWordCount();
+                int percentage = 100 / count;
+                int wordPos = -1;
+                lock (WordsLock)
+                {
+                    wordPos = Words.IndexOf(word);
+                }
+                int startPos = wordPos * percentage;
+                if (wordPos > 8)
+                    startPos = (wordPos - 8) * percentage;
+                int endPos = percentage;
+                var textPos = new { Word = word.Text, Start = startPos, End = endPos, WordPos = wordPos, WordTotal = count };
+                return textPos;
             }
-            int startPos = wordPos * percentage; 
-            if(wordPos > 8)
-                startPos = (wordPos - 8) * percentage;
-            int endPos = percentage;
-            var textPos = new { Word = word.Text, Start = startPos, End = endPos, WordPos = wordPos, WordTotal = count };
-            return textPos;
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"GetTextPos exception, {ex.Message}");
+            }
+            return null;
         }
 
         // get number of words to find based on difficulty
@@ -380,7 +383,7 @@ namespace WordSearch.Util
                     row = (int)json["TileRow"];
                 if (json.SelectToken("TileColumn", false) != null)
                     column = (int)json["TileColumn"];
-                bOK = GetTileAt(row, column, out TileControlViewModel tile);
+                bOK = GetTileAt(row, column, out Tile tile);
                 Debug.Assert(bOK);
                 if (!bOK)
                     return false;
@@ -439,8 +442,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"CheckForSelectedWord exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"CheckForSelectedWord exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -466,8 +468,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"CheckForCompletedWord exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"CheckForCompletedWord exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -488,8 +489,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"MarkTilesAsWordCompleted exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"MarkTilesAsWordCompleted exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -516,8 +516,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"CheckForAllWordsSelected exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"CheckForAllWordsSelected exception, {ex.Message}");
                 bOK = false;
                 allSelected = false;
             }
@@ -539,8 +538,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"ShowAllHardLevelWords exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"ShowAllHardLevelWords exception, {ex.Message}");
             }
         }
 
@@ -579,8 +577,7 @@ namespace WordSearch.Util
             }
             catch (Exception ex)
             {
-                var error = $"HideHardLevelWords exception, {ex.Message}";
-                Debug.WriteLine(error);
+                Logger.Instance.Error($"HideHardLevelWords exception, {ex.Message}");
             }
         }
     }

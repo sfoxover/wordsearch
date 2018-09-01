@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using WordSearch.Models;
-using WordSearch.Util;
+using WordSearch.Helpers;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -83,7 +83,7 @@ namespace WordSearch
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("InitalizeHeaderAndTiles exception, " + ex.Message);
+                Logger.Instance.Error($"InitalizeHeaderAndTiles exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -103,14 +103,14 @@ namespace WordSearch
                 Rows = (int)(ScreenWidth / tileWidth);
                 Columns = (int)(TilesScreenHeight / tileHeight);
                 // add titles on UI thread
-                var viewModels = new TileControlViewModel[Rows, Columns];
+                var viewModels = new Tile[Rows, Columns];
                 for (int column = 0; column < Columns; column++)
                 {
                     for (int row = 0; row < Rows; row++)
                     {
                         // create tile view model
-                        TileControlViewModel viewModel = new TileControlViewModel(Navigation);
-                        viewModel.Letter = $"{TileControlViewModel.GetRandomLetter()}";
+                        Tile viewModel = new Tile();
+                        viewModel.Letter = $"{Tile.GetRandomLetter()}";
                         viewModel.TileRow = row;
                         viewModel.TileColumn = column;
                         viewModels.SetValue(viewModel, row, column);
@@ -123,7 +123,7 @@ namespace WordSearch
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("CalculateTiles exception, " + ex.Message);
+                Logger.Instance.Error($"CalculateTiles exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -147,7 +147,7 @@ namespace WordSearch
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("CalculateTileWidthHeight exception, " + ex.Message);
+                Logger.Instance.Error($"CalculateTileWidthHeight exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -165,7 +165,7 @@ namespace WordSearch
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("LoadWordsTiles exception, " + ex.Message);
+                Logger.Instance.Error($"LoadWordsTiles exception, {ex.Message}");
             }
         }
 
@@ -233,65 +233,79 @@ namespace WordSearch
         // callback from JS header html page
         void HeaderJSCallback(string message)
         {
-            ViewModel.HasHeaderPageSignalled = true;
-            MessageJson msg = new MessageJson(message);
-            switch(msg.Message)
+            try
             {
-                case "LogMsg":
-                    Debug.WriteLine(msg.Data.ToString());
-                    break;
-                case "Error":
-                    if (msg.Data != null)
-                    {
+                ViewModel.HasHeaderPageSignalled = true;
+                MessageJson msg = new MessageJson(message);
+                switch (msg.Message)
+                {
+                    case "LogMsg":
                         Debug.WriteLine(msg.Data.ToString());
-                    }
-                    break;
-                case "LoadWordsHeader":
-                    LoadWordsHeader();
-                    break;
-                default:
-                    Debug.Assert(false, $"HeaderJSCallback unexpected message {message}");
-                    break;
+                        break;
+                    case "Error":
+                        if (msg.Data != null)
+                        {
+                            Debug.WriteLine(msg.Data.ToString());
+                        }
+                        break;
+                    case "LoadWordsHeader":
+                        LoadWordsHeader();
+                        break;
+                    default:
+                        Debug.Assert(false, $"HeaderJSCallback unexpected message {message}");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HeaderJSCallback exception, {ex.Message}");
             }
         }
 
         // callback from JS body html page
         void TilesJSCallback(string message)
         {
-            ViewModel.HasTilesPageSignalled = true;
-            System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
-            MessageJson msg = new MessageJson(message);
-            switch (msg.Message)
+            try
             {
-                case "ping":
-                    break;
-                case "tilePageReady":
-                    ViewModel.IsLoading = false;
-                    FlexScoreHeader.BackgroundColor = Color.LightBlue;
-                    break;
-                case "tileClick":
-                    if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
-                    {
-                        Manager.CheckForSelectedWord(msg.Data as JObject);
-                        // reload tiles
-                        ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
-                    }
-                    break;
-                case "hightscoreName":
-                    SaveHighScore(msg.Data.ToString());
-                    break;
-                case "LogMsg":
-                    Debug.WriteLine(msg.Data.ToString());
-                    break;
-                case "Error":
-                    if (msg.Data != null)
-                    {
+                ViewModel.HasTilesPageSignalled = true;
+                System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
+                MessageJson msg = new MessageJson(message);
+                switch (msg.Message)
+                {
+                    case "ping":
+                        break;
+                    case "tilePageReady":
+                        ViewModel.IsLoading = false;
+                        FlexScoreHeader.BackgroundColor = Color.LightBlue;
+                        break;
+                    case "tileClick":
+                        if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
+                        {
+                            Manager.CheckForSelectedWord(msg.Data as JObject);
+                            // reload tiles
+                            ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
+                        }
+                        break;
+                    case "hightscoreName":
+                        SaveHighScore(msg.Data.ToString());
+                        break;
+                    case "LogMsg":
                         Debug.WriteLine(msg.Data.ToString());
-                    }
-                    break;             
-                default:
-                    Debug.Assert(false, $"TilesJSCallback unexpected message {message}");
-                    break;
+                        break;
+                    case "Error":
+                        if (msg.Data != null)
+                        {
+                            Debug.WriteLine(msg.Data.ToString());
+                        }
+                        break;
+                    default:
+                        Debug.Assert(false, $"TilesJSCallback unexpected message {message}");
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"TilesJSCallback exception, {ex.Message}");
             }
         }
 
@@ -308,7 +322,7 @@ namespace WordSearch
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("SaveHighScore exception, " + ex.Message);
+                Logger.Instance.Error($"SaveHighScore exception, {ex.Message}");
             }
         }
     }

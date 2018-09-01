@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using WordSearch.Util;
+using WordSearch.Helpers;
 using Xamarin.Forms;
 
 namespace WordSearch.Models

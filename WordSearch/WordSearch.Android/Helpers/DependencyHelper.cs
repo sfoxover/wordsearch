@@ -1,13 +1,13 @@
 ﻿using System;
-using WordSearch.Util;
-using WordSearch.Droid.Util;
+using WordSearch.Droid.Helpers;
 using System.IO;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using Android.Content;
+using WordSearch.Helpers;
 
 [assembly: Xamarin.Forms.Dependency(typeof(DependencyHelper))]
-namespace WordSearch.Droid.Util
+namespace WordSearch.Droid.Helpers
 {
     public class DependencyHelper : IDependencyHelper
     {

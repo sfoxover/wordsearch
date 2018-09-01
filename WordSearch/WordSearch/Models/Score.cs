@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WordSearch.Util;
+using WordSearch.Helpers;
 using WordSearch.ViewModels;
 
 namespace WordSearch.Models
@@ -61,7 +61,7 @@ namespace WordSearch.Models
             }
             catch(Exception ex)
             {
-                Debug.WriteLine($"SaveRecord exception {ex.Message}");
+                Logger.Instance.Error($"SaveRecord exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -82,7 +82,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"LoadAllRecords exception {ex.Message}");
+                Logger.Instance.Error($"LoadAllRecords exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -103,7 +103,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"DeleteAllRecords exception {ex.Message}");
+                Logger.Instance.Error($"DeleteAllRecords exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -125,7 +125,7 @@ namespace WordSearch.Models
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"GetScoreRank exception {ex.Message}");
+                Logger.Instance.Error($"GetScoreRank exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;

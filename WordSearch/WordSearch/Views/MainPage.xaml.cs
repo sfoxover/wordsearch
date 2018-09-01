@@ -1,4 +1,6 @@
-﻿using WordSearch.Util;
+﻿using Serilog;
+using System;
+using WordSearch.Helpers;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -17,15 +19,34 @@ namespace WordSearch.Views
         {
             InitializeComponent();
             BindingContext = new MainPageViewModel(Navigation);
-            // Verify words db exists
-            DependencyService.Get<IDependencyHelper>().CheckWordsDBFileExists("words.db3");
+            CheckWordsDB();
+        }
+
+        public void CheckWordsDB()
+        {
+            try
+            {
+                // Verify words db exists
+                DependencyService.Get<IDependencyHelper>().CheckWordsDBFileExists("words.db3");
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"CheckWordsDB exception, {ex.Message}");
+            }
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
-            base.OnSizeAllocated(width, height); // must be called
-            ViewModel.ScreenWidth = width;
-            ViewModel.ScreenHeight = height;
+            try
+            {
+                base.OnSizeAllocated(width, height); // must be called
+                ViewModel.ScreenWidth = width;
+                ViewModel.ScreenHeight = height;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"OnSizeAllocated exception, {ex.Message}");
+            }
         }
     }
 }

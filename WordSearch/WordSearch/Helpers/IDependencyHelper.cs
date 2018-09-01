@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WordSearch.Util
+namespace WordSearch.Helpers
 {
     public interface IDependencyHelper
     {

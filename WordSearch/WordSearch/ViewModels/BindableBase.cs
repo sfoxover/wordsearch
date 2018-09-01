@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using WordSearch.Helpers;
 using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
@@ -68,7 +69,7 @@ namespace WordSearch.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"CloseWindow exception {ex.Message}");
+                Logger.Instance.Error($"CloseWindow exception, {ex.Message}");
             }
         }
     }

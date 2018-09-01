@@ -4,6 +4,7 @@ using WordSearch.Models;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using Xam.Plugin.WebView.Abstractions;
+using WordSearch.Helpers;
 
 namespace WordSearch.ViewModels
 {
@@ -125,7 +126,7 @@ namespace WordSearch.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"StartGameTimer exception, {ex.Message}");
+                Logger.Instance.Error($"StartGameTimer exception, {ex.Message}");
             }
         }
 
@@ -143,7 +144,7 @@ namespace WordSearch.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"UpdateScore exception, {ex.Message}");
+                Logger.Instance.Error($"UpdateScore exception, {ex.Message}");
             }
         }
 
@@ -170,7 +171,7 @@ namespace WordSearch.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"SignalHeaderHtmlPage exception, {ex.Message}");
+                Logger.Instance.Error($"SignalHeaderHtmlPage exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;
@@ -199,7 +200,7 @@ namespace WordSearch.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"SignalTilesHtmlPage exception, {ex.Message}");
+                Logger.Instance.Error($"SignalTilesHtmlPage exception, {ex.Message}");
                 bOK = false;
             }
             return bOK;

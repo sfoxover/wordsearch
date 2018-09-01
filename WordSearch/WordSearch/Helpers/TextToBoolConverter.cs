@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using Xamarin.Forms;
 
-namespace WordSearch.Util
+namespace WordSearch.Helpers
 {
     class TextToBoolConverter : IValueConverter
     {

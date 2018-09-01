@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"      
              Title="Super Word Search"
              xmlns:webview="clr-namespace:Xam.Plugin.WebView.Abstractions;assembly=Xam.Plugin.WebView.Abstractions"
-             xmlns:Helpers="clr-namespace:WordSearch.Util"
+             xmlns:Helpers="clr-namespace:WordSearch.Helpers"
              x:Class="WordSearch.WordSearchPage">
     <ContentPage.Content>
         <StackLayout x:Name="FlexScoreHeader" Orientation="Vertical" BackgroundColor="White" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
