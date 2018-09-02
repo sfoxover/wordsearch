@@ -4,6 +4,13 @@ $(document).ready(function () {
 
     // handle high score save click
     $('#saveHighScoreButton').click(() => tiles.saveHighScoreClick());
+
+    $('#highScoreModal').on('keypress', function (e) {
+        if (e.keyCode === 13) {
+            e.preventDefault();
+            tiles.saveHighScoreClick();
+        }
+    });
 });
 
 $(window).resize(function () {
