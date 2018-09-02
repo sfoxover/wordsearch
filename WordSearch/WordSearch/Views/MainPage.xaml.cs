@@ -28,9 +28,9 @@ namespace WordSearch.Views
             {
                 // Verify words db exists
                 DependencyService.Get<IDependencyHelper>().CheckWordsDBFileExists("words.db3");
-
-                for (int n = 0; n < 300; n++)
-                    Logger.Instance.Error($"Error test {n}");
+                // Test window scrolling
+                //for (int n = 0; n < 300; n++)
+                  //  Logger.Instance.Error($"Error test {n}");
 
             }
             catch (Exception ex)
