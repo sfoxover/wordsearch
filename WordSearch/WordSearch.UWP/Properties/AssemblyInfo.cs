@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WordSearch.UWP")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Super Word Search")]
+[assembly: AssemblyDescription("Super fun word puzzle with easy, medium and super hard levels.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WordSearch.UWP")]
-[assembly: AssemblyCopyright("Copyright ©  2015")]
+[assembly: AssemblyCompany("Steve's Software Factory")]
+[assembly: AssemblyProduct("Super Word Search")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
