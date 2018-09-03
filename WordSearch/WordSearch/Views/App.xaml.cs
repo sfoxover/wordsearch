@@ -2,6 +2,9 @@
 using Xamarin.Forms.Xaml;
 using WordSearch.Views;
 using System;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 [assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace WordSearch
@@ -16,7 +19,7 @@ namespace WordSearch
        
         protected override void OnStart()
         {
-            // Handle when your app starts
+            AppCenter.Start("android=a65979bc-328c-45c3-a3c8-1d7f8fd12a13;", typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()

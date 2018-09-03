@@ -2595,7 +2595,6 @@ verify
 globe
 trusted
 copper
-dicke
 kerry
 receipt
 supposed
@@ -3635,7 +3634,6 @@ cyber
 verizon
 scored
 clone
-dicks
 velocity
 lambda
 relay
