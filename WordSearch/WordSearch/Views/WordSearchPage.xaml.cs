@@ -233,26 +233,29 @@ namespace WordSearch
         {
             try
             {
-                ViewModel.HasHeaderPageSignalled = true;
-                MessageJson msg = new MessageJson(message);
-                switch (msg.Message)
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    case "LogMsg":
-                        Debug.WriteLine(msg.Data.ToString());
-                        break;
-                    case "Error":
-                        if (msg.Data != null)
-                        {
-                            Logger.Instance.Error(msg.Data.ToString());
-                        }
-                        break;
-                    case "LoadWordsHeader":
-                        LoadWordsHeader();
-                        break;
-                    default:
-                        Debug.Assert(false, $"HeaderJSCallback unexpected message {message}");
-                        break;
-                }
+                    ViewModel.HasHeaderPageSignalled = true;
+                    MessageJson msg = new MessageJson(message);
+                    switch (msg.Message)
+                    {
+                        case "LogMsg":
+                            Debug.WriteLine(msg.Data.ToString());
+                            break;
+                        case "Error":
+                            if (msg.Data != null)
+                            {
+                                Logger.Instance.Error(msg.Data.ToString());
+                            }
+                            break;
+                        case "LoadWordsHeader":
+                            LoadWordsHeader();
+                            break;
+                        default:
+                            Debug.Assert(false, $"HeaderJSCallback unexpected message {message}");
+                            break;
+                    }
+                });
             }
             catch (Exception ex)
             {
@@ -265,41 +268,44 @@ namespace WordSearch
         {
             try
             {
-                ViewModel.HasTilesPageSignalled = true;
-                System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
-                MessageJson msg = new MessageJson(message);
-                switch (msg.Message)
+                Device.BeginInvokeOnMainThread(() =>
                 {
-                    case "ping":
-                        break;
-                    case "tilePageReady":
-                        ViewModel.IsLoading = false;
-                        FlexScoreHeader.BackgroundColor = Color.LightBlue;
-                        break;
-                    case "tileClick":
-                        if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
-                        {
-                            Manager.CheckForSelectedWord(msg.Data as JObject);
-                            // reload tiles
-                            ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
-                        }
-                        break;
-                    case "hightscoreName":
-                        SaveHighScore(msg.Data.ToString());
-                        break;
-                    case "LogMsg":
-                        Debug.WriteLine(msg.Data.ToString());
-                        break;
-                    case "Error":
-                        if (msg.Data != null)
-                        {
-                            Logger.Instance.Error(msg.Data.ToString());
-                        }
-                        break;
-                    default:
-                        Debug.Assert(false, $"TilesJSCallback unexpected message {message}");
-                        break;
-                }
+                    ViewModel.HasTilesPageSignalled = true;
+                    System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
+                    MessageJson msg = new MessageJson(message);
+                    switch (msg.Message)
+                    {
+                        case "ping":
+                            break;
+                        case "tilePageReady":
+                            ViewModel.IsLoading = false;
+                            FlexScoreHeader.BackgroundColor = Color.LightBlue;
+                            break;
+                        case "tileClick":
+                            if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
+                            {
+                                Manager.CheckForSelectedWord(msg.Data as JObject);
+                                // reload tiles
+                                ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
+                            }
+                            break;
+                        case "hightscoreName":
+                            SaveHighScore(msg.Data.ToString());
+                            break;
+                        case "LogMsg":
+                            Debug.WriteLine(msg.Data.ToString());
+                            break;
+                        case "Error":
+                            if (msg.Data != null)
+                            {
+                                Logger.Instance.Error(msg.Data.ToString());
+                            }
+                            break;
+                        default:
+                            Debug.Assert(false, $"TilesJSCallback unexpected message {message}");
+                            break;
+                    }
+                });
             }
             catch (Exception ex)
             {

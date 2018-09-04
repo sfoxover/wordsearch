@@ -34,29 +34,39 @@ namespace WordSearch.Views
         // callback from JS body html page
         void ScoresJSCallback(string message)
         {
-            ViewModel.HasHtmlPageSignalled = true;
-            System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
-            MessageJson msg = new MessageJson(message);
-            switch (msg.Message)
+            try
             {
-                case "ping":
-                    break;
-                case "closeWindow":
-                    // back to main page
-                    ViewModel.CloseWindow();
-                    break;
-                case "clearScores":
-                    ViewModel.ClearHighScores();
-                    break;
-                case "Error":
-                    if (msg.Data != null)
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    ViewModel.HasHtmlPageSignalled = true;
+                    System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
+                    MessageJson msg = new MessageJson(message);
+                    switch (msg.Message)
                     {
-                        Logger.Instance.Error(msg.Data.ToString());
+                        case "ping":
+                            break;
+                        case "closeWindow":
+                            // back to main page
+                            ViewModel.CloseWindow();
+                            break;
+                        case "clearScores":
+                            ViewModel.ClearHighScores();
+                            break;
+                        case "Error":
+                            if (msg.Data != null)
+                            {
+                                Logger.Instance.Error(msg.Data.ToString());
+                            }
+                            break;
+                        default:
+                            Debug.Assert(false, $"ScoresJSCallback unexpected message {message}");
+                            break;
                     }
-                    break;
-                default:
-                    Debug.Assert(false, $"ScoresJSCallback unexpected message {message}");
-                    break;
+                });
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"ScoresJSCallback exception, {ex.Message}");
             }
         }
     }
