@@ -47,7 +47,7 @@ namespace WordSearch.Helpers
                 LogToDbAsync("ERROR: " + text);
                 System.Diagnostics.Debug.WriteLine("ERROR: " + text);
                 // Log to MS AppCenter
-                Analytics.TrackEvent(text);
+                Analytics.TrackEvent("Error", new Dictionary<string, string> { { "Exception", text } });
             }
             catch (Exception ex)
             {
