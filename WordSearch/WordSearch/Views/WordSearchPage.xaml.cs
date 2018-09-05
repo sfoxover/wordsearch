@@ -8,6 +8,7 @@ using WordSearch.Helpers;
 using WordSearch.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 namespace WordSearch
 {
@@ -215,6 +216,8 @@ namespace WordSearch
             // signal html page with word complete
             var textPos = Manager.GetTextPos(word);            
             await ViewModel.SignalHeaderHtmlPage("OnWordComplete", textPos);
+            // speak completed word
+            await TextToSpeech.SpeakAsync("You found " + word.Text);
         }
 
         // delegate for game completed callback
@@ -226,6 +229,8 @@ namespace WordSearch
             var rank = new { Score = ViewModel.GameScore, Rank = ranking };
             await ViewModel.SignalTilesHtmlPage("OnGameCompleted", rank);
             await ViewModel.SignalHeaderHtmlPage("OnGameCompleted", rank);
+            // speak completed word
+            await TextToSpeech.SpeakAsync("Excellent job. You are a winner!");
         }       
 
         // callback from JS header html page
@@ -271,7 +276,6 @@ namespace WordSearch
                 Device.BeginInvokeOnMainThread(() =>
                 {
                     ViewModel.HasTilesPageSignalled = true;
-                    System.Diagnostics.Debug.WriteLine($"Got local callback: {message}");
                     MessageJson msg = new MessageJson(message);
                     switch (msg.Message)
                     {
