@@ -1,4 +1,5 @@
-﻿using Serilog;
+﻿using Microsoft.AppCenter.Analytics;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,9 +41,20 @@ namespace WordSearch.Helpers
 
         public void Error(string text)
         {
-            Log.Error(Defines.TAG, text);
-            LogToDbAsync("ERROR: " + text);
-            System.Diagnostics.Debug.WriteLine("ERROR: " + text);
+            try
+            {
+                Log.Error(Defines.TAG, text);
+                LogToDbAsync("ERROR: " + text);
+                System.Diagnostics.Debug.WriteLine("ERROR: " + text);
+                // Log to MS AppCenter
+                Analytics.TrackEvent(text);
+            }
+            catch (Exception ex)
+            {
+                string error = $"Logger.Error exception, {ex.Message}";
+                Log.Error(Defines.TAG, error);
+                System.Diagnostics.Debug.WriteLine(error);
+            }
         }
 
         // log message to database
