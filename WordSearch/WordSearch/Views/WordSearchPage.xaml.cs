@@ -77,8 +77,8 @@ namespace WordSearch
                     LoadWordsHeader();
                 });
                 // xamarin essentials screen lock
-                // if (!ScreenLock.IsActive)
-                //   ScreenLock.RequestActive();
+                if (!ScreenLock.IsActive)
+                    ScreenLock.RequestActive();
             }
             catch (Exception ex)
             {

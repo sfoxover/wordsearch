@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using WordSearch.Models;
 using WordSearch.ViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace WordSearch.Helpers

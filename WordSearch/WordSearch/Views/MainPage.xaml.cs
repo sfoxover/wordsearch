@@ -2,6 +2,7 @@
 using System;
 using WordSearch.Helpers;
 using WordSearch.ViewModels;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -19,23 +20,29 @@ namespace WordSearch.Views
         {
             InitializeComponent();
             BindingContext = new MainPageViewModel(Navigation);
-            CheckWordsDB();
+            Initialize();
         }
 
-        public void CheckWordsDB()
+        public void Initialize()
         {
             try
             {
                 // Verify words db exists
                 DependencyService.Get<IDependencyHelper>().CheckWordsDBFileExists("words.db3");
+
+                // xamarin essentials screen lock off
+                if (ScreenLock.IsActive)
+                    ScreenLock.RequestRelease();
+
                 // Test window scrolling
                 //for (int n = 0; n < 300; n++)
-                  //  Logger.Instance.Error($"Error test {n}");
+                //  Logger.Instance.Error($"Error test {n}");
+
 
             }
             catch (Exception ex)
             {
-                Logger.Instance.Error($"CheckWordsDB exception, {ex.Message}");
+                Logger.Instance.Error($"Initialize exception, {ex.Message}");
             }
         }
 
