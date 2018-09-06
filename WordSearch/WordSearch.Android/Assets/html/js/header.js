@@ -206,29 +206,34 @@ class Header {
 
     // Animate completed word
     animateWord(text) {
-        $('#animeWord').text(text);
-        $('.ml15').show();
-        if (this._restartAnim != null) {
-            this._restartAnim.restart();
+        try {
+            $('#animeWord').text(text);
+            $('.ml15').show();
+            if (this._restartAnim != null) {
+                this._restartAnim.restart();
+            }
+            else {
+                this._restartAnim = anime.timeline({ loop: false })
+                    .add({
+                        targets: '.ml15 .word',
+                        scale: [14, 1],
+                        opacity: [0, 1],
+                        easing: "easeOutCirc",
+                        duration: 800,
+                        delay: function (el, i) {
+                            return 800 * i;
+                        }
+                    }).add({
+                        targets: '.ml15',
+                        opacity: 0,
+                        duration: 1000,
+                        easing: "easeOutExpo",
+                        delay: 1000
+                    });
+            }
         }
-        else {
-            this._restartAnim = anime.timeline({ loop: false })
-                .add({
-                    targets: '.ml15 .word',
-                    scale: [14, 1],
-                    opacity: [0, 1],
-                    easing: "easeOutCirc",
-                    duration: 800,
-                    delay: function (el, i) {
-                        return 800 * i;
-                    }
-                }).add({
-                    targets: '.ml15',
-                    opacity: 0,
-                    duration: 1000,
-                    easing: "easeOutExpo",
-                    delay: 1000
-                });
+        catch (err) {
+            this.handleError(err);
         }
     }
 }
