@@ -132,9 +132,6 @@
     <AndroidAsset Include="Assets\html\js\proton.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\js\fire.js" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\html\images\fire.png" />
   </ItemGroup>
   <ItemGroup>
@@ -196,6 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\html\js\logFiles.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\js\anime.min.js" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

@@ -1,12 +1,11 @@
 ﻿// on ready handler
 $(document).ready(function () {    
-
-    header.signalNativeApp("LoadWordsHeader");
-
+    header.signalNativeApp("LoadWordsHeader");   
 });
 
 class Header {
     constructor() {
+        this._restartAnim = null;
         this.waitForHeaderCallbackCreation().then(function () {
             console.log('Native object loaded');
         }).catch(function (error) {
@@ -48,7 +47,7 @@ class Header {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "Error";
-                msgObj.Data = err;
+                msgObj.Data = err.message;
                 var json = JSON.stringify(msgObj);
                 // call native code
                 headerJSCallback(json);
@@ -187,14 +186,12 @@ class Header {
                     }
                 case "OnWordComplete":
                     {                        
-                        // show fireworks
-                        fire.start(data.WordPos, data.WordTotal);
+                        // Change word to strike out after 1 second
                         setTimeout(function () {
-                            fire.pause();
                             header.signalNativeApp("LoadWordsHeader");
                         }, 1000);
-                        $('#FireworksCanvas').hide();
-                        $('#FireworksCanvas').fadeIn(1000);
+                        // Animate word
+                        header.animateWord(data.Word);
                         break;
                     }
                 case "OnGameCompleted":
@@ -213,6 +210,34 @@ class Header {
         }
         catch (err) {
             this.handleError(err);
+        }
+    }
+
+    // Animate completed word
+    animateWord(text) {
+        $('#animeWord').text(text);
+        $('.ml15').show();
+        if (this._restartAnim != null) {
+            this._restartAnim.restart();
+        }
+        else {
+            this._restartAnim = anime.timeline({ loop: false })
+                .add({
+                    targets: '.ml15 .word',
+                    scale: [14, 1],
+                    opacity: [0, 1],
+                    easing: "easeOutCirc",
+                    duration: 800,
+                    delay: function (el, i) {
+                        return 800 * i;
+                    }
+                }).add({
+                    targets: '.ml15',
+                    opacity: 0,
+                    duration: 1000,
+                    easing: "easeOutExpo",
+                    delay: 1000
+                });
         }
     }
 }

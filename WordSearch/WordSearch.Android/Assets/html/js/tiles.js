@@ -62,7 +62,7 @@ class Tiles {
                 // format error message into json
                 var msgObj = new Object();
                 msgObj.Message = "Error";
-                msgObj.Data = err;
+                msgObj.Data = err.message;
                 var json = JSON.stringify(msgObj);
                 // call native code
                 tilesJSCallback(json);
