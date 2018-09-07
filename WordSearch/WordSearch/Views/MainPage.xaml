@@ -27,7 +27,7 @@
 
         <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
             <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding ShowHighScoresCommand}" Text="High scores" Image="{Binding HighScoresImgPath}"/>
-            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding ShowLogsCommand}" Text="Debug logs" Image="{Binding LogsImgPath}"/>
+            <Button Style="{StaticResource newGameButtonStyle}" Command="{Binding SoundOnCommand}" Text="{Binding SoundOnText}" Image="{Binding SoundOnImgPath}"/>
         </StackLayout>
 
     </StackLayout>

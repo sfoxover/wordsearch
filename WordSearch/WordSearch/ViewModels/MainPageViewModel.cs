@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using WordSearch.Helpers;
 using WordSearch.Views;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
@@ -45,13 +46,22 @@ namespace WordSearch.ViewModels
             get { return _highScoresImgPath; }
             set { SetProperty(ref _highScoresImgPath, value); }
         }
-        // Show debug logs
-        private string _logsImgPath;
-        public string LogsImgPath
+        // Sound on or off
+        private string _soundOnImgPath;
+        public string SoundOnImgPath
         {
-            get { return _logsImgPath; }
-            set { SetProperty(ref _logsImgPath, value); }
+            get { return _soundOnImgPath; }
+            set { SetProperty(ref _soundOnImgPath, value); }
         }
+        // Text for sound on or off
+        private string _soundOnText;
+        public string SoundOnText
+        {
+            get { return _soundOnText; }
+            set { SetProperty(ref _soundOnText, value); }
+        }
+        // Sound is on or off
+        private bool SoundSettingIsOn = true;
         // Screen width and height
         public double ScreenWidth { get; set; }
         public double ScreenHeight { get; set; }
@@ -61,7 +71,7 @@ namespace WordSearch.ViewModels
         public Command NewMediumGameCommand { get; }
         public Command NewHardGameCommand { get; }
         public Command ShowHighScoresCommand { get; }
-        public Command ShowLogsCommand { get; }
+        public Command SoundOnCommand { get; }
 
         public MainPageViewModel(INavigation navigation)
              : base(navigation)
@@ -70,7 +80,7 @@ namespace WordSearch.ViewModels
             NewMediumGameCommand = new Command(OnNewMediumGameClick);
             NewHardGameCommand = new Command(OnNewHardGameClick);
             ShowHighScoresCommand = new Command(OnShowHighScoresClick);
-            ShowLogsCommand = new Command(ShowLogsClick);
+            SoundOnCommand = new Command(SoundOnClick);
             // main logo image
             string basePath = DependencyService.Get<IDependencyHelper>().GetResourceImagesPath();
             LogoPath = basePath + "mainlogo.png";
@@ -78,10 +88,26 @@ namespace WordSearch.ViewModels
             EasyGameImgPath = basePath + "baby.png";
             MediumGameImgPath = basePath + "manwalk.png";
             HardGameImgPath = basePath + "mansuitcasefast.png";
-            HighScoresImgPath = basePath + "leaderboard.png"; 
-            LogsImgPath = basePath + "qr.png";
+            HighScoresImgPath = basePath + "leaderboard.png";
             ScreenWidth = 0;
             ScreenHeight = 0;
+            SoundSettingIsOn = Preferences.Get("soundOn", true);
+            SetSoundIcon(basePath);
+        }
+
+        // Set sound icon and text
+        private void SetSoundIcon(string basePath)
+        {
+            if (SoundSettingIsOn)
+            {
+                SoundOnText = "Sound is on";
+                SoundOnImgPath = basePath + "ic_volume_up_black_48dp.png";
+            }
+            else
+            {
+                SoundOnText = "Sound is off";
+                SoundOnImgPath = basePath + "ic_volume_off_black_48dp.png";
+            }
         }
 
         public async void OnNewEasyGameClick()
@@ -104,9 +130,13 @@ namespace WordSearch.ViewModels
             await Navigation.PushAsync(new HighScoresPage(ScreenWidth, ScreenHeight));
         }
 
-        public async void ShowLogsClick()
+        // Toggle sound on or off
+        public void SoundOnClick()
         {
-            await Navigation.PushAsync(new LogFilesPage(ScreenWidth, ScreenHeight));
+            SoundSettingIsOn = !SoundSettingIsOn;
+            Preferences.Set("soundOn", SoundSettingIsOn);
+            string basePath = DependencyService.Get<IDependencyHelper>().GetResourceImagesPath();
+            SetSoundIcon(basePath);
         }
     }
 }

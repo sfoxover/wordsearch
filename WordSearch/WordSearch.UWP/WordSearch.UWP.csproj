@@ -112,21 +112,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="html\css\tablePage.css" />
+    <Content Include="html\images\ic_volume_off_black_48dp.png" />
+    <Content Include="html\images\ic_volume_up_black_48dp.png" />
     <Content Include="html\js\anime.min.js" />
     <Content Include="html\logFiles.html" />
     <Content Include="html\highScores.html" />
-    <Content Include="html\images\ajax-loader.gif" />
     <Content Include="html\images\baby.png" />
     <Content Include="html\images\leaderboard.png" />
-    <Content Include="html\images\lightbulbhueon.png" />
-    <Content Include="html\images\lightning.png" />
     <Content Include="html\images\mansuitcasefast.png" />
     <Content Include="html\images\manwalk.png" />
-    <Content Include="html\images\puzzle.png" />
-    <Content Include="html\images\puzzleround.png" />
-    <Content Include="html\images\qr.png" />
     <Content Include="html\js\bootstrap.min.js" />
-    <Content Include="html\images\fire.png" />
     <Content Include="html\js\fireworks.js" />
     <Content Include="html\js\header.js" />
     <Content Include="html\js\logFiles.js" />

@@ -28,6 +28,8 @@ namespace WordSearch
         public double ScreenWidth { get; set; }
         public double ScreenHeight { get; set; }
         public double TilesScreenHeight { get; set; }
+        // Sound on or off
+        public bool SoundSettingIsOn { get; private set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -49,6 +51,8 @@ namespace WordSearch
             bool bOK = true;
             try
             {
+                // Check if sound is on
+                SoundSettingIsOn = Preferences.Get("soundOn", true);
                 // Create word manager
                 Manager = new WordManager();
                 Manager.DifficultyLevel = level;
@@ -217,7 +221,8 @@ namespace WordSearch
             var textPos = Manager.GetTextPos(word);            
             await ViewModel.SignalHeaderHtmlPage("OnWordComplete", textPos);
             // speak completed word
-            await TextToSpeech.SpeakAsync("You found " + word.Text);
+            if(SoundSettingIsOn)
+                await TextToSpeech.SpeakAsync("You found " + word.Text);
         }
 
         // delegate for game completed callback
@@ -230,7 +235,19 @@ namespace WordSearch
             await ViewModel.SignalTilesHtmlPage("OnGameCompleted", rank);
             await ViewModel.SignalHeaderHtmlPage("OnGameCompleted", rank);
             // speak completed word
-            await TextToSpeech.SpeakAsync("Excellent job. You are a winner!");
+            if (SoundSettingIsOn)
+            {
+                switch (Manager.DifficultyLevel)
+                {
+                    case Defines.GameDifficulty.easy:
+                    case Defines.GameDifficulty.medium:
+                        await TextToSpeech.SpeakAsync("Excellent job. You are a winner!");
+                        break;
+                    case Defines.GameDifficulty.hard:
+                        await TextToSpeech.SpeakAsync("Wow. You are a legand!");
+                        break;
+                }
+            }
         }       
 
         // callback from JS header html page
