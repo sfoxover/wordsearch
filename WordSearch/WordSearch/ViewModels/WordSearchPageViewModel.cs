@@ -205,6 +205,22 @@ namespace WordSearch.ViewModels
             }
             return bOK;
         }
+
+        // Remove score on missed tile hit
+        internal void SubtractPenaltyScore()
+        {
+            try
+            {
+                GameScore += Defines.PENALTY_POINTS;
+                ScoreBoard = $"Score: {GameScore}";
+                SignalHeaderHtmlPage("OnUpdateScore", ScoreBoard);
+                SignalHeaderHtmlPage("SubtractPenaltyScore", $"{Defines.PENALTY_POINTS}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"SubtractPenaltyScore exception, {ex.Message}");
+            }
+        }
     }
 }
 

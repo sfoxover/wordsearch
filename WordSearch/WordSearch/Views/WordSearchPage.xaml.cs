@@ -30,6 +30,8 @@ namespace WordSearch
         public double TilesScreenHeight { get; set; }
         // Sound on or off
         public bool SoundSettingIsOn { get; private set; }
+        // Has warned of score penalty
+        public bool ScorePenaltyWarned { get; private set; }
 
         // get access to ViewModel
         private WordSearchPageViewModel ViewModel
@@ -53,6 +55,7 @@ namespace WordSearch
             {
                 // Check if sound is on
                 SoundSettingIsOn = Preferences.Get("soundOn", true);
+                ScorePenaltyWarned = false;
                 // Create word manager
                 Manager = new WordManager();
                 Manager.DifficultyLevel = level;
@@ -305,7 +308,19 @@ namespace WordSearch
                         case "tileClick":
                             if (!ViewModel.GameCompleted && ViewModel.SecondsRemaining > 0)
                             {
-                                Manager.CheckForSelectedWord(msg.Data as JObject);
+                                if(Manager.CheckForSelectedWord(msg.Data as JObject, out bool isPartOfWord))
+                                {
+                                    if(!isPartOfWord && Manager.DifficultyLevel == Defines.GameDifficulty.hard)
+                                    {
+                                        // Remove score on missed tile hit
+                                        ViewModel.SubtractPenaltyScore();
+                                        if (SoundSettingIsOn && !ScorePenaltyWarned)
+                                        {
+                                            ScorePenaltyWarned = true;
+                                            TextToSpeech.SpeakAsync("You lost 25 points. Only click on tiles that are part of a word.");
+                                        }
+                                    }
+                                }
                                 // reload tiles
                                 ViewModel.SignalTilesHtmlPage("UpdateTileSelectedSates", Manager.TileViewModels);
                             }

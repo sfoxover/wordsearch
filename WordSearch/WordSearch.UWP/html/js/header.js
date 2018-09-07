@@ -192,6 +192,11 @@ class Header {
                         $('#wordsList').fadeOut(500);
                         break;
                     }
+                case "SubtractPenaltyScore":
+                    {
+                        this.animateWord(data);
+                        break;
+                    }
                 default:
                     {
                         this.handleError("Unknown message from app, " + msg);

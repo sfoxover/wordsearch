@@ -373,9 +373,10 @@ namespace WordSearch.Helpers
         }
 
         // change word letter selection if clicked
-        public bool CheckForSelectedWord(JObject json)
+        public bool CheckForSelectedWord(JObject json, out bool isPartOfWord)
         {
             bool bOK = true;
+            isPartOfWord = false;
             try
             {
                 int row = 0;
@@ -391,7 +392,7 @@ namespace WordSearch.Helpers
                 if (!tile.IsPartOfCompletedWord)
                 {
                     tile.LetterSelected = !tile.LetterSelected;
-                    bool isPartOfWord = false;
+                    isPartOfWord = false;
                     lock (WordsLock)
                     {
                         foreach (var word in Words)
@@ -439,6 +440,10 @@ namespace WordSearch.Helpers
                     }
                     if (!isPartOfWord)
                         LastFailedTileClicked = tile;
+                }
+                else
+                {
+                    isPartOfWord = true;
                 }
             }
             catch (Exception ex)
