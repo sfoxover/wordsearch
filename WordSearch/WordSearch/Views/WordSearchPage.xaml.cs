@@ -168,6 +168,16 @@ namespace WordSearch
                 {
                     ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
                 });
+                // speak completed word
+                if (SoundSettingIsOn)
+                {
+                    bool hasBeenPlayed = Preferences.Get("playedHardWarning", false);
+                    if (!hasBeenPlayed)
+                    {
+                        Preferences.Set("playedHardWarning", true);
+                        TextToSpeech.SpeakAsync("Warning. On hard level the words you need to find are hidden. You will see 1 word to find every 5 seconds.");
+                    }
+                }
             }
             catch (Exception ex)
             {
@@ -317,7 +327,7 @@ namespace WordSearch
                                         if (SoundSettingIsOn && !ScorePenaltyWarned)
                                         {
                                             ScorePenaltyWarned = true;
-                                            TextToSpeech.SpeakAsync("You lost 25 points. Only click on tiles that are part of a word.");
+                                            TextToSpeech.SpeakAsync($"You lost {Defines.PENALTY_POINTS} points. Only click on tiles that are part of a word.");
                                         }
                                     }
                                 }

@@ -16,6 +16,6 @@ namespace WordSearch.Helpers
         // Header html page height
         public const int HEADER_HTML_HEIGHT = 100;
         // Minus points for hard level penalty
-        public const int PENALTY_POINTS = -25;
+        public const int PENALTY_POINTS = 25;
     }
 }

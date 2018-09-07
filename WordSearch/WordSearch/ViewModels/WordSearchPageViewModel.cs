@@ -211,10 +211,10 @@ namespace WordSearch.ViewModels
         {
             try
             {
-                GameScore += Defines.PENALTY_POINTS;
+                GameScore -= Defines.PENALTY_POINTS;
                 ScoreBoard = $"Score: {GameScore}";
                 SignalHeaderHtmlPage("OnUpdateScore", ScoreBoard);
-                SignalHeaderHtmlPage("SubtractPenaltyScore", $"{Defines.PENALTY_POINTS}");
+                SignalHeaderHtmlPage("SubtractPenaltyScore", $"-{Defines.PENALTY_POINTS}");
             }
             catch (Exception ex)
             {
