@@ -242,6 +242,17 @@ namespace WordSearch
         private async void OnGameCompletedCallbackAsync()
         {
             ViewModel.GameCompleted = true;
+            // Game over if less than or equal to zero points
+            if (ViewModel.GameScore <= 0)
+            {
+                ViewModel.SecondsRemaining = 0;
+                if (SoundSettingIsOn)
+                {
+                    await TextToSpeech.SpeakAsync("Sorry but you did not score any points. Please try again.");
+                }
+                return;
+            }
+           
             // get ranking
             bool bOK = Score.GetScoreRank(ViewModel.GameScore, out int ranking);
             var rank = new { Score = ViewModel.GameScore, Rank = ranking };
