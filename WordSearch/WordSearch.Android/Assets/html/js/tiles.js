@@ -310,7 +310,7 @@ class Tiles {
 
     showHighScoreDialog(data) {
         try {
-            $('#labelRank').text('You are ranked #' + data.Rank + ' for your score of ' + data.Score);
+            $('#labelRank').html('You are ranked <b>#' + data.Rank + '</b> for your score of ' + data.Score);
             $('#highScoreModal').modal();
             $('#highScoreModal').on('shown.bs.modal', ()=> {
                 $('#hightscore-name').trigger('focus');
