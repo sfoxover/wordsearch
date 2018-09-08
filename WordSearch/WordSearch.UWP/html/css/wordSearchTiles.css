@@ -22,7 +22,7 @@ body {
     color: var(--text-color);
     background-color: var(--tile-bk-color);
     font-family: Arial, sans-serif;
-    font-size: xx-large;
+    font-size: 2vw;
     border: var(--div-border-size) solid var(--tile-border-color);
     border-radius: var(--div-border-radius);
     text-align: center;
@@ -34,7 +34,7 @@ body {
     color: var(--text-color-selected);
     background-color: var(--tile-bk-color-selected);
     font-family: Arial, sans-serif;
-    font-size: xx-large;
+    font-size: 2vw;
     border: var(--div-border-size) solid var(--tile-border-color-selected);
     border-radius: var(--div-border-radius);
     text-align: center;

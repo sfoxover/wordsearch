@@ -142,17 +142,6 @@ class Tiles {
             var height = paddedSize * this.columnCount;
             $(".tilesTable").width(width + 'px');
             $(".tilesTable").height(height + 'px');     
-
-            // use smaller font for large number of tiles
-            if (this.rowCount >= 16) {
-                $(".letterDiv").css('font-size', 'medium');
-                $(".letterDivSelected").css('font-size', 'medium');
-            }
-            else if (this.rowCount >= 12) {
-                $(".letterDiv").css('font-size', 'large');
-                $(".letterDivSelected").css('font-size', 'large');
-            }
-
             return tileSize;
         }
         catch (err) {
