@@ -9,8 +9,7 @@ class Header {
         this.waitForHeaderCallbackCreation().then(function () {
             console.log('Native object loaded');
         }).catch(function (error) {
-            console.log('Loading mock data');
-            header.loadMockData();
+            console.log('Native object timed out');
         });
     }   
 
@@ -20,7 +19,7 @@ class Header {
             return new Promise(function (resolve, reject) {
                 var timerId = setTimeout(function () {
                     return reject(new Error("waitForHeaderCallbackCreation timed out."));
-                }, 3000);
+                }, 5000);
                 (function waitForHeaderCallback() {
                     try {
                         if (headerJSCallback) {
@@ -116,9 +115,9 @@ class Header {
                 td.append(wordDiv);
                 row.append(td);
                 if (count >= 16)
-                    wordDiv.css('font-size', 'small');
+                    wordDiv.css('font-size', '1em');
                 else if (count >= 8)
-                    wordDiv.css('font-size', 'medium');
+                    wordDiv.css('font-size', '1em');
                 addedCount++;
                 // add new table column
                 if ((count === 8 && addedCount === 4) || (count >= 16 && addedCount === 8)) {

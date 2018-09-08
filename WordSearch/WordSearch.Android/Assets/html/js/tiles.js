@@ -24,8 +24,7 @@ class Tiles {
         this.waitForTilesCallbackCreation().then(function () {
             console.log('Native object loaded');
         }).catch(function (error) {
-            console.log('Loading mock data');
-            tiles.loadMockData();
+            console.log('Native object timed out');
         });
     }   
 
@@ -35,7 +34,7 @@ class Tiles {
             return new Promise(function (resolve, reject) {
                 var timerId = setTimeout(function () {
                     return reject(new Error("waitForTilesCallbackCreation timed out."));
-                }, 3000);
+                }, 5000);
                 (function waitForTilesCallback() {
                     try {
                         if (tilesJSCallback) {
@@ -142,17 +141,15 @@ class Tiles {
             var height = paddedSize * this.columnCount;
             $(".tilesTable").width(width + 'px');
             $(".tilesTable").height(height + 'px');     
-
             // use smaller font for large number of tiles
             if (this.rowCount >= 16) {
-                $(".letterDiv").css('font-size', 'medium');
-                $(".letterDivSelected").css('font-size', 'medium');
+                $(".letterDiv").css('font-size', '1em');
+                $(".letterDivSelected").css('font-size', '1em');
             }
             else if (this.rowCount >= 12) {
-                $(".letterDiv").css('font-size', 'large');
-                $(".letterDivSelected").css('font-size', 'large');
+                $(".letterDiv").css('font-size', '1em');
+                $(".letterDivSelected").css('font-size', '1em');
             }
-
             return tileSize;
         }
         catch (err) {

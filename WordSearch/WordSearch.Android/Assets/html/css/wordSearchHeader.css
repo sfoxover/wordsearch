@@ -43,20 +43,20 @@ body {
 .wordDiv {
     color: black;
     font-family: Arial, sans-serif;
-    font-size: large;
+    font-size: 1.2em;
 }
 
 .wordHiddenDiv {
     color: var(--text-color-hidden);
     font-family: Arial, sans-serif;
-    font-size: large;
+    font-size: 1em;
 }
 
 .wordCompleteDiv {
     color: red;
     text-decoration: line-through;
     font-family: Arial, sans-serif;
-    font-size: large;
+    font-size: 1.2em;
 }
 
 .digitalText {
