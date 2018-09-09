@@ -65,8 +65,27 @@ namespace WordSearch.Helpers
                 // store tile array
                 TileViewModels = viewModels;
                 // put words in tiles
-                bOK = PlaceWordsInTiles(maxWordLength);
-                Debug.Assert(bOK);
+                int total = GetLevelWordCount();
+                Words = new List<Word>();
+                // Hard level will split easy + medium words
+                if (DifficultyLevel == Defines.GameDifficulty.hard)
+                {
+                    bOK = PlaceWordsInTiles(maxWordLength, Defines.GameDifficulty.easy, total / 2);
+                    Debug.Assert(bOK);
+                    bOK = PlaceWordsInTiles(maxWordLength, Defines.GameDifficulty.medium, total / 2);
+                    Debug.Assert(bOK);
+                }
+                else
+                {
+                    bOK = PlaceWordsInTiles(maxWordLength, DifficultyLevel, total);
+                    Debug.Assert(bOK);
+                }
+                if (bOK)
+                {
+                    // update tiles with words
+                    bOK = RefreshWordTileStates();
+                    Debug.Assert(bOK);
+                }
             }
             catch (Exception ex)
             {
@@ -77,26 +96,24 @@ namespace WordSearch.Helpers
         }
 
         // put words in tiles
-        private bool PlaceWordsInTiles(int maxWordLength)
+        private bool PlaceWordsInTiles(int maxWordLength, Defines.GameDifficulty difficulty, int totalWords)
         {
             bool bOK = true;
             try
-            {
-                Words = new List<Word>();
+            {                
                 // load words database
                 var wordDb = new WordDatabase();
-                bOK = wordDb.LoadWordsDB(DifficultyLevel);
+                bOK = wordDb.LoadWordsDB(difficulty);
                 Debug.Assert(bOK);
                 if (!bOK)
                     return false;
                 int count = 0;
                 int tries = 0;
-                int total = GetLevelWordCount();
                 var filterList = new List<string>();
-                while (count < total && tries < Defines.MAX_RANDOM_TRIES)
+                while (count < totalWords && tries < Defines.MAX_RANDOM_TRIES)
                 {
                     string text;
-                    bOK = wordDb.GetNextRandomWord(maxWordLength, DifficultyLevel, filterList, out text);
+                    bOK = wordDb.GetNextRandomWord(maxWordLength, filterList, out text);
                     Debug.Assert(bOK);
                     if (bOK)
                     {
@@ -124,13 +141,7 @@ namespace WordSearch.Helpers
                         }
                     }
                     tries++;
-                }
-                if (bOK)
-                {
-                    // update tiles with words
-                    bOK = RefreshWordTileStates();
-                    Debug.Assert(bOK);
-                }
+                }               
             }
             catch (Exception ex)
             {

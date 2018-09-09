@@ -34,7 +34,7 @@ namespace WordSearch.Helpers
         }
 
         // get next random word with filter list
-        public bool GetNextRandomWord(int maxWordLength, Defines.GameDifficulty difficulty, List<string> wordListFilter, out string result)
+        public bool GetNextRandomWord(int maxWordLength, List<string> wordListFilter, out string result)
         {
             bool bOK = false;
             result = "";

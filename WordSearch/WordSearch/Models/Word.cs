@@ -203,11 +203,12 @@ namespace WordSearch.Models
             bool bOK = true;
             try
             {
+                Debug.Assert(difficulty != Defines.GameDifficulty.hard);
                 using (var db = new DbContextWords())
                 {
                     db.Database.EnsureCreated();
                     results = (from item in db.Words
-                               where item.WordDifficulty <= difficulty
+                               where item.WordDifficulty == difficulty
                                orderby item ascending
                                select item).ToList();
                 }
