@@ -19,7 +19,7 @@ namespace WordSearch
        
         protected override void OnStart()
         {
-            AppCenter.Start("android=a65979bc-328c-45c3-a3c8-1d7f8fd12a13;", typeof(Analytics), typeof(Crashes));
+            AppCenter.Start("android=a65979bc-328c-45c3-a3c8-1d7f8fd12a13;" + "uwp=562aeb1d-adf4-4f7a-b562-6badd9fc9ea8;", typeof(Analytics), typeof(Crashes));
         }
 
         protected override void OnSleep()
