@@ -169,7 +169,7 @@ namespace WordSearch
                     ViewModel.SignalTilesHtmlPage("LoadTiles", Manager.TileViewModels);
                 });
                 // speak completed word
-                if (SoundSettingIsOn)
+                if (SoundSettingIsOn && Manager.DifficultyLevel == Defines.GameDifficulty.hard)
                 {
                     bool hasBeenPlayed = Preferences.Get("playedHardWarning", false);
                     if (!hasBeenPlayed)

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="ff80ba9c-e41c-4be5-8292-d2ce267f3a6e" Publisher="CN=SteveTesting" Version="1.0.0.0" />
-  <mp:PhoneIdentity PhoneProductId="ec0cc741-fd3e-485c-81be-68815c480690" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="32404SteveF.SuperWordSearch" Publisher="CN=82A080BB-8EDC-450D-9B3B-90C836EFD686" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="8fd88cf6-1902-4cea-8b6a-ae1bdc44ffd5" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>WordSearch.UWP</DisplayName>
-    <PublisherDisplayName>0f454ebe-7518-4802-8f59-97637cb6db58</PublisherDisplayName>
+    <DisplayName>SuperWordSearch</DisplayName>
+    <PublisherDisplayName>SteveF</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
