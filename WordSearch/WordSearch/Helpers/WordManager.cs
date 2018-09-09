@@ -86,6 +86,7 @@ namespace WordSearch.Helpers
                     bOK = RefreshWordTileStates();
                     Debug.Assert(bOK);
                 }
+                Debug.Assert(Words.Count == total, "InitializeWordList error Words.Count != total.");
             }
             catch (Exception ex)
             {
