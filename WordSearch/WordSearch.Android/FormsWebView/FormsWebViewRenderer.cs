@@ -147,21 +147,21 @@ namespace Xam.Plugin.WebView.Droid
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {
-            if (Element == null || Control == null) return string.Empty;
+            if (Element == null || Control == null)
+                return string.Empty;
 
             // fire!
             _callback.Reset();
-
-            var response = string.Empty;
             Device.BeginInvokeOnMainThread(() =>
             {
                 System.Diagnostics.Debug.Assert(Control != null, "OnJavascriptInjectionRequest Control is null");
-                if (Control != null)
+                if (Element != null && Control != null)
                 {
                     Control.EvaluateJavascript(js, _callback);
                 }
             });
 
+            var response = "";
             // wait!
             await Task.Run(() =>
             {
