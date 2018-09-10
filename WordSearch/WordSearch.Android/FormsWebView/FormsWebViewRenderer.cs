@@ -147,44 +147,20 @@ namespace Xam.Plugin.WebView.Droid
 
         internal async Task<string> OnJavascriptInjectionRequest(string js)
         {
-            if (Element == null || Control == null)
-                return string.Empty;
-
             // fire!
             _callback.Reset();
             Device.BeginInvokeOnMainThread(() =>
             {
-                System.Diagnostics.Debug.Assert(Control != null, "OnJavascriptInjectionRequest Control is null");
                 if (Element != null && Control != null)
                 {
                     Control.EvaluateJavascript(js, _callback);
                 }
-            });
-
-            var response = "";
-            // wait!
-            await Task.Run(() =>
-            {
-                while (_callback.Value == null) { }
-
-                // Get the string and strip off the quotes
-                if (_callback.Value is Java.Lang.String)
+                else
                 {
-                    // Unescape that damn Unicode Java bull.
-                    response = Regex.Replace(_callback.Value.ToString(), @"\\[Uu]([0-9A-Fa-f]{4})", m => char.ToString((char) ushort.Parse(m.Groups[1].Value, NumberStyles.AllowHexSpecifier)));
-                    response = Regex.Unescape(response);
-
-                    if (response.Equals("\"null\""))
-                        response = null;
-
-                    else if (response.StartsWith("\"") && response.EndsWith("\""))
-                        response = response.Substring(1, response.Length - 2);
+                    System.Diagnostics.Debug.WriteLine($"OnJavascriptInjectionRequest null value for webview with command, {js}");
                 }
-
             });
-
-            // return
-            return response;
+            return "";
         }
 
         internal void SetSource()
