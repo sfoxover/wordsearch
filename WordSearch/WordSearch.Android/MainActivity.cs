@@ -17,6 +17,7 @@ namespace WordSearch.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(bundle);
+
             FormsWebViewRenderer.Initialize();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);

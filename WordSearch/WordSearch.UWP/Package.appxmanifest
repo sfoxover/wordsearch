@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="32404SteveF.SuperWordSearch" Publisher="CN=82A080BB-8EDC-450D-9B3B-90C836EFD686" Version="1.0.0.0" />
+  <Identity Name="32404SteveF.SuperWordSearch" Publisher="CN=82A080BB-8EDC-450D-9B3B-90C836EFD686" Version="1.0.1.0" />
   <mp:PhoneIdentity PhoneProductId="8fd88cf6-1902-4cea-8b6a-ae1bdc44ffd5" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>SuperWordSearch</DisplayName>

@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WordSearch", "WordSearch\Wo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DictionaryImporter", "DictionaryImporter\DictionaryImporter.csproj", "{D8C7B630-1A7A-4280-A643-1552EB5BCE0A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xam.Plugin.WebView.Abstractions", "WordSearch\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj", "{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -99,6 +101,22 @@ Global
 		{D8C7B630-1A7A-4280-A643-1552EB5BCE0A}.Release|x64.Build.0 = Release|Any CPU
 		{D8C7B630-1A7A-4280-A643-1552EB5BCE0A}.Release|x86.ActiveCfg = Release|Any CPU
 		{D8C7B630-1A7A-4280-A643-1552EB5BCE0A}.Release|x86.Build.0 = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|ARM.Build.0 = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|x64.Build.0 = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Debug|x86.Build.0 = Debug|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|ARM.ActiveCfg = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|ARM.Build.0 = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|x64.ActiveCfg = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|x64.Build.0 = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|x86.ActiveCfg = Release|Any CPU
+		{BBC01B57-6033-4069-8B9C-BE4CCFE8AB76}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
