@@ -99,13 +99,12 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="FormsWebView\FormsWebViewRenderer.cs" />
-    <Compile Include="FormsWebView\LocalFileStreamResolver.cs" />
     <Compile Include="Helpers\DependencyHelper.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Views\HybridWebViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -195,7 +194,7 @@
       <Version>1.9.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite">
-      <Version>2.1.2</Version>
+      <Version>2.1.3</Version>
     </PackageReference>
     <PackageReference Include="Serilog">
       <Version>2.7.1</Version>
@@ -210,10 +209,6 @@
     <ProjectReference Include="..\WordSearch\WordSearch.csproj">
       <Project>{BCAB5556-9EB8-4083-B0E7-048A29960DCB}</Project>
       <Name>WordSearch</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Xam.Plugin.WebView.Abstractions\Xam.Plugin.WebView.Abstractions.csproj">
-      <Project>{bbc01b57-6033-4069-8b9c-be4ccfe8ab76}</Project>
-      <Name>Xam.Plugin.WebView.Abstractions</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

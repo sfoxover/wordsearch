@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WordSearch.Helpers;
 using WordSearch.Models;
-using Xam.Plugin.WebView.Abstractions;
+using WordSearch.Views;
 using Xamarin.Forms;
 
 namespace WordSearch.ViewModels
@@ -13,7 +13,7 @@ namespace WordSearch.ViewModels
     public class LogFilesPageViewModel : BindableBase
     {
         // reference to web page
-        private FormsWebView WebView { get; set; }
+        private HybridWebView WebView { get; set; }
         private string _sourceHtml;
         public string SourceHtml
         {
@@ -37,7 +37,7 @@ namespace WordSearch.ViewModels
         // has the html page loaded
         public bool HasHtmlPageSignalled { get; set; }
 
-        public LogFilesPageViewModel(INavigation navigation, FormsWebView webView)
+        public LogFilesPageViewModel(INavigation navigation, HybridWebView webView)
             : base(navigation)
         {
             HasHtmlPageSignalled = false;

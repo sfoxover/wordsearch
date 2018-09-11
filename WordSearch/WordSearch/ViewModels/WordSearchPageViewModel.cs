@@ -3,15 +3,15 @@ using System.Diagnostics;
 using WordSearch.Models;
 using Xamarin.Forms;
 using System.Threading.Tasks;
-using Xam.Plugin.WebView.Abstractions;
 using WordSearch.Helpers;
+using WordSearch.Views;
 
 namespace WordSearch.ViewModels
 {
     public class WordSearchPageViewModel : BindableBase
     {
-        private FormsWebView WebViewHeader { get; set; }
-        private FormsWebView WebViewTiles { get; set; }
+        private HybridWebView WebViewHeader { get; set; }
+        private HybridWebView WebViewTiles { get; set; }
 
         // Loading screen visible.
         private bool _isLoading = true;
@@ -82,7 +82,7 @@ namespace WordSearch.ViewModels
         public bool HasTilesPageSignalled { get; set; }
         public bool HasHeaderPageSignalled { get; set; }
 
-        public WordSearchPageViewModel(INavigation navigation, int secondsRemaining, int pointsPerLetter, FormsWebView webViewHeader, FormsWebView webViewTiles)
+        public WordSearchPageViewModel(INavigation navigation, int secondsRemaining, int pointsPerLetter, HybridWebView webViewHeader, HybridWebView webViewTiles)
              : base(navigation)
         {
             HasTilesPageSignalled = false;

@@ -5,7 +5,6 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using Xam.Plugin.WebView.Droid;
 
 namespace WordSearch.Droid
 {
@@ -17,8 +16,6 @@ namespace WordSearch.Droid
             TabLayoutResource = Resource.Layout.Tabbar;
             ToolbarResource = Resource.Layout.Toolbar;
             base.OnCreate(bundle);
-
-            FormsWebViewRenderer.Initialize();
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
             Xamarin.Essentials.Platform.Init(this, bundle);

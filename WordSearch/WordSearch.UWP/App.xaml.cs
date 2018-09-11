@@ -4,7 +4,6 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Xam.Plugin.WebView.UWP;
 
 namespace WordSearch.UWP
 {
@@ -41,7 +40,6 @@ namespace WordSearch.UWP
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
-                FormsWebViewRenderer.Initialize();
                 Xamarin.Forms.Forms.Init(e);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
