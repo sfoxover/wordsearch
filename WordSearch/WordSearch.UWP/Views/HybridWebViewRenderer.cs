@@ -40,18 +40,18 @@ namespace WordSearch.UWP.Views
         {
             if (IsScriptReady)
             {
-                if (Element.Scripts.Count > 0)
+                // Inject JS script
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    // Inject JS script
-                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    if (Element != null && Element.Scripts != null && Element.Scripts.Count > 0)
                     {
                         foreach (var script in Element.Scripts)
                         {
                             Control.InvokeScriptAsync("eval", new[] { script });
                         }
                         Element.Scripts.Clear();
-                    });
-                }
+                    }
+                });
             }
         }
 

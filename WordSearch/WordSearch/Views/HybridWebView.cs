@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using WordSearch.Helpers;
 using Xamarin.Forms;
 
 namespace WordSearch.Views
@@ -45,15 +46,29 @@ namespace WordSearch.Views
         // Call from Javascript to C#
         public void InvokeAction(string data)
         {
-            if (action == null || data == null)
+            try
+            {
+                if (action == null || data == null)
                 return;
-            action.Invoke(data);
+                action.Invoke(data);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebView::InvokeAction exception, {ex.Message}");
+            }
         }
 
         // Queue script for call in HybridWebViewRenderer
         public void RunJSScript(string script)
         {
-            Scripts.Add(script);
+            try
+            { 
+                Scripts.Add(script);
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebView::RunJSScript exception, {ex.Message}");
+            }
         }
 
         public static string InjectedFunction
