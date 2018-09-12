@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Xamarin.Forms;
 
 namespace WordSearch.Views
@@ -11,7 +12,8 @@ namespace WordSearch.Views
         // Url
         public static readonly BindableProperty UriProperty = BindableProperty.Create(propertyName: "Uri", returnType: typeof(string), declaringType: typeof(HybridWebView), defaultValue: default(string));
         // JS scripts to run in web page
-        public static readonly BindableProperty ScriptsProperty = BindableProperty.Create(propertyName: "Scripts", returnType: typeof(List<string>), declaringType: typeof(HybridWebView), defaultValue: default(List<string>));
+        public static readonly BindableProperty ScriptsProperty = BindableProperty.Create(propertyName: "Scripts", returnType: typeof(ObservableCollection<string>), declaringType: typeof(HybridWebView), defaultValue: default(ObservableCollection<string>));
+        internal static object ScriptsPropertyLock = new object();
 
         public string Uri
         {
@@ -19,15 +21,15 @@ namespace WordSearch.Views
             set { SetValue(UriProperty, value); }
         }
 
-        public List<string> Scripts
+        public ObservableCollection<string> Scripts
         {
-            get { return (List<string>)GetValue(ScriptsProperty); }
+            get { return (ObservableCollection<string>)GetValue(ScriptsProperty); }
             set { SetValue(ScriptsProperty, value); }
         }
 
         public HybridWebView() : base()
         {
-            Scripts = new List<string>();
+            Scripts = new ObservableCollection<string>();
         }
 
         public void RegisterAction(Action<string> callback)
@@ -62,10 +64,8 @@ namespace WordSearch.Views
                 {
                     case Device.Android:
                         return "function csharp(data){bridge.invokeAction(data);}";
-
                     case Device.iOS:
                         return "function csharp(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
-
                     default:
                         return "function csharp(data){window.external.notify(data);}";
                 }

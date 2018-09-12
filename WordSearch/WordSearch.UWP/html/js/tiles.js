@@ -28,7 +28,7 @@ class Tiles {
         });
     }   
 
-    // use promise to wait for C# tilesJSCallback object to be created
+    // use promise to wait for C# invokeCSharpAction object to be created
     waitForTilesCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
@@ -37,7 +37,7 @@ class Tiles {
                 }, 5000);
                 (function waitForTilesCallback() {
                     try {
-                        if (tilesJSCallback) {
+                        if (invokeCSharpAction) {
                             clearTimeout(timerId);
                             return resolve();
                         }
@@ -64,7 +64,7 @@ class Tiles {
                 msgObj.Data = err.message;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                tilesJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -84,7 +84,7 @@ class Tiles {
                 msgObj.Data = info;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                tilesJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -250,7 +250,7 @@ class Tiles {
                 msgObj.Data = data;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                tilesJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });

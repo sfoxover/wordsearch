@@ -22,23 +22,26 @@ namespace WordSearch.Droid.Views
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (Control == null && Element != null)
             {
                 var webView = new Android.Webkit.WebView(_context);
                 webView.Settings.JavaScriptEnabled = true;
                 SetNativeControl(webView);
             }
-            if (e.OldElement != null)
+            if (Control != null)
             {
-                Control.RemoveJavascriptInterface("jsBridge");
-                var hybridWebView = e.OldElement as HybridWebView;
-                hybridWebView.Cleanup();
-            }
-            if (e.NewElement != null)
-            {
-                Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
-                Control.LoadUrl(string.Format("file:///android_asset/html/{0}", Element.Uri));
-                InjectJS(JavaScriptFunction);
+                if (e.OldElement != null)
+                {
+                    Control.RemoveJavascriptInterface("jsBridge");
+                    var hybridWebView = e.OldElement as HybridWebView;
+                    hybridWebView.Cleanup();
+                }
+                if (e.NewElement != null)
+                {
+                    Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
+                    Control.LoadUrl(string.Format("file:///android_asset/html/{0}", Element.Uri));
+                    InjectJS(JavaScriptFunction);
+                }
             }
         }
 

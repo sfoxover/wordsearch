@@ -8,24 +8,50 @@ namespace WordSearch.UWP.Views
 {
     public class HybridWebViewRenderer : ViewRenderer<HybridWebView, Windows.UI.Xaml.Controls.WebView>
     {
+        bool IsScriptReady = false;
+
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
             base.OnElementChanged(e);
 
-            if (Control == null)
+            if (Control == null && Element != null)
             {
                 SetNativeControl(new Windows.UI.Xaml.Controls.WebView());
             }
-            if (e.OldElement != null)
+            if (Control != null)
             {
-                Control.NavigationCompleted -= OnWebViewNavigationCompleted;
-                Control.ScriptNotify -= OnWebViewScriptNotify;
+                if (e.OldElement != null)
+                {
+                    Control.NavigationCompleted -= OnWebViewNavigationCompleted;
+                    Control.ScriptNotify -= OnWebViewScriptNotify;
+                }
+                if (e.NewElement != null)
+                {
+                    Control.NavigationCompleted += OnWebViewNavigationCompleted;
+                    Control.ScriptNotify += OnWebViewScriptNotify;
+                    Control.Source = new Uri(string.Format("ms-appx-web:///html//{0}", Element.Uri));
+
+                    Element.Scripts.CollectionChanged += Scripts_CollectionChanged;
+                }
             }
-            if (e.NewElement != null)
+        }
+
+        private void Scripts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (IsScriptReady)
             {
-                Control.NavigationCompleted += OnWebViewNavigationCompleted;
-                Control.ScriptNotify += OnWebViewScriptNotify;
-                Control.Source = new Uri(string.Format("ms-appx-web:///html//{0}", Element.Uri));
+                if (Element.Scripts.Count > 0)
+                {
+                    // Inject JS script
+                    Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                    {
+                        foreach (var script in Element.Scripts)
+                        {
+                            Control.InvokeScriptAsync("eval", new[] { script });
+                        }
+                        Element.Scripts.Clear();
+                    });
+                }
             }
         }
 
@@ -42,9 +68,13 @@ namespace WordSearch.UWP.Views
                 {
                     await Control.InvokeScriptAsync("eval", new[] { script });
                 }
+                Element.Scripts.Clear();
+
+                IsScriptReady = true;
             }
         }
 
+        // Javascript call from html page to C#
         void OnWebViewScriptNotify(object sender, NotifyEventArgs e)
         {
             Element.InvokeAction(e.Value);

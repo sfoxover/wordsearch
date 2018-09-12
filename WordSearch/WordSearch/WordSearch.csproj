@@ -27,9 +27,6 @@
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\App.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\LogFilesPage.xaml.cs">
-      <DependentUpon>LogFilesPage.xaml</DependentUpon>
-    </Compile>
     <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="Views\MainPage.xaml.cs">
       <DependentUpon>*.xaml</DependentUpon>
     </Compile>

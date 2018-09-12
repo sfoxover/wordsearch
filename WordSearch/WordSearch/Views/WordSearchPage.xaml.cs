@@ -232,7 +232,7 @@ namespace WordSearch
             ViewModel.UpdateScore(word.Text.Length);
             // signal html page with word complete
             var textPos = Manager.GetTextPos(word);            
-            await ViewModel.SignalHeaderHtmlPage("OnWordComplete", textPos);
+            ViewModel.SignalHeaderHtmlPage("OnWordComplete", textPos);
             // speak completed word
             if(SoundSettingIsOn)
                 await TextToSpeech.SpeakAsync("You found " + word.Text);
@@ -256,8 +256,8 @@ namespace WordSearch
             // get ranking
             bool bOK = Score.GetScoreRank(ViewModel.GameScore, out int ranking);
             var rank = new { Score = ViewModel.GameScore, Rank = ranking };
-            await ViewModel.SignalTilesHtmlPage("OnGameCompleted", rank);
-            await ViewModel.SignalHeaderHtmlPage("OnGameCompleted", rank);
+            ViewModel.SignalTilesHtmlPage("OnGameCompleted", rank);
+            ViewModel.SignalHeaderHtmlPage("OnGameCompleted", rank);
             // speak completed word
             if (SoundSettingIsOn)
             {

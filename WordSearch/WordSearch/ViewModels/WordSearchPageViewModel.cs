@@ -97,8 +97,8 @@ namespace WordSearch.ViewModels
             GameScore = 0;
             GameCompleted = false;
             ScoreBoard = $"Score: {GameScore}";
-            WordSearchHeaderSourceHtml = "html/wordSearchHeader.html";
-            WordSearchTilesSourceHtml = "html/wordSearchTiles.html";
+            WordSearchHeaderSourceHtml = "wordSearchHeader.html";
+            WordSearchTilesSourceHtml = "wordSearchTiles.html";
             StartGameTimer();
         }    
 
@@ -149,19 +149,11 @@ namespace WordSearch.ViewModels
         }
 
         // send message to html header page
-        public async Task<bool> SignalHeaderHtmlPage(string message, object data)
+        public bool SignalHeaderHtmlPage(string message, object data)
         {
             bool bOK = true;
             try
             {
-                // wait for page load
-                int waited = 0;
-                while (!HasHeaderPageSignalled && waited < 20)
-                {
-                    await Task.Delay(100);
-                    waited++;
-                }
-                Debug.Assert(HasHeaderPageSignalled);
                 var msg = new MessageJson();
                 msg.Message = message;
                 msg.Data = data;
@@ -178,19 +170,11 @@ namespace WordSearch.ViewModels
         }
 
         // send message to html tiles page
-        public async Task<bool> SignalTilesHtmlPage(string message, object data)
+        public bool SignalTilesHtmlPage(string message, object data)
         {
             bool bOK = true;
             try
             {
-                // wait for page load
-                int waited = 0;
-                while (!HasTilesPageSignalled && waited < 20)
-                {
-                    await Task.Delay(100);
-                    waited++;
-                }
-                Debug.Assert(HasTilesPageSignalled);
                 var msg = new MessageJson();
                 msg.Message = message;
                 msg.Data = data;
