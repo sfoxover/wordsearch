@@ -11,8 +11,8 @@
                 <Helpers:NegateBooleanConverter x:Key="inverter"/>
             </StackLayout.Resources>
             <ActivityIndicator HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" BackgroundColor="White" Color="Black"/>
-            <localViews:HybridWebView IsVisible="{Binding IsLoading, Converter={StaticResource inverter}" x:Name="webViewHeader" Margin="0" Uri="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}"/>
-            <localViews:HybridWebView IsVisible="{Binding IsLoading, Converter={StaticResource inverter}" x:Name="webViewTiles" Margin="0" Uri="{Binding WordSearchTilesSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlTilePageHeight}"/>
+            <localViews:HybridWebView IsVisible="{Binding IsLoading, Converter={StaticResource inverter}}" x:Name="webViewHeader" Margin="0" Uri="{Binding WordSearchHeaderSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlHeaderPageHeight}"/>
+            <localViews:HybridWebView IsVisible="{Binding IsLoading, Converter={StaticResource inverter}}" x:Name="webViewTiles" Margin="0" Uri="{Binding WordSearchTilesSourceHtml}" WidthRequest="{Binding HtmlPageWidth}" HeightRequest="{Binding HtmlTilePageHeight}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -85,6 +85,7 @@ namespace WordSearch.ViewModels
         public WordSearchPageViewModel(INavigation navigation, int secondsRemaining, int pointsPerLetter, HybridWebView webViewHeader, HybridWebView webViewTiles)
              : base(navigation)
         {
+            IsLoading = true;
             HasTilesPageSignalled = false;
             HasHeaderPageSignalled = false;
             WebViewHeader = webViewHeader;

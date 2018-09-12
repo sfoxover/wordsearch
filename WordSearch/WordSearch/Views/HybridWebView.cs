@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using WordSearch.Helpers;
 using Xamarin.Forms;
 
@@ -14,7 +15,7 @@ namespace WordSearch.Views
         public static readonly BindableProperty UriProperty = BindableProperty.Create(propertyName: "Uri", returnType: typeof(string), declaringType: typeof(HybridWebView), defaultValue: default(string));
         // JS scripts to run in web page
         public static readonly BindableProperty ScriptsProperty = BindableProperty.Create(propertyName: "Scripts", returnType: typeof(ObservableCollection<string>), declaringType: typeof(HybridWebView), defaultValue: default(ObservableCollection<string>));
-        internal static object ScriptsPropertyLock = new object();
+        internal static object ScriptsLock = new object();
 
         public string Uri
         {
@@ -62,8 +63,11 @@ namespace WordSearch.Views
         public void RunJSScript(string script)
         {
             try
-            { 
-                Scripts.Add(script);
+            {
+                lock (ScriptsLock)
+                {
+                    Scripts.Add(script);
+                }
             }
             catch (Exception ex)
             {
@@ -71,19 +75,37 @@ namespace WordSearch.Views
             }
         }
 
-        public static string InjectedFunction
+        public void GetScripts(out List<string> result)
         {
-            get
+            result = new List<string>();
+            try
             {
-                switch (Device.RuntimePlatform)
+                lock (ScriptsLock)
                 {
-                    case Device.Android:
-                        return "function csharp(data){bridge.invokeAction(data);}";
-                    case Device.iOS:
-                        return "function csharp(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
-                    default:
-                        return "function csharp(data){window.external.notify(data);}";
+                    result = Scripts.ToList();
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebView::GetScripts exception, {ex.Message}");
+            }
+        }
+
+        public void ClearScripts(List<string> values)
+        {
+            try
+            {
+                lock (ScriptsLock)
+                {
+                    foreach (var item in values)
+                    {
+                        Scripts.Remove(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebView::ClearScripts exception, {ex.Message}");
             }
         }
     }

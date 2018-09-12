@@ -2,6 +2,7 @@
 using Xamarin.Forms.Platform.UWP;
 using Windows.UI.Xaml.Controls;
 using WordSearch.Views;
+using System.Collections.Generic;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(WordSearch.UWP.Views.HybridWebViewRenderer))]
 namespace WordSearch.UWP.Views
@@ -34,26 +35,7 @@ namespace WordSearch.UWP.Views
                     Element.Scripts.CollectionChanged += Scripts_CollectionChanged;
                 }
             }
-        }
-
-        private void Scripts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (IsScriptReady)
-            {
-                // Inject JS script
-                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
-                {
-                    if (Element != null && Element.Scripts != null && Element.Scripts.Count > 0)
-                    {
-                        foreach (var script in Element.Scripts)
-                        {
-                            Control.InvokeScriptAsync("eval", new[] { script });
-                        }
-                        Element.Scripts.Clear();
-                    }
-                });
-            }
-        }
+        }      
 
         async void OnWebViewNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
@@ -64,11 +46,12 @@ namespace WordSearch.UWP.Views
                 await Control.InvokeScriptAsync("eval", new[] { jsFunction });
 
                 // Inject JS script
-                foreach (var script in Element.Scripts)
+                Element.GetScripts(out List<string> results);
+                foreach (var script in results)
                 {
                     await Control.InvokeScriptAsync("eval", new[] { script });
                 }
-                Element.Scripts.Clear();
+                Element.ClearScripts(results);
 
                 IsScriptReady = true;
             }
@@ -78,6 +61,26 @@ namespace WordSearch.UWP.Views
         void OnWebViewScriptNotify(object sender, NotifyEventArgs e)
         {
             Element.InvokeAction(e.Value);
+        }
+
+        private void Scripts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (IsScriptReady)
+            {
+                // Inject JS script
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    if (Element != null) // && Element.Scripts != null && Element.Scripts.Count > 0)
+                    {
+                        Element.GetScripts(out List<string> results);
+                        foreach (var script in results)
+                        {
+                            Control.InvokeScriptAsync("eval", new[] { script });
+                        }
+                        Element.ClearScripts(results);
+                    }
+                });
+            }
         }
     }
 }

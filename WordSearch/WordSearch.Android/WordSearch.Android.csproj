@@ -170,12 +170,6 @@
     <AndroidAsset Include="Assets\html\js\highScores.js" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\html\logFiles.html" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\html\js\logFiles.js" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\html\js\anime.min.js" />
   </ItemGroup>
   <ItemGroup>

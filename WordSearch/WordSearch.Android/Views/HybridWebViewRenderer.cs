@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Android.Content;
 using WordSearch.Droid.Helpers;
 using WordSearch.Views;
@@ -10,8 +11,8 @@ namespace WordSearch.Droid.Views
 {
     public class HybridWebViewRenderer : ViewRenderer<HybridWebView, Android.Webkit.WebView>
     {
-        const string JavaScriptFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
         Context _context;
+        bool IsScriptReady = false;
 
         public HybridWebViewRenderer(Context context) : base(context)
         {
@@ -40,7 +41,20 @@ namespace WordSearch.Droid.Views
                 {
                     Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
                     Control.LoadUrl(string.Format("file:///android_asset/html/{0}", Element.Uri));
-                    InjectJS(JavaScriptFunction);
+
+                    // Add Injection Function
+                    string jsFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
+                    InjectJS(jsFunction);
+
+                    // Inject JS script
+                    Element.GetScripts(out List<string> results);
+                    foreach (var script in results)
+                    {
+                        InjectJS(script);
+                    }
+                    Element.ClearScripts(results);
+
+                    IsScriptReady = true;
                 }
             }
         }
@@ -50,6 +64,26 @@ namespace WordSearch.Droid.Views
             if (Control != null)
             {
                 Control.LoadUrl(string.Format("javascript: {0}", script));
+            }
+        }
+
+        private void Scripts_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (IsScriptReady)
+            {
+                // Inject JS script
+                Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
+                {
+                    if (Element != null) // && Element.Scripts != null && Element.Scripts.Count > 0)
+                    {
+                        Element.GetScripts(out List<string> results);
+                        foreach (var script in results)
+                        {
+                            InjectJS(script);
+                        }
+                        Element.ClearScripts(results);
+                    }
+                });
             }
         }
     }

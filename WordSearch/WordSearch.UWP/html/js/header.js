@@ -213,7 +213,7 @@ class Header {
         try {
             $('#animeWord').text(text);
             $('.ml15').show();
-            if (this._restartAnim != null) {
+            if (this._restartAnim !== null) {
                 this._restartAnim.restart();
             }
             else {

@@ -13,7 +13,7 @@ class Header {
         });
     }   
 
-    // use promise to wait for C# headerJSCallback object to be created
+    // use promise to wait for C# invokeCSharpAction object to be created
     waitForHeaderCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
@@ -22,7 +22,7 @@ class Header {
                 }, 5000);
                 (function waitForHeaderCallback() {
                     try {
-                        if (headerJSCallback) {
+                        if (invokeCSharpAction) {
                             clearTimeout(timerId);
                             return resolve();
                         }
@@ -49,7 +49,7 @@ class Header {
                 msgObj.Data = err.message;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                headerJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -69,7 +69,7 @@ class Header {
                 msgObj.Data = info;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                headerJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -143,7 +143,7 @@ class Header {
                 msgObj.Data = data;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                headerJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -213,7 +213,7 @@ class Header {
         try {
             $('#animeWord').text(text);
             $('.ml15').show();
-            if (this._restartAnim != null) {
+            if (this._restartAnim !== null) {
                 this._restartAnim.restart();
             }
             else {
