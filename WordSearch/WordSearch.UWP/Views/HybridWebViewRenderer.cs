@@ -33,6 +33,10 @@ namespace WordSearch.UWP.Views
         {
             if (args.IsSuccess)
             {
+                // Add Injection Function
+                string jsFunction = "function invokeCSharpAction(data){window.external.notify(data);}";
+                await Control.InvokeScriptAsync("eval", new[] { jsFunction });
+
                 // Inject JS script
                 foreach (var script in Element.Scripts)
                 {

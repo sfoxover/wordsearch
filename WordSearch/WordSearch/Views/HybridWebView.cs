@@ -53,5 +53,23 @@ namespace WordSearch.Views
         {
             Scripts.Add(script);
         }
+
+        public static string InjectedFunction
+        {
+            get
+            {
+                switch (Device.RuntimePlatform)
+                {
+                    case Device.Android:
+                        return "function csharp(data){bridge.invokeAction(data);}";
+
+                    case Device.iOS:
+                        return "function csharp(data){window.webkit.messageHandlers.invokeAction.postMessage(data);}";
+
+                    default:
+                        return "function csharp(data){window.external.notify(data);}";
+                }
+            }
+        }
     }
 }

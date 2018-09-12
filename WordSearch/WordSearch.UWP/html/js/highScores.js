@@ -19,7 +19,7 @@ class HighScores {
         });
     }   
 
-    // use promise to wait for C# scoresJSCallback object to be created
+    // use promise to wait for C# invokeCSharpAction object to be created
     waitForCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
@@ -28,7 +28,7 @@ class HighScores {
                 }, 3000);
                 (function waitForCallback() {
                     try {
-                        if (scoresJSCallback) {
+                        if (invokeCSharpAction) {
                             clearTimeout(timerId);
                             return resolve();
                         }
@@ -55,7 +55,7 @@ class HighScores {
                 msgObj.Data = err.message;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                scoresJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -75,7 +75,7 @@ class HighScores {
                 msgObj.Data = info;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                scoresJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -139,7 +139,7 @@ class HighScores {
                 msgObj.Data = data;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                scoresJSCallback(json);
+                invokeCSharpAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
