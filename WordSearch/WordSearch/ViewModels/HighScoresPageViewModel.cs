@@ -41,29 +41,21 @@ namespace WordSearch.ViewModels
         {
             HasHtmlPageSignalled = false;
             WebView = webView;
-            SourceHtml = "html/highScores.html";
+            SourceHtml = "highScores.html";
         }
 
         // send message to html header page
-        public async Task<bool> SignalHtmlPage(string message, object data)
+        public bool SignalHtmlPage(string message, object data)
         {
             bool bOK = true;
             try
             {
-                // wait for page load
-                int waited = 0;
-                while (!HasHtmlPageSignalled && waited < 20)
-                {
-                    await Task.Delay(100);
-                    waited++;
-                }
-                Debug.Assert(HasHtmlPageSignalled);
                 var msg = new MessageJson();
                 msg.Message = message;
                 msg.Data = data;
                 string json = msg.GetJsonString();
                 string script = $"highScores.handleMsgFromApp('{json}')";
-                await WebView.InjectJavascriptAsync(script).ConfigureAwait(false);
+                WebView.RunJSScript(script);
             }
             catch (Exception ex)
             {
@@ -79,17 +71,17 @@ namespace WordSearch.ViewModels
             bool bOK = await Score.DeleteAllRecords();
             if (bOK)
             {
-                await SignalHtmlPage("LoadHighScores", null);
+                SignalHtmlPage("LoadHighScores", null);
             }
         }
 
         // load high scores from database
-        public async void LoadHighScoreData()
+        public void LoadHighScoreData()
         {
             bool bOK = Score.LoadAllRecords(out List<Score> results);
             if(bOK)
             {
-                await SignalHtmlPage("LoadHighScores", results);
+                SignalHtmlPage("LoadHighScores", results);
             }
         }
     }

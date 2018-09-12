@@ -167,7 +167,7 @@ namespace WordSearch.ViewModels
                 msg.Data = data;
                 string json = msg.GetJsonString();
                 string script = $"header.handleMsgFromApp('{json}')";
-                await WebViewHeader.InjectJavascriptAsync(script).ConfigureAwait(false);
+                WebViewHeader.RunJSScript(script);
             }
             catch (Exception ex)
             {
@@ -196,7 +196,7 @@ namespace WordSearch.ViewModels
                 msg.Data = data;
                 string json = msg.GetJsonString();
                 string script = $"tiles.handleMsgFromApp('{json}')";
-                await WebViewTiles.InjectJavascriptAsync(script).ConfigureAwait(false);
+                WebViewTiles.RunJSScript(script);
             }
             catch (Exception ex)
             {

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms.Platform.UWP;
 using Windows.UI.Xaml.Controls;
 using WordSearch.Views;
@@ -12,8 +8,6 @@ namespace WordSearch.UWP.Views
 {
     public class HybridWebViewRenderer : ViewRenderer<HybridWebView, Windows.UI.Xaml.Controls.WebView>
     {
-        const string JavaScriptFunction = "function invokeCSharpAction(data){window.external.notify(data);}";
-
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
             base.OnElementChanged(e);
@@ -31,7 +25,7 @@ namespace WordSearch.UWP.Views
             {
                 Control.NavigationCompleted += OnWebViewNavigationCompleted;
                 Control.ScriptNotify += OnWebViewScriptNotify;
-                Control.Source = new Uri(string.Format("ms-appx-web:///Content//{0}", Element.Uri));
+                Control.Source = new Uri(string.Format("ms-appx-web:///html//{0}", Element.Uri));
             }
         }
 
@@ -40,7 +34,10 @@ namespace WordSearch.UWP.Views
             if (args.IsSuccess)
             {
                 // Inject JS script
-                await Control.InvokeScriptAsync("eval", new[] { JavaScriptFunction });
+                foreach (var script in Element.Scripts)
+                {
+                    await Control.InvokeScriptAsync("eval", new[] { script });
+                }
             }
         }
 

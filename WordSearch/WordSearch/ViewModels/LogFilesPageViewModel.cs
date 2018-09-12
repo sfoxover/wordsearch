@@ -64,7 +64,7 @@ namespace WordSearch.ViewModels
                 msg.Data = data;
                 string json = msg.GetJsonString();
                 string script = $"logFiles.handleMsgFromApp('{json}')";
-                await WebView.InjectJavascriptAsync(script).ConfigureAwait(false);
+                WebView.RunJSScript(script);
             }
             catch (Exception ex)
             {

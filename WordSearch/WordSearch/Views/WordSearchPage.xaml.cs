@@ -67,8 +67,8 @@ namespace WordSearch
                 int points = Manager.GetPointsPerLetter();
                 BindingContext = new WordSearchPageViewModel(Navigation, secondsRemaining, points, webViewHeader, webViewTiles);
                 // Html callbacks
-                webViewHeader.AddLocalCallback("headerJSCallback", HeaderJSCallback);
-                webViewTiles.AddLocalCallback("tilesJSCallback", TilesJSCallback);
+                webViewHeader.RegisterAction(HeaderJSCallback);
+                webViewTiles.RegisterAction(TilesJSCallback);
                 // Set sizes
                 ScreenWidth = width;
                 ScreenHeight = height;

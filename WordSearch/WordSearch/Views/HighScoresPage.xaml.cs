@@ -27,7 +27,7 @@ namespace WordSearch.Views
             BindingContext = new HighScoresPageViewModel(Navigation, webViewHighScores);
             ViewModel.HtmlPageWidth = width;
             ViewModel.HtmlPageHeight = height;
-            webViewHighScores.AddLocalCallback("scoresJSCallback", ScoresJSCallback);
+            webViewHighScores.RegisterAction(ScoresJSCallback);
             ViewModel.LoadHighScoreData();
         }
 

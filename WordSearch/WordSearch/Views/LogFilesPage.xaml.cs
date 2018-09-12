@@ -27,7 +27,7 @@ namespace WordSearch.Views
             BindingContext = new LogFilesPageViewModel(Navigation, webViewLogs);
             ViewModel.HtmlPageWidth = width;
             ViewModel.HtmlPageHeight = height;
-            webViewLogs.AddLocalCallback("logsJSCallback", LogsJSCallback);
+            webViewLogs.RegisterAction(LogsJSCallback);
             ViewModel.LoadData();
         }
 
