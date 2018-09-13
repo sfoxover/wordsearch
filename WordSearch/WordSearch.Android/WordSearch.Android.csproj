@@ -85,6 +85,7 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Helpers\DependencyHelper.cs" />
+    <Compile Include="Views\HybridWebViewClient.cs" />
     <Compile Include="Views\HybridWebViewRenderer.cs" />
   </ItemGroup>
   <ItemGroup>

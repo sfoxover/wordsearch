@@ -2,6 +2,7 @@
 using Android.Webkit;
 using Java.Interop;
 using WordSearch.Droid.Views;
+using WordSearch.Helpers;
 
 namespace WordSearch.Droid.Helpers
 {
@@ -18,10 +19,17 @@ namespace WordSearch.Droid.Helpers
         [Export("invokeAction")]
         public void InvokeAction(string data)
         {
-            HybridWebViewRenderer hybridRenderer;
-            if (hybridWebViewRenderer != null && hybridWebViewRenderer.TryGetTarget(out hybridRenderer))
+            try
             {
-                hybridRenderer.Element.InvokeAction(data);
+                HybridWebViewRenderer hybridRenderer;
+                if (hybridWebViewRenderer != null && hybridWebViewRenderer.TryGetTarget(out hybridRenderer))
+                {
+                    hybridRenderer.Element.InvokeAction(data);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"JSBridge::InvokeAction exception, {ex.Message}");
             }
         }
     }

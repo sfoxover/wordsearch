@@ -5,6 +5,8 @@ using WordSearch.Droid.Helpers;
 using WordSearch.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
+using WordSearch.Helpers;
+using Xamarin.Essentials;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(WordSearch.Droid.Views.HybridWebViewRenderer))]
 namespace WordSearch.Droid.Views
@@ -21,50 +23,73 @@ namespace WordSearch.Droid.Views
 
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
-            base.OnElementChanged(e);
+            try
+            {
+                base.OnElementChanged(e);
 
-            if (Control == null && Element != null)
-            {
-                var webView = new Android.Webkit.WebView(_context);
-                webView.Settings.JavaScriptEnabled = true;
-                SetNativeControl(webView);
-            }
-            if (Control != null)
-            {
-                if (e.OldElement != null)
+                if (Control == null && Element != null)
                 {
-                    Control.RemoveJavascriptInterface("jsBridge");
-                    var hybridWebView = e.OldElement as HybridWebView;
-                    hybridWebView.Cleanup();
+                    var webView = new Android.Webkit.WebView(_context);
+                    webView.Settings.JavaScriptEnabled = true;
+                    webView.SetWebViewClient(new HybridWebViewClient(this));
+                    SetNativeControl(webView);
                 }
-                if (e.NewElement != null)
+                if (Control != null)
                 {
-                    Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
-                    var url = $"file:///android_asset/html/{Element.Uri}";
-                    Control.LoadUrl(url);
-
-                    // Add Injection Function
-                    string jsFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";
-                    InjectJS(jsFunction);
-
-                    // Inject JS script
-                    Element.GetScripts(out List<string> results);
-                    foreach (var script in results)
+                    if (e.OldElement != null)
                     {
-                        InjectJS(script);
+                        Control.RemoveJavascriptInterface("jsBridge");
+                        Element.Scripts.CollectionChanged -= Scripts_CollectionChanged;
+                        var hybridWebView = e.OldElement as HybridWebView;
+                        hybridWebView.Cleanup();
                     }
-                    Element.ClearScripts(results);
-
-                    IsScriptReady = true;
+                    if (e.NewElement != null)
+                    {
+                        Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
+                        var url = $"file:///android_asset/html/{Element.Uri}";
+                        Control.LoadUrl(url);                      
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebViewRenderer::OnElementChanged exception, {ex.Message}");
+            }
+        }
+
+        public void OnPageFinished()
+        {
+            try
+            { 
+                // Inject JS script
+                Element.GetScripts(out List<string> results);
+                foreach (var script in results)
+                {
+                    InjectJS(script);
+                }
+                Element.ClearScripts(results);
+                Element.Scripts.CollectionChanged += Scripts_CollectionChanged;
+                IsScriptReady = true;
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebViewRenderer::OnPageFinished exception, {ex.Message}");
             }
         }
 
         void InjectJS(string script)
         {
-            if (Control != null)
+            try
             {
-                Control.LoadUrl(string.Format("javascript: {0}", script));
+                System.Diagnostics.Debug.Assert(MainThread.IsMainThread);
+                if (Control != null)
+                {
+                    Control.EvaluateJavascript(script, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebViewRenderer::InjectJS exception, {ex.Message}");
             }
         }
 
@@ -72,17 +97,25 @@ namespace WordSearch.Droid.Views
         {
             if (IsScriptReady)
             {
+                System.Diagnostics.Debug.Assert(MainThread.IsMainThread);
                 // Inject JS script
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    if (Element != null) // && Element.Scripts != null && Element.Scripts.Count > 0)
+                    try
                     {
-                        Element.GetScripts(out List<string> results);
-                        foreach (var script in results)
+                        if (Element != null) 
                         {
-                            InjectJS(script);
+                            Element.GetScripts(out List<string> results);
+                            foreach (var script in results)
+                            {
+                                InjectJS(script);
+                            }
+                            Element.ClearScripts(results);
                         }
-                        Element.ClearScripts(results);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Error($"HybridWebViewRenderer::Scripts_CollectionChanged exception, {ex.Message}");
                     }
                 });
             }
