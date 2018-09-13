@@ -13,7 +13,7 @@ class Header {
         });
     }   
 
-    // use promise to wait for C# invokeCSharpAction object to be created
+    // use promise to wait for C# window.jsBridge object to be created
     waitForHeaderCallbackCreation() {
         try {
             return new Promise(function (resolve, reject) {
@@ -22,7 +22,7 @@ class Header {
                 }, 5000);
                 (function waitForHeaderCallback() {
                     try {
-                        if (invokeCSharpAction) {
+                        if (window.jsBridge) {
                             clearTimeout(timerId);
                             return resolve();
                         }
@@ -49,7 +49,7 @@ class Header {
                 msgObj.Data = err.message;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                invokeCSharpAction(json);
+                jsBridge.invokeAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -69,7 +69,7 @@ class Header {
                 msgObj.Data = info;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                invokeCSharpAction(json);
+                jsBridge.invokeAction(json);
             }).catch(function (error) {
                 console.log(error);
             });
@@ -143,7 +143,7 @@ class Header {
                 msgObj.Data = data;
                 var json = JSON.stringify(msgObj);
                 // call native code
-                invokeCSharpAction(json);
+                jsBridge.invokeAction(json);
             }).catch(function (error) {
                 console.log(error);
             });

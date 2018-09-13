@@ -40,7 +40,8 @@ namespace WordSearch.Droid.Views
                 if (e.NewElement != null)
                 {
                     Control.AddJavascriptInterface(new JSBridge(this), "jsBridge");
-                    Control.LoadUrl(string.Format("file:///android_asset/html/{0}", Element.Uri));
+                    var url = $"file:///android_asset/html/{Element.Uri}";
+                    Control.LoadUrl(url);
 
                     // Add Injection Function
                     string jsFunction = "function invokeCSharpAction(data){jsBridge.invokeAction(data);}";

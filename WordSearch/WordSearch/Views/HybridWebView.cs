@@ -49,8 +49,12 @@ namespace WordSearch.Views
         {
             try
             {
+                Logger.Instance.Debug($"InvokeAction with data: {data}");
                 if (action == null || data == null)
-                return;
+                {
+                    Logger.Instance.Error($"InvokeAction with data lost with null action: {data}");
+                    return;
+                }
                 action.Invoke(data);
             }
             catch (Exception ex)
