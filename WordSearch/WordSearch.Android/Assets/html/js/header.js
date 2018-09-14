@@ -3,92 +3,11 @@ $(document).ready(function () {
     header.signalNativeApp("LoadWordsHeader");   
 });
 
-class Header {
+class Header extends Signal {
     constructor() {
+        super();
         this._restartAnim = null;
-        this.waitForHeaderCallbackCreation().then(function () {
-            console.log('Native object loaded');
-        }).catch(function (error) {
-            console.log('Native object timed out');
-        });
     }   
-
-    // use promise to wait for C# window.jsBridge object to be created
-    waitForHeaderCallbackCreation() {
-        try {
-            return new Promise(function (resolve, reject) {
-                var timerId = setTimeout(function () {
-                    return reject(new Error("waitForHeaderCallbackCreation timed out."));
-                }, 5000);
-                (function waitForHeaderCallback() {
-                    try {
-                        if (window.jsBridge) {
-                            clearTimeout(timerId);
-                            return resolve();
-                        }
-                    }
-                    catch (err) {
-                        err;
-                    }
-                    setTimeout(waitForHeaderCallback, 100);
-                })();
-            });
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
-
-    // handle errors
-    handleError(err) {
-        try {
-            this.waitForHeaderCallbackCreation().then(function () {
-                // format error message into json
-                var msgObj = new Object();
-                msgObj.Message = "Error";
-                msgObj.Data = err.message;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }
-
-    // log message to native app
-    logMsg(info) {
-        try {
-            this.waitForHeaderCallbackCreation().then(function () {
-                // format error message into json
-                var msgObj = new Object();
-                msgObj.Message = "LogMsg";
-                msgObj.Data = info;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }    
-
-    // load mok data for browser testing
-    loadMockData() {
-        try {
-            var data = JSON.parse('[{ "Text": "friday", "Row": 3, "Column": 2, "IsWordCompleted": false }, { "Text": "july", "Row": 8, "Column": 4, "IsWordCompleted": false }, { "Text": "car", "Row": 4, "Column": 6, "IsWordCompleted": false }, { "Text": "africa", "Row": 0, "Column": 7, "IsWordCompleted": false }]');
-            this.makeTable($("#wordsList"), data);
-        }
-        catch(err) {
-            this.handleError(err);
-        }
-    }
 
     // create word list table
     makeTable(container, items) {
@@ -129,26 +48,6 @@ class Header {
             return container.html(table);
         }
         catch(err) {
-            this.handleError(err);
-        }
-    }
-
-    // pass message and data to native app
-    signalNativeApp(msg, data) {
-        try {
-            this.waitForHeaderCallbackCreation().then(function () {
-                // format message into json
-                var msgObj = new Object();
-                msgObj.Message = msg;
-                msgObj.Data = data;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
             this.handleError(err);
         }
     }

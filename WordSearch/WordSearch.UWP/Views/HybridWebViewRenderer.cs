@@ -3,6 +3,8 @@ using Xamarin.Forms.Platform.UWP;
 using Windows.UI.Xaml.Controls;
 using WordSearch.Views;
 using System.Collections.Generic;
+using WordSearch.Helpers;
+using Xamarin.Essentials;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(WordSearch.UWP.Views.HybridWebViewRenderer))]
 namespace WordSearch.UWP.Views
@@ -13,47 +15,61 @@ namespace WordSearch.UWP.Views
 
         protected override void OnElementChanged(ElementChangedEventArgs<HybridWebView> e)
         {
-            base.OnElementChanged(e);
-
-            if (Control == null && Element != null)
+            try
             {
-                SetNativeControl(new Windows.UI.Xaml.Controls.WebView());
+                base.OnElementChanged(e);
+
+                if (Control == null && Element != null)
+                {
+                    SetNativeControl(new Windows.UI.Xaml.Controls.WebView());
+                }
+                if (Control != null)
+                {
+                    if (e.OldElement != null)
+                    {
+                        Control.NavigationCompleted -= OnWebViewNavigationCompleted;
+                        Control.ScriptNotify -= OnWebViewScriptNotify;
+                    }
+                    if (e.NewElement != null)
+                    {
+                        Control.NavigationCompleted += OnWebViewNavigationCompleted;
+                        Control.ScriptNotify += OnWebViewScriptNotify;
+                        Control.Source = new Uri(string.Format("ms-appx-web:///html//{0}", Element.Uri));
+
+                        Element.Scripts.CollectionChanged += Scripts_CollectionChanged;
+                    }
+                }
             }
-            if (Control != null)
+            catch (Exception ex)
             {
-                if (e.OldElement != null)
-                {
-                    Control.NavigationCompleted -= OnWebViewNavigationCompleted;
-                    Control.ScriptNotify -= OnWebViewScriptNotify;
-                }
-                if (e.NewElement != null)
-                {
-                    Control.NavigationCompleted += OnWebViewNavigationCompleted;
-                    Control.ScriptNotify += OnWebViewScriptNotify;
-                    Control.Source = new Uri(string.Format("ms-appx-web:///html//{0}", Element.Uri));
-
-                    Element.Scripts.CollectionChanged += Scripts_CollectionChanged;
-                }
+                Logger.Instance.Error($"HybridWebViewRenderer::OnElementChanged exception, {ex.Message}");
             }
         }      
 
         async void OnWebViewNavigationCompleted(WebView sender, WebViewNavigationCompletedEventArgs args)
         {
-            if (args.IsSuccess)
+            try
             {
-                // Add Injection Function
-                string jsFunction = "function invokeCSharpAction(data){window.external.notify(data);}";
-                await Control.InvokeScriptAsync("eval", new[] { jsFunction });
-
-                // Inject JS script
-                Element.GetScripts(out List<string> results);
-                foreach (var script in results)
+                if (args.IsSuccess)
                 {
-                    await Control.InvokeScriptAsync("eval", new[] { script });
-                }
-                Element.ClearScripts(results);
+                    // Add Injection Function
+                    string jsFunction = "function invokeCSharpAction(data){window.external.notify(data);}";
+                    await Control.InvokeScriptAsync("eval", new[] { jsFunction });
 
-                IsScriptReady = true;
+                    // Inject JS script
+                    Element.GetScripts(out List<string> results);
+                    foreach (var script in results)
+                    {
+                        await Control.InvokeScriptAsync("eval", new[] { script });
+                    }
+                    Element.ClearScripts(results);
+
+                    IsScriptReady = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Logger.Instance.Error($"HybridWebViewRenderer::OnWebViewNavigationCompleted exception, {ex.Message}");
             }
         }
 
@@ -67,17 +83,25 @@ namespace WordSearch.UWP.Views
         {
             if (IsScriptReady)
             {
+                System.Diagnostics.Debug.Assert(MainThread.IsMainThread);
                 // Inject JS script
                 Xamarin.Forms.Device.BeginInvokeOnMainThread(() =>
                 {
-                    if (Element != null) // && Element.Scripts != null && Element.Scripts.Count > 0)
+                    try
                     {
-                        Element.GetScripts(out List<string> results);
-                        foreach (var script in results)
+                        if (Element != null) // && Element.Scripts != null && Element.Scripts.Count > 0)
                         {
-                            Control.InvokeScriptAsync("eval", new[] { script });
+                            Element.GetScripts(out List<string> results);
+                            foreach (var script in results)
+                            {
+                                Control.InvokeScriptAsync("eval", new[] { script });
+                            }
+                            Element.ClearScripts(results);
                         }
-                        Element.ClearScripts(results);
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.Instance.Error($"HybridWebViewRenderer::Scripts_CollectionChanged exception, {ex.Message}");
                     }
                 });
             }

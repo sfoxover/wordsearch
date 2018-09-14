@@ -182,5 +182,8 @@
   <ItemGroup>
     <Folder Include="Assets\html\images\" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\html\js\signal.js" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

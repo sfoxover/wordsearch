@@ -1,88 +1,17 @@
 ﻿// on ready handler
-$(document).ready(function () {    
+$(document).ready(function () {
+    // Ping ready message
     highScores.signalNativeApp('ping');
-
     // close window
     $('#closeButton').click(() => highScores.closeWindow());
-
     // clear Scores
     $('#clearScores').click(() => highScores.clearScores());
 });
 
-class HighScores {
+class HighScores extends Signal {
     constructor() {
-        this.waitForCallbackCreation().then(function () {
-            console.log('Native object loaded');
-        }).catch(function (error) {
-            console.log('Loading mock data');
-        });
+        super();
     }   
-
-    // use promise to wait for C# window.jsBridge object to be created
-    waitForCallbackCreation() {
-        try {
-            return new Promise(function (resolve, reject) {
-                var timerId = setTimeout(function () {
-                    return reject(new Error("waitForCallbackCreation timed out."));
-                }, 3000);
-                (function waitForCallback() {
-                    try {
-                        if (window.jsBridge) {
-                            clearTimeout(timerId);
-                            return resolve();
-                        }
-                    }
-                    catch (err) {
-                        err;
-                    }
-                    setTimeout(waitForCallback, 100);
-                })();
-            });
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
-
-    // handle errors
-    handleError(err) {
-        try {
-            this.waitForCallbackCreation().then(function () {
-                // format error message into json
-                var msgObj = new Object();
-                msgObj.Message = "Error";
-                msgObj.Data = err.message;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }
-
-    // log message to native app
-    logMsg(info) {
-        try {
-            this.waitForCallbackCreation().then(function () {
-                // format error message into json
-                var msgObj = new Object();
-                msgObj.Message = "LogMsg";
-                msgObj.Data = info;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }    
 
     // create word list table
     makeTable(container, items) {
@@ -110,26 +39,6 @@ class HighScores {
             this.handleError(err);
         }
     }   
-
-    // pass message and data to native app
-    signalNativeApp(msg, data) {
-        try {
-            this.waitForCallbackCreation().then(function () {
-                // format message into json
-                var msgObj = new Object();
-                msgObj.Message = msg;
-                msgObj.Data = data;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
 
     // handle message from native app
     handleMsgFromApp(json) {

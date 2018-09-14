@@ -6,10 +6,8 @@ $(document).ready(function () {
     catch (err) {
         console.log('Error in tiles.signalNativeApp, ' + err);
     }
-
     // handle high score save click
     $('#saveHighScoreButton').click(() => tiles.saveHighScoreClick());
-
     $('#highScoreModal').on('keypress', function (e) {
         if (e.keyCode === 13) {
             e.preventDefault();
@@ -27,82 +25,12 @@ $(window).resize(function () {
     }
 });
 
-class Tiles {
+class Tiles extends Signal {
     constructor() {
+        super();
         this.rowCount = 0;
         this.columnCount = 0;
-        this.waitForTilesCallbackCreation().then(function () {
-            console.log('Native object loaded');
-        }).catch(function (error) {
-            console.log('Native object timed out');
-        });
     }   
-
-    // use promise to wait for C# window.jsBridge object to be created
-    waitForTilesCallbackCreation() {
-        try {
-            return new Promise(function (resolve, reject) {
-                var timerId = setTimeout(function () {
-                    return reject(new Error("waitForTilesCallbackCreation timed out."));
-                }, 5000);
-                (function waitForTilesCallback() {
-                    try {
-                        if (window.jsBridge) {
-                            clearTimeout(timerId);
-                            return resolve();
-                        }
-                    }
-                    catch (err) {
-                        err;
-                    }
-                    setTimeout(waitForTilesCallback, 100);
-                })();
-            });
-        }
-        catch (err) {
-            this.handleError(err);
-        }
-    }
-
-    // handle errors
-    handleError(err) {
-        try {
-            this.waitForTilesCallbackCreation().then(function () {
-                // format error message into json
-                var msgObj = new Object();
-                msgObj.Message = "Error";
-                msgObj.Data = err.message;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }
-
-    // log message to native app
-    logMsg(info) {
-        try {
-            this.waitForTilesCallbackCreation().then(function () {
-                // format error message into json
-                var msgObj = new Object();
-                msgObj.Message = "LogMsg";
-                msgObj.Data = info;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-    }    
 
     // resize to fix html page
     resizeTiles() {
@@ -231,26 +159,6 @@ class Tiles {
     // handle tile clicks
     handleTileClick(row) {
         this.signalNativeApp('tileClick', row);
-    }
-
-    // pass message and data to native app
-    signalNativeApp(msg, data) {
-        try {
-            this.waitForTilesCallbackCreation().then(function () {
-                // format message into json
-                var msgObj = new Object();
-                msgObj.Message = msg;
-                msgObj.Data = data;
-                var json = JSON.stringify(msgObj);
-                // call native code
-                jsBridge.invokeAction(json);
-            }).catch(function (error) {
-                console.log(error);
-            });
-        }
-        catch (err) {
-            this.handleError(err);
-        }
     }
 
     // handle message from native app
