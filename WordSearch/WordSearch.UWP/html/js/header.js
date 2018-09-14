@@ -3,7 +3,7 @@ $(document).ready(function () {
     header.signalNativeApp("LoadWordsHeader");   
 });
 
-class Header {
+class Header extends Signal{
     constructor() {
         this._restartAnim = null;
         this.waitForHeaderCallbackCreation().then(function () {

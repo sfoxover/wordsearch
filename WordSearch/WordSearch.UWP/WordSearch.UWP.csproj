@@ -135,6 +135,7 @@
     <Content Include="html\js\jquery-3.3.1.min.js" />
     <Content Include="html\images\mainlogo.png" />
     <Content Include="html\js\proton.min.js" />
+    <Content Include="html\js\signal.js" />
     <Content Include="html\js\tiles.js" />
     <Content Include="html\css\wordSearchHeader.css" />
     <Content Include="html\css\wordSearchTiles.css" />
