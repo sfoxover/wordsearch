@@ -48,7 +48,7 @@ class Header extends Signal {
             return container.html(table);
         }
         catch(err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -97,13 +97,13 @@ class Header extends Signal {
                     }
                 default:
                     {
-                        this.handleError("Unknown message from app, " + msg);
+                        this.logError("Unknown message from app, " + msg);
                         break;
                     }
             }
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -136,7 +136,7 @@ class Header extends Signal {
             }
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 }

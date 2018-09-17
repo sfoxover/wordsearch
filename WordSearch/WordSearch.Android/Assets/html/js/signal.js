@@ -1,10 +1,11 @@
 ﻿// Class used to receive messages from C# code.
 class Signal {
     constructor() {
+        var pThis = this;
         this.waitForCallbackCreation().then(function () {
-            console.log('Native object loaded');
+            pThis.logInfo('Native object loaded');
         }).catch(function (error) {
-            console.log('Native object timed out');
+            pThis.logInfo('Native object timed out');
         });
     }
 
@@ -37,13 +38,11 @@ class Signal {
     // handle errors
     logError(err) {      
         this.signalNativeApp("Error", err.message);
-        console.log(err);
     }
 
     // log message to native app
     logInfo(info) {       
         this.signalNativeApp("LogMsg", info);
-        console.log(info);
     }
 
     // pass message and data to native app
@@ -65,7 +64,7 @@ class Signal {
             });
         }
         catch (err) {
-            console.log(err);
+            err;
         }
     }
 }

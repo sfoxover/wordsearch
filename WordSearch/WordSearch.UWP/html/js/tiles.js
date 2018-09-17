@@ -66,7 +66,7 @@ class Tiles extends Signal {
             return tileSize;
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -126,7 +126,7 @@ class Tiles extends Signal {
             }, 1000);
         }
         catch(err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -144,7 +144,7 @@ class Tiles extends Signal {
             }); 
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -188,13 +188,13 @@ class Tiles extends Signal {
                     }
                 default:
                     {
-                        this.handleError("Unknown message from app, " + msg);
+                        this.logError("Unknown message from app, " + msg);
                         break;
                     }
             }
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -207,7 +207,7 @@ class Tiles extends Signal {
             });
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -218,7 +218,7 @@ class Tiles extends Signal {
             tiles.signalNativeApp('hightscoreName', name);
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 

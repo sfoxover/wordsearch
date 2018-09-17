@@ -36,7 +36,7 @@ class HighScores extends Signal {
             table.append(body);
         }
         catch(err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }   
 
@@ -54,13 +54,13 @@ class HighScores extends Signal {
                     }
                 default:
                     {
-                        this.handleError("Unknown message from app, " + msg);
+                        this.logError("Unknown message from app, " + msg);
                         break;
                     }
             }
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -70,7 +70,7 @@ class HighScores extends Signal {
             highScores.signalNativeApp('closeWindow', name);
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -80,7 +80,7 @@ class HighScores extends Signal {
             highScores.signalNativeApp('clearScores');
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 }

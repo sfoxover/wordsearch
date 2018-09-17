@@ -236,6 +236,9 @@ namespace WordSearch
             // speak completed word
             if(SoundSettingIsOn)
                 await TextToSpeech.SpeakAsync("You found " + word.Text);
+
+            var rank = new { Score = 100, Rank = "1" };
+            ViewModel.SignalTilesHtmlPage("OnGameCompleted", rank);
         }
 
         // delegate for game completed callback

@@ -74,7 +74,7 @@ class Tiles extends Signal {
             return tileSize;
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -134,7 +134,7 @@ class Tiles extends Signal {
             }, 1000);
         }
         catch(err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -152,7 +152,7 @@ class Tiles extends Signal {
             }); 
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -180,29 +180,29 @@ class Tiles extends Signal {
                         break;
                     }
                 case "OnGameCompleted":
-                    {
+                    {                       
                         // load fireworks
                         fireworks.start(0, 100);
                         setTimeout(function () {
-                            fireworks.pause();
+                         //   fireworks.pause();
                         }, 20000);
                         setTimeout(function () {
                             // show high score dialog
-                            tiles.showHighScoreDialog(data);
+                           // tiles.showHighScoreDialog(data);
                         }, 5000);
-                        $('#FireworksCanvas').hide();
-                        $('#FireworksCanvas').fadeIn(1000);                     
+                       // $('#FireworksCanvas').hide();
+                     //   $('#FireworksCanvas').fadeIn(1000);                     
                         break;
                     }
                 default:
                     {
-                        this.handleError("Unknown message from app, " + msg);
+                        this.logError("Unknown message from app, " + msg);
                         break;
                     }
             }
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -215,7 +215,7 @@ class Tiles extends Signal {
             });
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 
@@ -226,7 +226,7 @@ class Tiles extends Signal {
             tiles.signalNativeApp('hightscoreName', name);
         }
         catch (err) {
-            this.handleError(err);
+            this.logError(err);
         }
     }
 

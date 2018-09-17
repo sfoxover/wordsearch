@@ -5,6 +5,7 @@ $(document).ready(function () {
 class Fireworks {
 
     constructor() {
+        super();
         this.CANVAS_NAME = "FireworksCanvas";
         this._paused = false;
     }
