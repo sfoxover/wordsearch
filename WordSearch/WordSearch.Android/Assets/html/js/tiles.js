@@ -184,14 +184,14 @@ class Tiles extends Signal {
                         // load fireworks
                         fireworks.start(0, 100);
                         setTimeout(function () {
-                         //   fireworks.pause();
+                            fireworks.pause();
                         }, 20000);
                         setTimeout(function () {
                             // show high score dialog
-                           // tiles.showHighScoreDialog(data);
+                            tiles.showHighScoreDialog(data);
                         }, 5000);
-                       // $('#FireworksCanvas').hide();
-                     //   $('#FireworksCanvas').fadeIn(1000);                     
+                        $('#FireworksCanvas').hide();
+                        $('#FireworksCanvas').fadeIn(1000);                     
                         break;
                     }
                 default:

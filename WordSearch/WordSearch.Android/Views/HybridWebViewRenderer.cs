@@ -31,6 +31,7 @@ namespace WordSearch.Droid.Views
                 {
                     var webView = new Android.Webkit.WebView(_context);
                     webView.Settings.JavaScriptEnabled = true;
+                    webView.Settings.DomStorageEnabled = true;
                     webView.SetWebViewClient(new HybridWebViewClient(this));
                     SetNativeControl(webView);
                 }
