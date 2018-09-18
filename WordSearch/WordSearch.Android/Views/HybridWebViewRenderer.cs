@@ -7,6 +7,7 @@ using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using WordSearch.Helpers;
 using Xamarin.Essentials;
+using Android.Webkit;
 
 [assembly: ExportRenderer(typeof(HybridWebView), typeof(WordSearch.Droid.Views.HybridWebViewRenderer))]
 namespace WordSearch.Droid.Views
@@ -30,9 +31,12 @@ namespace WordSearch.Droid.Views
                 if (Control == null && Element != null)
                 {
                     var webView = new Android.Webkit.WebView(_context);
+                    webView.LayoutParameters = new LayoutParams(LayoutParams.MatchParent, LayoutParams.MatchParent);
                     webView.Settings.JavaScriptEnabled = true;
                     webView.Settings.DomStorageEnabled = true;
                     webView.SetWebViewClient(new HybridWebViewClient(this));
+                    webView.SetWebChromeClient(new WebChromeClient());
+                    webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
                     SetNativeControl(webView);
                 }
                 if (Control != null)
