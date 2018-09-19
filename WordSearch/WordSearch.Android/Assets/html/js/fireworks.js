@@ -10,6 +10,18 @@ class Fireworks extends Signal {
         this._paused = false;
     }
 
+    resizeCanvas(width, height) {
+        try {
+            this._canvas = document.getElementById(this.CANVAS_NAME);
+            this._canvas.width = window.innerWidth;
+            this._canvas.height = window.innerHeight;
+            console.log('canvas width:' + this._canvas.width + ' canvas height:' + this._canvas.height);
+        }
+        catch (err) {
+            this.logError(err);
+        }
+    }
+
     start(startPos, endPos) {
         try {
             var canvas = $("#" + this.CANVAS_NAME);

@@ -19,6 +19,7 @@ $(document).ready(function () {
 $(window).resize(function () {
     try {
         tiles.resizeTiles();
+        fireworks.resizeCanvas(window.innerWidth, window.innerHeight);
     }
     catch (err) {
         console.log('Error in tiles.resize, ' + err);
