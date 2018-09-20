@@ -37,7 +37,6 @@ namespace WordSearch.Droid.Views
                     webView.SetWebViewClient(new HybridWebViewClient(this));
                     webView.SetWebChromeClient(new WebChromeClient());
                     webView.SetBackgroundColor(Android.Graphics.Color.Transparent);
-                    //webView.SetLayerType(Android.Views.LayerType.Software, null);
                     SetNativeControl(webView);
                 }
                 if (Control != null)

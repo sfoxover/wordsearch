@@ -15,6 +15,7 @@ $(document).ready(function () {
 
 $(window).resize(function () {
     tiles.resizeTiles();
+    fireworks.resizeCanvas(window.innerWidth, window.innerHeight);
 });
 
 class Tiles extends Signal {
